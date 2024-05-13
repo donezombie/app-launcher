@@ -8,17 +8,27 @@ interface Props extends TypeButton {
   component?: string;
 }
 
-const Button = ({ isIconButton, ...props }: Props) => {
+const Button = ({ isIconButton, sx, ...props }: Props) => {
   if (isIconButton) {
     return (
-      <MuiIconButton {...props}>
+      <MuiIconButton sx={sx} {...props}>
         {props?.loading ? <CommonStyles.Loading /> : props.children}
       </MuiIconButton>
     );
   }
 
   return (
-    <LoadingButton variant='contained' {...props}>
+    <LoadingButton
+      variant='contained'
+      sx={{
+        textTransform: 'initial',
+        py: 1.25,
+        gap: 1.25,
+        boxShadow: 0,
+        ...sx,
+      }}
+      {...props}
+    >
       {props.children}
     </LoadingButton>
   );

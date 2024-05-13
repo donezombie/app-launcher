@@ -20,9 +20,13 @@ const Navbar = () => {
           borderBottom: `1px solid ${theme.colors?.border}`,
         }}
       >
-        <LeftSide />
+        <CommonStyles.Box sx={{ minWidth: 180 }}>
+          <LeftSide />
+        </CommonStyles.Box>
         <CenterSide />
-        <RightSide />
+        <CommonStyles.Box sx={{ minWidth: 180 }}>
+          <RightSide />
+        </CommonStyles.Box>
       </CommonStyles.Box>
     </CommonStyles.Box>
   );

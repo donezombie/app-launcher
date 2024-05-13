@@ -11,6 +11,7 @@ import { useSettingsTheme } from 'providers/SettingsThemeProvider';
 import { ErrorBoundary } from 'react-error-boundary';
 import CommonStyles from 'components/CommonStyles';
 import routesPublic from 'routes/routesPublic';
+import { useAuth } from 'providers/AuthenticationProvider';
 
 const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
   return (
@@ -24,12 +25,21 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
 
 const App = () => {
   //! State
+  const auth = useAuth();
   const { themeOfApp } = useSettingsTheme();
 
   //! Function
 
   //! Render
   const renderContent = () => {
+    if (auth.loading) {
+      return (
+        <CommonStyles.Box sx={{ p: 2 }}>
+          <CommonStyles.Loading />
+        </CommonStyles.Box>
+      );
+    }
+
     return (
       <Router>
         <Routes>
@@ -43,9 +53,11 @@ const App = () => {
                 key={`${route.path}-layout`}
                 path={route.path}
                 element={
-                  <route.layout>
-                    <Outlet />
-                  </route.layout>
+                  <PrivateRoute>
+                    <route.layout>
+                      <Outlet />
+                    </route.layout>
+                  </PrivateRoute>
                 }
               >
                 {route.routeChild.map((child, idx) => {

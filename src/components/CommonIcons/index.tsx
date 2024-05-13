@@ -2,7 +2,6 @@ import DoDisturbOffOutlinedIcon from '@mui/icons-material/DoDisturbOffOutlined';
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import LockIcon from '@mui/icons-material/Lock';
 import KeyIcon from '@mui/icons-material/Key';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
@@ -31,6 +30,8 @@ import DownloadingIcon from '@mui/icons-material/Downloading';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import * as IoIcons from 'react-icons/io5';
+import { SiWindows11 } from 'react-icons/si';
+import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 
 export default {
   InboxIcon,
@@ -61,7 +62,6 @@ export default {
   AdminPanelSettingsIcon,
   SettingsAccessibilityIcon,
   KeyIcon,
-  LockIcon,
   AppsIcon: IoIcons.IoAppsOutline,
   AssignmentChecked: AssignmentTurnedInOutlinedIcon,
   CheckedAndAdd: AddTaskIcon,
@@ -69,4 +69,10 @@ export default {
   RequestAccess: FileOpenOutlinedIcon,
   HelpIcon: IoIcons.IoHelpCircleOutline,
   NotificationIcon: IoIcons.IoNotificationsOutline,
+  RightArrowIcon: IoIcons.IoArrowForwardSharp,
+  AtIcon: IoIcons.IoAtOutline,
+  LockIcon: IoIcons.IoLockClosedOutline,
+  LogoWindow11Icon: SiWindows11,
+  EyeOpenIcon: IoEyeOutline,
+  EyeCloseIcon: IoEyeOffOutline,
 };

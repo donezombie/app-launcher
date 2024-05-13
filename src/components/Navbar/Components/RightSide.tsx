@@ -5,6 +5,7 @@ import Avatar from 'components/CommonStyles/Avatar';
 import { styled } from '@mui/material/styles';
 import CommonIcons from 'components/CommonIcons';
 import { SIZE_ICON_DEFAULT } from 'consts';
+import { useAuth } from 'providers/AuthenticationProvider';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -37,6 +38,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const RightSide = () => {
   //! State
+  const auth = useAuth();
 
   //! Function
 
@@ -58,6 +60,10 @@ const RightSide = () => {
       >
         <Avatar sx={{ width: 35, height: 35 }} src='https://mui.com/static/images/avatar/1.jpg' />
       </StyledBadge>
+
+      <CommonStyles.Typography className='is-hover' isLink onClick={() => auth.logout()}>
+        Logout
+      </CommonStyles.Typography>
     </CommonStyles.Box>
   );
 };

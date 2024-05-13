@@ -84,6 +84,18 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
             main: '#147b77',
           },
         },
+        components: {
+          MuiButton: {
+            variants: [
+              {
+                props: { variant: 'secondary' },
+                style: {
+                  backgroundColor: '#F2F2F2',
+                },
+              },
+            ],
+          },
+        },
         colors: {
           purple: '#611f69',
           green: '#2eb67d',
@@ -94,8 +106,10 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           black: 'rgb(18, 18, 18)',
           gray: '#fafafb',
           grayLight: '#F2F2F2',
+          grayText: '#7a7a7a',
           border: '#dde0e2',
           borderInput: '#e8ebeb',
+          borderInputLight: '#ebeeef',
         },
       }),
     [mainColour]

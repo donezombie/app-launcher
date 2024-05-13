@@ -64,7 +64,7 @@ const AuthenticationProvider = ({ children }: { children: any }) => {
   //! State
   const [isTokenAttached, setTokenAttached] = useState(false);
   const [userData, setUserData] = useState<User | null>(null);
-  const [isCheckingAuth, setCheckingAuth] = useState(false);
+  const [isCheckingAuth, setCheckingAuth] = useState(true);
   const { mutateAsync: logoutUser } = useLogoutUser();
 
   const accessToken = userData?.access_token || '';

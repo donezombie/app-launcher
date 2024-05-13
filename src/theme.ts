@@ -1,5 +1,11 @@
 import { createTheme } from '@mui/material/styles';
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    secondary: true;
+  }
+}
+
 type Colors = {
   purple?: string;
   green?: string;
@@ -10,8 +16,10 @@ type Colors = {
   black?: string;
   gray?: string;
   grayLight?: string;
+  grayText?: string;
   border?: string;
   borderInput?: string;
+  borderInputLight?: string;
 };
 
 declare module '@mui/material/styles' {

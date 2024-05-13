@@ -233,6 +233,14 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  if (auth.loading) {
+    return (
+      <CommonStyles.Box sx={{ p: 2 }}>
+        <CommonStyles.Loading />
+      </CommonStyles.Box>
+    );
+  }
+
   return (
     <CommonStyles.Box component='main'>
       <Navbar />

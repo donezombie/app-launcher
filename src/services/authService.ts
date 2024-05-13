@@ -13,6 +13,7 @@ class AuthService {
       response_type: 'code',
       loadUserInfo: true,
       automaticSilentRenew: true,
+      popup_redirect_uri: '/login/callback',
     };
 
     this.userManager = new UserManager(settings);
