@@ -87,4 +87,10 @@ export default {
   BagHandleIcon: IoBagHandleOutline,
   MedalIcon: PiMedalLight,
   HintIcon: IoIcons.IoInformationCircleOutline,
+  IoHeartOutline: IoIcons.IoHeartOutline,
+  IoSearchOutline: IoIcons.IoSearchOutline,
+  IoListOutline: IoIcons.IoListOutline,
+  IoHomeOutline: IoIcons.IoHomeOutline,
+  IoEllipsisVerticalSharp: IoIcons.IoEllipsisVerticalSharp,
+  IoArrowForwardOutline: IoIcons.IoArrowForwardOutline,
 };

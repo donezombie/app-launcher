@@ -21,6 +21,7 @@ type Colors = {
   border?: string;
   borderInput?: string;
   borderInputLight?: string;
+  borderIcon?: string;
 };
 
 type Sizes = {

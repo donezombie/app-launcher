@@ -1,94 +1,93 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
+// import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import { visuallyHidden } from '@mui/utils';
-import { OrderType } from 'interfaces/common';
-import CommonStyles from '.';
+// import TableSortLabel from '@mui/material/TableSortLabel';
+import { useTheme } from '@mui/material/styles';
+// import { visuallyHidden } from '@mui/utils';
 import CommonIcons from 'components/CommonIcons';
+import { OrderType } from 'interfaces/common';
+import * as React from 'react';
+import CommonStyles from '.';
 
-interface EnhancedTableProps<T> {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof any) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: OrderType;
-  orderBy: string;
-  rowCount: number;
-  headCells: HeadCell<T>[];
-  showCheckBox?: boolean;
-}
+// interface EnhancedTableProps<T> {
+//   numSelected: number;
+//   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof any) => void;
+//   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+//   order: OrderType;
+//   orderBy: string;
+//   rowCount: number;
+//   headCells: HeadCell<T>[];
+//   showCheckBox?: boolean;
+// }
 
-function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof any) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
-  };
+// function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
+//   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+//   const createSortHandler = (property: keyof any) => (event: React.MouseEvent<unknown>) => {
+//     onRequestSort(event, property);
+//   };
 
-  return (
-    <TableHead>
-      <TableRow>
-        {props?.showCheckBox && (
-          <TableCell padding='checkbox'>
-            <Checkbox
-              color='primary'
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                'aria-label': 'select all desserts',
-              }}
-            />
-          </TableCell>
-        )}
+//   return (
+//     <TableHead>
+//       <TableRow>
+//         {props?.showCheckBox && (
+//           <TableCell padding='checkbox'>
+//             <Checkbox
+//               color='primary'
+//               indeterminate={numSelected > 0 && numSelected < rowCount}
+//               checked={rowCount > 0 && numSelected === rowCount}
+//               onChange={onSelectAllClick}
+//               inputProps={{
+//                 'aria-label': 'select all desserts',
+//               }}
+//             />
+//           </TableCell>
+//         )}
 
-        {props.headCells.map((headCell: any) => {
-          if (headCell.isHided) {
-            return null;
-          }
+//         {props.headCells.map((headCell: any) => {
+//           if (headCell.isHided) {
+//             return null;
+//           }
 
-          if (headCell?.disableSort) {
-            return (
-              <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'}>
-                {headCell.label}
-              </TableCell>
-            );
-          }
+//           if (headCell?.disableSort) {
+//             return (
+//               <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'}>
+//                 {headCell.label}
+//               </TableCell>
+//             );
+//           }
 
-          return (
-            <TableCell
-              key={headCell.id}
-              align={headCell.numeric ? 'right' : 'left'}
-              padding={headCell.disablePadding ? 'none' : 'normal'}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component='span' sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            </TableCell>
-          );
-        })}
-      </TableRow>
-    </TableHead>
-  );
-}
+//           return (
+//             <TableCell
+//               key={headCell.id}
+//               align={headCell.numeric ? 'right' : 'left'}
+//               padding={headCell.disablePadding ? 'none' : 'normal'}
+//               sortDirection={orderBy === headCell.id ? order : false}
+//             >
+//               <TableSortLabel
+//                 active={orderBy === headCell.id}
+//                 direction={orderBy === headCell.id ? order : 'asc'}
+//                 onClick={createSortHandler(headCell.id)}
+//               >
+//                 {headCell.label}
+//                 {orderBy === headCell.id ? (
+//                   <Box component='span' sx={visuallyHidden}>
+//                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+//                   </Box>
+//                 ) : null}
+//               </TableSortLabel>
+//             </TableCell>
+//           );
+//         })}
+//       </TableRow>
+//     </TableHead>
+//   );
+// }
 
 interface HeadCell<T> {
   disablePadding?: boolean;
@@ -126,8 +125,8 @@ interface TableCommonProps<T> {
 }
 
 function TableCommon<T>({
-  order,
-  orderBy,
+  // order,
+  // orderBy,
   selected,
   page,
   rowsPerPage,
@@ -139,11 +138,11 @@ function TableCommon<T>({
   isLoading,
   invisibleCheckBox,
   handleCheckBox,
-  handleChangePage,
-  handleSelectAllClick,
-  handleRequestSort,
-  handleChangeRowsPerPage,
-}: TableCommonProps<T>) {
+}: // handleChangePage,
+// handleSelectAllClick,
+// handleRequestSort,
+// handleChangeRowsPerPage,
+TableCommonProps<T>) {
   const theme = useTheme();
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
@@ -155,7 +154,7 @@ function TableCommon<T>({
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle' size='medium'>
-            <EnhancedTableHead
+            {/* <EnhancedTableHead
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -166,7 +165,7 @@ function TableCommon<T>({
               rowCount={rows.length}
               headCells={headCells}
               showCheckBox={showCheckBox}
-            />
+            /> */}
             <TableBody>
               {!isLoading &&
                 rows.map((row, index) => {
@@ -277,7 +276,7 @@ function TableCommon<T>({
           </Table>
         </TableContainer>
 
-        <TablePagination
+        {/* <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
           count={totalCount}
@@ -285,7 +284,7 @@ function TableCommon<T>({
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        /> */}
       </Paper>
     </Box>
   );
