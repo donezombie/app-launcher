@@ -23,6 +23,8 @@ const BaseUrl = {
     Index: '/apps/marketplace',
     Products: '/apps/marketplace/products',
     Quote: '/apps/marketplace/quote',
+    Info: '/apps/marketplace/app/:id',
+    InfoWithID: (id: string | number) => `/apps/marketplace/app/${id}`,
   },
 
   Setting: {

@@ -22,6 +22,7 @@ const Products = lazy(
   () => import('pages/NewDesigns/Apps/PageChild/Marketplace/PageChild/Products')
 );
 const Quote = lazy(() => import('pages/NewDesigns/Apps/PageChild/Marketplace/PageChild/Quote'));
+const InfoApp = lazy(() => import('pages/NewDesigns/Apps/PageChild/Marketplace/PageChild/InfoApp'));
 
 //! Develop
 const DevelopPage = lazy(() => import('pages/NewDesigns/Apps/PageChild/Develop'));
@@ -116,6 +117,13 @@ const routes: Route[] = [
         isPrivateRoute: true,
       },
       {
+        name: 'Info App',
+        path: BaseUrl.Marketplace.Info,
+        component: InfoApp,
+        isPrivateRoute: true,
+      },
+
+      {
         name: 'MyApps',
         path: BaseUrl.MyApps.Index,
         component: MyApps,
@@ -127,12 +135,14 @@ const routes: Route[] = [
         component: MyAppDetail,
         isPrivateRoute: true,
       },
+
       {
         name: 'Settings',
         path: BaseUrl.Setting.Index,
         component: Settings,
         isPrivateRoute: true,
       },
+
       {
         name: 'Develop',
         path: BaseUrl.Develop.Index,

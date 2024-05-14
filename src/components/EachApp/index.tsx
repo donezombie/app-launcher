@@ -36,7 +36,10 @@ const EachApp = ({ item }: EachAppProps) => {
     return (
       <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
         <CommonStyles.Button>Install</CommonStyles.Button>
-        <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
+
+        <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
+          <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
+        </Link>
       </CommonStyles.Box>
     );
   };
