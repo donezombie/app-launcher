@@ -8,7 +8,18 @@ const Navbar = () => {
   const theme = useTheme();
 
   return (
-    <CommonStyles.Box className='component:Navbar' component='header' sx={{ minHeight: 60 }}>
+    <CommonStyles.Box
+      className='component:Navbar'
+      component='header'
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: theme.sizes?.heightNavbar,
+        zIndex: 1999,
+      }}
+    >
       <CommonStyles.Box
         sx={{
           display: 'flex',

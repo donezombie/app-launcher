@@ -17,6 +17,27 @@ const BaseUrl = {
   Users: '/users',
   Settings: '/settings',
   AppConnect: '/app-connect',
+
+  Apps: '/apps',
+  Marketplace: {
+    Index: '/apps/marketplace',
+    Products: '/apps/marketplace/products',
+    Quote: '/apps/marketplace/quote',
+  },
+
+  Setting: {
+    Index: '/apps/settings',
+  },
+
+  MyApps: {
+    Index: '/apps/my-apps',
+  },
+
+  Develop: {
+    Index: '/apps/develop',
+    UploadApps: '/apps/develop/upload-apps',
+    ManageYourApps: '/apps/develop/manage-apps',
+  },
 };
 
 export default BaseUrl;

@@ -84,10 +84,21 @@ export interface Route {
     | React.LazyExoticComponent<React.MemoExoticComponent<any>>
     | React.ExoticComponent<any>
     | typeof React.Component;
-  routeChild: {
+  routeChild?: {
     name: string;
     path: string;
     component: typeof React.Component | React.FC;
     isPrivateRoute?: boolean;
+  }[];
+}
+
+export interface SidebarItem {
+  id: string;
+  label: string;
+  icon: any;
+  path: string;
+  children?: {
+    label: string;
+    path: string;
   }[];
 }

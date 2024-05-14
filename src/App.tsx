@@ -43,9 +43,9 @@ const App = () => {
     return (
       <Router>
         <Routes>
-          {routesPublic.map((route) => (
-            <Route key={route.name} path={route.path} element={<route.component />} />
-          ))}
+          {routesPublic.map((route) => {
+            return <Route key={route.name} path={route.path} element={<route.component />} />;
+          })}
 
           {routes.map((route) => {
             return (
@@ -60,7 +60,7 @@ const App = () => {
                   </PrivateRoute>
                 }
               >
-                {route.routeChild.map((child, idx) => {
+                {route?.routeChild?.map((child, idx) => {
                   return (
                     <Route
                       key={`${child.path}-${idx}`}

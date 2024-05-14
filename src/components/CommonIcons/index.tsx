@@ -12,7 +12,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import SearchIcon from '@mui/icons-material/Search';
 import GroupIcon from '@mui/icons-material/Group';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
@@ -31,7 +30,14 @@ import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import * as IoIcons from 'react-icons/io5';
 import { SiWindows11 } from 'react-icons/si';
-import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import {
+  IoEyeOffOutline,
+  IoEyeOutline,
+  IoSparklesOutline,
+  IoBagHandleOutline,
+  IoSearchOutline,
+} from 'react-icons/io5';
+import { PiMedalLight } from 'react-icons/pi';
 
 export default {
   InboxIcon,
@@ -50,7 +56,7 @@ export default {
   NoteAddIcon: NoteAddOutlinedIcon,
   BookIcon: MenuBookIcon,
   Users: GroupIcon,
-  Search: SearchIcon,
+  Search: IoSearchOutline,
   Reset: RestartAltIcon,
   SettingsIcon: IoIcons.IoSettingsOutline,
   SaveIcon,
@@ -70,9 +76,13 @@ export default {
   HelpIcon: IoIcons.IoHelpCircleOutline,
   NotificationIcon: IoIcons.IoNotificationsOutline,
   RightArrowIcon: IoIcons.IoArrowForwardSharp,
+  LeftArrowIcon: IoIcons.IoArrowBackSharp,
   AtIcon: IoIcons.IoAtOutline,
   LockIcon: IoIcons.IoLockClosedOutline,
   LogoWindow11Icon: SiWindows11,
   EyeOpenIcon: IoEyeOutline,
   EyeCloseIcon: IoEyeOffOutline,
+  SparkesIcon: IoSparklesOutline,
+  BagHandleIcon: IoBagHandleOutline,
+  MedalIcon: PiMedalLight,
 };

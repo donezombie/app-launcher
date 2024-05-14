@@ -17,17 +17,25 @@ type Colors = {
   gray?: string;
   grayLight?: string;
   grayText?: string;
+  grayActiveMenu?: string;
   border?: string;
   borderInput?: string;
   borderInputLight?: string;
 };
 
+type Sizes = {
+  heightNavbar: number;
+  widthSidebar: number;
+};
+
 declare module '@mui/material/styles' {
   interface Theme {
     colors?: Colors;
+    sizes?: Sizes;
   }
   interface ThemeOptions {
     colors?: Colors;
+    sizes?: Sizes;
   }
 }
 

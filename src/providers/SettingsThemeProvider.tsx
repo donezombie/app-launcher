@@ -96,6 +96,10 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
             ],
           },
         },
+        sizes: {
+          heightNavbar: 76,
+          widthSidebar: 300,
+        },
         colors: {
           purple: '#611f69',
           green: '#2eb67d',
@@ -107,6 +111,7 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           gray: '#fafafb',
           grayLight: '#F2F2F2',
           grayText: '#7a7a7a',
+          grayActiveMenu: '#f1f1f2',
           border: '#dde0e2',
           borderInput: '#e8ebeb',
           borderInputLight: '#ebeeef',

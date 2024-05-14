@@ -41,37 +41,6 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
-// const DrawerHeader = styled('div')(({ theme }) => ({
-//   display: 'flex',
-//   alignItems: 'center',
-//   justifyContent: 'flex-end',
-//   padding: theme.spacing(0, 1),
-//   // necessary for content to be below app bar
-//   ...theme.mixins.toolbar,
-// }));
-
-// interface AppBarProps extends MuiAppBarProps {
-//   open?: boolean;
-// }
-
-// const AppBar = styled(MuiAppBar, {
-//   shouldForwardProp: (prop) => prop !== 'open',
-// })<AppBarProps>(({ theme, open }) => ({
-//   zIndex: theme.zIndex.drawer + 1,
-//   transition: theme.transitions.create(['width', 'margin'], {
-//     easing: theme.transitions.easing.sharp,
-//     duration: theme.transitions.duration.leavingScreen,
-//   }),
-//   ...(open && {
-//     marginLeft: drawerWidth,
-//     width: `calc(100% - ${drawerWidth}px)`,
-//     transition: theme.transitions.create(['width', 'margin'], {
-//       easing: theme.transitions.easing.sharp,
-//       duration: theme.transitions.duration.enteringScreen,
-//     }),
-//   }),
-// }));
-
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     width: drawerWidth,
@@ -102,32 +71,8 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   const { settings } = useSettingsTheme();
 
   //! Function
-  // const handleDrawerOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleDrawerClose = () => {
-  //   setOpen(false);
-  // };
-
-  // const customStyleHeader = React.useMemo(() => {
-  //   return {
-  //     [theme.breakpoints.up('xs')]: {
-  //       minHeight: 0,
-  //       height: 50,
-  //     },
-  //   };
-  // }, [theme]);
 
   //! Render
-  // const renderAppBar = () => {
-  //   return (
-  //     <Typography variant='h6' noWrap component='div'>
-  //       Custom header here
-  //     </Typography>
-  //   );
-  // };
-
   const renderBtnLogout = () => {
     return (
       <List>
@@ -247,7 +192,12 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
       <Suspense fallback={<CommonStyles.Loading />}>
         <CommonStyles.Box
           className='main__container'
-          sx={{ maxWidth: 1460, margin: 'auto', pt: 5, px: 2 }}
+          sx={{
+            maxWidth: 1460,
+            margin: 'auto',
+            paddingTop: `${(theme.sizes?.heightNavbar || 0) + 8 * 3}px`,
+            px: 2,
+          }}
         >
           {children}
         </CommonStyles.Box>

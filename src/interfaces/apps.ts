@@ -39,3 +39,11 @@ export type App = Pick<
   | 'requestCount'
   | 'isAssigned'
 >;
+
+export type IApp = {
+  id?: string;
+  title?: string;
+  description?: string;
+  image?: string;
+  isInstalled?: boolean;
+};

@@ -22,7 +22,7 @@ const Button = ({ isIconButton, sx, ...props }: Props) => {
       variant='contained'
       sx={{
         textTransform: 'initial',
-        py: 1.25,
+        py: 0.8,
         gap: 1.25,
         boxShadow: 0,
         ...sx,

@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import BaseUrl from 'consts/baseUrl';
 
 // Bash importHere
-const Login = lazy(() => import('pages/NewDesigns/Login'));
+const Login = lazy(() => import('pages/Login'));
 const Callbacks = lazy(() => import('pages/Callbacks'));
 const Logout = lazy(() => import('pages/Logout'));
 
