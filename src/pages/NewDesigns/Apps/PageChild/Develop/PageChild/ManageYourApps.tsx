@@ -1,3 +1,6 @@
+import CommonStyles from 'components/CommonStyles';
+import HeadWithSearching from 'components/HeadWithSearching';
+import ListApp from 'components/ListApp';
 import React from 'react';
 
 const ManageYourApps = () => {
@@ -6,7 +9,16 @@ const ManageYourApps = () => {
   //! Function
 
   //! Render
-  return <div>ManageYourApps</div>;
+  return (
+    <CommonStyles.Box
+      className='component:ManageYourApps'
+      sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
+    >
+      <HeadWithSearching title='Manage Your Apps' />
+
+      <ListApp isYourApp />
+    </CommonStyles.Box>
+  );
 };
 
-export default React.memo(ManageYourApps);
+export default ManageYourApps;

@@ -41,7 +41,7 @@ const Searching = ({
                 borderLeft: '1px solid',
                 borderColor: theme.colors?.border,
                 borderRadius: 0,
-                pl: 2,
+                px: 2,
                 height: 41,
                 color: theme.colors?.black,
               }}

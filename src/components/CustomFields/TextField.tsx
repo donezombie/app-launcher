@@ -1,11 +1,12 @@
 import MuiTextField, { TextFieldProps } from '@mui/material/TextField';
 import { FieldInputProps, FormikProps } from 'formik';
 import { get, isString } from 'lodash';
-import { styled } from '@mui/material/styles';
+import { SxProps, Theme, styled } from '@mui/material/styles';
 import CommonStyles from 'components/CommonStyles';
 import { useState } from 'react';
 import { IconButton, InputAdornment } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
+import { SIZE_ICON_DEFAULT } from 'consts';
 
 const CustomTextField = styled(MuiTextField)(({ theme }) => ({
   '& input:valid + fieldset': {
@@ -21,9 +22,16 @@ const CustomTextField = styled(MuiTextField)(({ theme }) => ({
   '& .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline': {
     borderColor: theme.palette.primary.main,
   },
+  '& .MuiInputBase-adornedEnd': {
+    paddingRight: 0,
+  },
   '& input:invalid + fieldset': {
     borderColor: theme?.colors?.red,
     borderWidth: 1,
+  },
+  '& .MuiFormHelperText-root': {
+    margin: '8px 0px 0px 0px',
+    color: theme.colors?.grayText,
   },
 }));
 
@@ -31,7 +39,11 @@ interface Props {
   field?: FieldInputProps<any>;
   form?: FormikProps<any>;
   isShowHidePassword?: boolean;
+  sxContainer?: SxProps<Theme>;
+  helperText?: string;
 }
+
+export type TextFieldFormikProps = Props & TextFieldProps;
 
 const TextField = ({
   field,
@@ -40,6 +52,8 @@ const TextField = ({
   isShowHidePassword,
   InputProps,
   type,
+  sxContainer,
+  helperText,
   ...props
 }: Props & TextFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -56,7 +70,7 @@ const TextField = ({
   };
 
   return (
-    <CommonStyles.Box>
+    <CommonStyles.Box sx={sxContainer}>
       {label && (
         <CommonStyles.Typography component='p' variant='body2' sx={{ mb: 1.5, fontWeight: 600 }}>
           {label}
@@ -68,7 +82,16 @@ const TextField = ({
         onBlur={onBlur}
         onChange={onChange}
         error={!!msgError}
-        helperText={isString(msgError) && msgError}
+        helperText={
+          helperText ? (
+            <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '20px 1fr', gap: 0.5 }}>
+              <CommonIcons.HintIcon size={SIZE_ICON_DEFAULT - 4} />
+              <CommonStyles.Typography variant='caption'>{helperText}</CommonStyles.Typography>
+            </CommonStyles.Box>
+          ) : (
+            isString(msgError) && msgError
+          )
+        }
         variant='outlined'
         size='small'
         sx={{

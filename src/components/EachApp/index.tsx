@@ -3,6 +3,8 @@ import CommonStyles from 'components/CommonStyles';
 import { Field, Formik } from 'formik';
 import { IApp } from 'interfaces/apps';
 import SwitchField from 'components/CustomFields/SwitchField';
+import { Link } from 'react-router-dom';
+import BaseUrl from 'consts/baseUrl';
 
 interface EachAppProps {
   item: IApp;
@@ -16,10 +18,16 @@ const EachApp = ({ item }: EachAppProps) => {
 
   //! Render
   const renderActions = () => {
+    if (item.isYourApp) {
+      return <CommonStyles.Button sx={{ width: 'fit-content' }}>Manage</CommonStyles.Button>;
+    }
+
     if (item.isInstalled) {
       return (
         <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-          <CommonStyles.Button>Edit</CommonStyles.Button>
+          <Link to={BaseUrl.MyApps.DetailWithID(item.id || '')}>
+            <CommonStyles.Button>Edit</CommonStyles.Button>
+          </Link>
           <CommonStyles.Button variant='outlined'>Uninstall</CommonStyles.Button>
         </CommonStyles.Box>
       );

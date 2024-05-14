@@ -46,4 +46,5 @@ export type IApp = {
   description?: string;
   image?: string;
   isInstalled?: boolean;
+  isYourApp?: boolean;
 };

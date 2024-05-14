@@ -31,6 +31,8 @@ const BaseUrl = {
 
   MyApps: {
     Index: '/apps/my-apps',
+    Detail: '/apps/my-apps/:id',
+    DetailWithID: (id: string | number) => `/apps/my-apps/${id}`,
   },
 
   Develop: {

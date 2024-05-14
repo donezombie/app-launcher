@@ -77,6 +77,7 @@ export default {
   NotificationIcon: IoIcons.IoNotificationsOutline,
   RightArrowIcon: IoIcons.IoArrowForwardSharp,
   LeftArrowIcon: IoIcons.IoArrowBackSharp,
+  DownArrowIcon: IoIcons.IoArrowDownSharp,
   AtIcon: IoIcons.IoAtOutline,
   LockIcon: IoIcons.IoLockClosedOutline,
   LogoWindow11Icon: SiWindows11,
@@ -85,4 +86,5 @@ export default {
   SparkesIcon: IoSparklesOutline,
   BagHandleIcon: IoBagHandleOutline,
   MedalIcon: PiMedalLight,
+  HintIcon: IoIcons.IoInformationCircleOutline,
 };

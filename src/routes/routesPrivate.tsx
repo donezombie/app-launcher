@@ -8,7 +8,7 @@ import { Route } from 'interfaces/common';
 const DefaultLayout = lazy(() => import('layouts/DefaultLayout'));
 const Homepage = lazy(() => import('pages/NewDesigns/Homepage'));
 const Users = lazy(() => import('pages/Users'));
-const Settings = lazy(() => import('pages/Settings'));
+// const Settings = lazy(() => import('pages/Settings'));
 
 // const Laucher = lazy(() => import('pages/Launcher'));
 // const AppManagement = lazy(() => import('pages/Apps'));
@@ -32,7 +32,12 @@ const ManageYourApps = lazy(
   () => import('pages/NewDesigns/Apps/PageChild/Develop/PageChild/ManageYourApps')
 );
 
+//! My Apps
 const MyApps = lazy(() => import('pages/NewDesigns/Apps/PageChild/MyApps'));
+const MyAppDetail = lazy(() => import('pages/NewDesigns/Apps/PageChild/MyApps/MyAppDetail'));
+
+//! Settings
+const Settings = lazy(() => import('pages/NewDesigns/Apps/PageChild/Settings'));
 
 const routes: Route[] = [
   {
@@ -114,6 +119,18 @@ const routes: Route[] = [
         name: 'MyApps',
         path: BaseUrl.MyApps.Index,
         component: MyApps,
+        isPrivateRoute: true,
+      },
+      {
+        name: 'MyApp Detail',
+        path: BaseUrl.MyApps.Detail,
+        component: MyAppDetail,
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Settings',
+        path: BaseUrl.Setting.Index,
+        component: Settings,
         isPrivateRoute: true,
       },
       {

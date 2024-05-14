@@ -5,19 +5,20 @@ import Searching from './Searching';
 
 interface HeadWithSearchingProps {
   title: React.ReactNode;
-  onSubmitSearch: () => void;
+  onSubmitSearch?: () => void;
   placeholder?: string;
+  renderLeftContent?: React.ReactNode;
 }
 
 const HeadWithSearching = (props: HeadWithSearchingProps) => {
   //! State
-  const { title, onSubmitSearch, placeholder = 'Search...' } = props;
+  const { title, onSubmitSearch, placeholder = 'Search...', renderLeftContent } = props;
 
   //! Function
 
   //! Render
   return (
-    <Formik initialValues={{ search: '' }} onSubmit={onSubmitSearch}>
+    <Formik initialValues={{ search: '' }} onSubmit={onSubmitSearch || function () {}}>
       {() => {
         return (
           <CommonStyles.Box
@@ -26,9 +27,13 @@ const HeadWithSearching = (props: HeadWithSearchingProps) => {
           >
             <CommonStyles.Typography variant='h5'>{title}</CommonStyles.Typography>
 
-            <Form>
-              <Searching nameField='search' placeholder={placeholder} />
-            </Form>
+            {onSubmitSearch && (
+              <Form>
+                <Searching nameField='search' placeholder={placeholder} />
+              </Form>
+            )}
+
+            {renderLeftContent}
           </CommonStyles.Box>
         );
       }}
