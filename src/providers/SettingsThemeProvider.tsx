@@ -116,7 +116,7 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           borderInput: '#e8ebeb',
           borderInputLight: '#ebeeef',
           borderIcon: '#f4f4f6',
-          textGray: '#909496',
+          textGray: '#666c6e',
           borderLine: '#dfe2e7',
         },
       }),

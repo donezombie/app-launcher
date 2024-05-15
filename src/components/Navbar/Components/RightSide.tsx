@@ -103,14 +103,16 @@ const RightSide = () => {
     ],
   };
 
-  console.log('Object.entries(dataNotification)', Object.entries(data));
-
   //! Function
   const handleClickNoti = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElNoti(event.currentTarget);
   };
 
   const handleClose = () => {
+    setAnchorElNoti(null);
+  };
+
+  const onClickNavigateNotiScreen = () => {
     setAnchorElNoti(null);
   };
 
@@ -159,7 +161,11 @@ const RightSide = () => {
           horizontal: 'right',
         }}
       >
-        <NotificationCard data={data} tabs={tabs} />
+        <NotificationCard
+          data={data}
+          tabs={tabs}
+          onClickNavigateNotiScreen={onClickNavigateNotiScreen}
+        />
       </Popover>
     </CommonStyles.Box>
   );

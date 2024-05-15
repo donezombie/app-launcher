@@ -48,16 +48,16 @@ const ItemNotification = (props: ItemNotificationProps) => {
         <CommonStyles.Box
           sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <CommonStyles.Typography sx={{ fontWeight: '400', fontSize: '0.8rem' }}>
+          <CommonStyles.Typography sx={{ fontWeight: '400', fontSize: '0.8rem', minWidth: 100 }}>
             {item.time}
           </CommonStyles.Typography>
           {item?.read ? (
             <CommonStyles.Box
-              sx={{ width: 6, height: 6, borderRadius: 6, backgroundColor: 'red', ml: 1 }}
+              sx={{ width: 6, height: 6, borderRadius: 6, backgroundColor: 'red' }}
             />
           ) : (
             <CommonStyles.Box
-              sx={{ width: 6, height: 6, borderRadius: 6, backgroundColor: 'white', ml: 1 }}
+              sx={{ width: 6, height: 6, borderRadius: 6, backgroundColor: 'white' }}
             />
           )}
         </CommonStyles.Box>

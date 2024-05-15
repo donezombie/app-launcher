@@ -40,6 +40,9 @@ const MyAppDetail = lazy(() => import('pages/NewDesigns/Apps/PageChild/MyApps/My
 //! Settings
 const Settings = lazy(() => import('pages/NewDesigns/Apps/PageChild/Settings'));
 
+//! Notification
+const NotificationScreen = lazy(() => import('pages/NewDesigns/NotificationScreen'));
+
 const routes: Route[] = [
   {
     name: 'Home Layout',
@@ -90,6 +93,11 @@ const routes: Route[] = [
         path: BaseUrl.Settings,
         component: withCheckRole(Settings, [PERMISSION_ENUM.PUBLIC]),
         isPrivateRoute: true,
+      },
+      {
+        name: 'Notification',
+        path: BaseUrl.Notification.Index,
+        component: NotificationScreen,
       },
     ],
   },

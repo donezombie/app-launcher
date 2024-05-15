@@ -42,6 +42,9 @@ const BaseUrl = {
     UploadApps: '/apps/develop/upload-apps',
     ManageYourApps: '/apps/develop/manage-apps',
   },
+  Notification: {
+    Index: '/apps/notification',
+  },
 };
 
 export default BaseUrl;

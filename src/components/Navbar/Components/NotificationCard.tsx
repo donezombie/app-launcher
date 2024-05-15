@@ -4,6 +4,8 @@ import CommonStyles from 'components/CommonStyles';
 import { SIZE_ICON_DEFAULT } from 'consts';
 import React from 'react';
 import ItemNotification from './ItemNotification';
+import { useNavigate } from 'react-router-dom';
+import BaseUrl from 'consts/baseUrl';
 
 interface ITab {
   label: string;
@@ -26,16 +28,22 @@ interface DataItem {
 interface NotificationCardProps {
   tabs: ITab[];
   data: DataItem;
+  onClickNavigateNotiScreen?: () => void;
 }
 
 const NotificationCard = (props: NotificationCardProps) => {
-  const { tabs, data } = props;
-  console.log('data', data);
+  const { tabs, data, onClickNavigateNotiScreen } = props;
   //! State
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const theme = useTheme();
+  const navigate = useNavigate();
 
   //! Function
+
+  const onOpenNotiSreen = () => {
+    navigate(BaseUrl.Notification.Index);
+    onClickNavigateNotiScreen && onClickNavigateNotiScreen();
+  };
 
   //! Render
   return (
@@ -57,7 +65,11 @@ const NotificationCard = (props: NotificationCardProps) => {
           <CommonStyles.Typography fontWeight={500} fontSize='14px' mr='12px' ml='8px'>
             Only show unread
           </CommonStyles.Typography>
-          <CommonIcons.MdOutlineLaunch size={SIZE_ICON_DEFAULT + 2} />
+          <CommonIcons.MdOutlineLaunch
+            size={SIZE_ICON_DEFAULT + 2}
+            style={{ cursor: 'pointer' }}
+            onClick={onOpenNotiSreen}
+          />
         </CommonStyles.Box>
       </CommonStyles.Box>
 
@@ -84,18 +96,29 @@ const NotificationCard = (props: NotificationCardProps) => {
             title = `Older`;
             break;
         }
+        const isAllRead = value.every((item: INotification) => item.read);
+
         return (
           <CommonStyles.Box key={ind} sx={{ pb: 1 }}>
-            <CommonStyles.Typography
-              sx={{
-                color: theme.colors?.textGray,
-                textTransform: 'uppercase',
-                fontSize: '0.8rem',
-                fontWeight: '600',
-              }}
+            <CommonStyles.Box
+              sx={{ alignContent: 'center', display: 'flex', justifyContent: 'space-between' }}
             >
-              {title}
-            </CommonStyles.Typography>
+              <CommonStyles.Typography
+                sx={{
+                  color: theme.colors?.textGray,
+                  textTransform: 'uppercase',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
+                }}
+              >
+                {title}
+              </CommonStyles.Typography>
+              {isAllRead && (
+                <CommonStyles.Typography className='is-hover' isLink fontSize={'0.9rem'} mr={2}>
+                  Mark all as read
+                </CommonStyles.Typography>
+              )}
+            </CommonStyles.Box>
             {value?.map((item: INotification, ind: number) => {
               return <ItemNotification key={ind} item={item} />;
             })}

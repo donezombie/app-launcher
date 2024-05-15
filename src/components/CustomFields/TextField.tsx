@@ -3,7 +3,7 @@ import { FieldInputProps, FormikProps } from 'formik';
 import { get, isString } from 'lodash';
 import { SxProps, Theme, styled } from '@mui/material/styles';
 import CommonStyles from 'components/CommonStyles';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { IconButton, InputAdornment } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
 import { SIZE_ICON_DEFAULT } from 'consts';
@@ -41,6 +41,7 @@ interface Props {
   isShowHidePassword?: boolean;
   sxContainer?: SxProps<Theme>;
   helperText?: string;
+  iconStartInput?: ReactNode;
 }
 
 export type TextFieldFormikProps = Props & TextFieldProps;
@@ -54,6 +55,7 @@ const TextField = ({
   type,
   sxContainer,
   helperText,
+  iconStartInput,
   ...props
 }: Props & TextFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -111,6 +113,11 @@ const TextField = ({
               </IconButton>
             </InputAdornment>
           ) : null,
+          startAdornment: iconStartInput ? (
+            <InputAdornment position='start' className='icon-start-input'>
+              {iconStartInput}
+            </InputAdornment>
+          ) : undefined,
           ...InputProps,
         }}
         {...props}
