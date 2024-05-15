@@ -12,6 +12,7 @@ declare module '@mui/material/styles' {
     h6Medium?: React.CSSProperties;
     captionMedium?: React.CSSProperties;
     captionLRegular?: React.CSSProperties;
+    captionLBold?: React.CSSProperties;
     captionMRegular?: React.CSSProperties;
     bodyMBold?: React.CSSProperties;
   }
@@ -20,6 +21,7 @@ declare module '@mui/material/styles' {
     h6Medium?: React.CSSProperties;
     captionMedium?: React.CSSProperties;
     captionLRegular?: React.CSSProperties;
+    captionLBold?: React.CSSProperties;
     captionMRegular?: React.CSSProperties;
     bodyMBold?: React.CSSProperties;
   }
@@ -31,6 +33,7 @@ declare module '@mui/material/Typography' {
     h6Medium: true;
     captionMedium: true;
     captionLRegular: true;
+    captionLBold: true;
     captionMRegular: true;
     bodyMBold: true;
   }

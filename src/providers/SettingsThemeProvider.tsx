@@ -102,6 +102,13 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
             lineHeight: '20px',
             letterSpacing: '-0.07px',
           },
+          captionLBold: {
+            fontSize: '14px',
+            fontStyle: 'normal',
+            fontWeight: 700,
+            lineHeight: '20px',
+            letterSpacing: '-0.07px',
+          },
           captionMRegular: {
             fontSize: '12px',
             fontStyle: 'normal',
