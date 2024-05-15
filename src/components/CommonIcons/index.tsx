@@ -37,6 +37,8 @@ import {
   IoSearchOutline,
 } from 'react-icons/io5';
 import { PiMedalLight } from 'react-icons/pi';
+import LaunchIcon from '@mui/icons-material/Launch';
+import { MdOutlineLaunch } from 'react-icons/md';
 
 export default {
   InboxIcon,
@@ -92,4 +94,7 @@ export default {
   IoHomeOutline: IoIcons.IoHomeOutline,
   IoEllipsisVerticalSharp: IoIcons.IoEllipsisVerticalSharp,
   IoArrowForwardOutline: IoIcons.IoArrowForwardOutline,
+  IoClose: IoIcons.IoClose,
+  LaunchIcon,
+  MdOutlineLaunch,
 };

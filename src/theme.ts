@@ -57,6 +57,8 @@ type Colors = {
   borderInput?: string;
   borderInputLight?: string;
   borderIcon?: string;
+  textGray?: string;
+  borderLine?: string;
   text1?: string;
   text2?: string;
   text3?: string;

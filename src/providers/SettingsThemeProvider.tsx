@@ -162,8 +162,9 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           borderInput: '#e8ebeb',
           borderInputLight: '#ebeeef',
           borderIcon: '#f4f4f6',
+          textGray: '#666c6e',
+          borderLine: '#dfe2e7',
           borderBaseAlpha: 'rgba(23, 25, 25, 0.08)',
-
           text1: '#171919',
           text2: '#17191999',
         },

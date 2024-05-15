@@ -70,6 +70,7 @@ const RecentActivity = () => {
   return (
     <CommonStyles.Box className='component:RecentActivity'>
       <HeadEachSection title='Recent Activity' subTitle={renderSearch} />
+
       <CommonStyles.Tabs tabs={tabs} />
 
       <CommonStyles.Box sx={{ mt: 5 }}>
