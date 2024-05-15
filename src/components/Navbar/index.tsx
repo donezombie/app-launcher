@@ -17,7 +17,7 @@ const Navbar = () => {
         left: 0,
         width: '100%',
         height: theme.sizes?.heightNavbar,
-        zIndex: 1999,
+        zIndex: 1299,
       }}
     >
       <CommonStyles.Box
