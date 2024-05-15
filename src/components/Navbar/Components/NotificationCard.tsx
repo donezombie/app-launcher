@@ -73,15 +73,7 @@ const NotificationCard = (props: NotificationCardProps) => {
         </CommonStyles.Box>
       </CommonStyles.Box>
 
-      <CommonStyles.Box
-        sx={{
-          mb: 2,
-          border: `1px solid ${theme.colors?.borderIcon}`,
-          borderWidth: '1px 0px 1px 0px',
-          mx: '-32px',
-          px: '32px',
-        }}
-      >
+      <CommonStyles.Box sx={{ mb: 1 }}>
         <CommonStyles.Tabs tabs={tabs} />
       </CommonStyles.Box>
       {Object.entries(data)?.map((el, ind) => {
@@ -107,14 +99,20 @@ const NotificationCard = (props: NotificationCardProps) => {
                 sx={{
                   color: theme.colors?.textGray,
                   textTransform: 'uppercase',
-                  fontSize: '0.9rem',
+                  fontSize: '0.8rem',
                   fontWeight: '600',
                 }}
               >
                 {title}
               </CommonStyles.Typography>
               {isAllRead && (
-                <CommonStyles.Typography className='is-hover' isLink fontSize={'0.9rem'} mr={2}>
+                <CommonStyles.Typography
+                  className='is-hover'
+                  isLink
+                  fontSize={'0.8rem'}
+                  mr={5}
+                  fontWeight={'600'}
+                >
                   Mark all as read
                 </CommonStyles.Typography>
               )}

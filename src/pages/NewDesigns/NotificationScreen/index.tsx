@@ -115,13 +115,7 @@ const NotificationScreen = (props: NotificationScreenProps) => {
   return (
     <CommonStyles.Box className='component:NotificationScreen' sx={{ mx: 10, mt: 1 }}>
       <HeaderOfSection title='Notifications' subTitle={renderSearch} />
-      <CommonStyles.Box
-        sx={{
-          mb: 4,
-          border: `1px solid ${theme.colors?.borderIcon}`,
-          borderWidth: '0px 0px 1px 0px',
-        }}
-      >
+      <CommonStyles.Box sx={{ mb: 2.5 }}>
         <CommonStyles.Tabs tabs={tabs} />
       </CommonStyles.Box>
       {Object.entries(data)?.map((el, ind) => {
@@ -147,14 +141,20 @@ const NotificationScreen = (props: NotificationScreenProps) => {
                 sx={{
                   color: theme.colors?.textGray,
                   textTransform: 'uppercase',
-                  fontSize: '0.9rem',
+                  fontSize: '0.8rem',
                   fontWeight: '600',
                 }}
               >
                 {title}
               </CommonStyles.Typography>
               {isAllRead && (
-                <CommonStyles.Typography className='is-hover' isLink fontSize={'0.9rem'} mr={3.5}>
+                <CommonStyles.Typography
+                  className='is-hover'
+                  isLink
+                  fontSize={'0.8rem'}
+                  mr={5}
+                  fontWeight={'600'}
+                >
                   Mark all as read
                 </CommonStyles.Typography>
               )}
