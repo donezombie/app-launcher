@@ -3,10 +3,29 @@ import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
 import bannerImage from 'assets/banner.png';
+import useFiltersHandler from 'hooks/useFiltersHandler';
+import { useGetAppStore } from 'hooks/app/useAppHooks';
+import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
+
+const initialValues = {
+  page: NUMBER_DEFAULT_PAGE,
+  rowsPerPage: 999,
+  search: '',
+};
 
 const Marketplace = () => {
   //! State
   const theme = useTheme();
+  const { filters, handleSearch } = useFiltersHandler(initialValues);
+
+  const { data: resList, isLoading: isLoadingList } = useGetAppStore({
+    skip:
+      (filters?.page || NUMBER_DEFAULT_PAGE) *
+      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
+    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
+    filter: filters?.search,
+  });
+  const data = resList?.data?.items || [];
 
   //! Function
 
@@ -67,10 +86,15 @@ const Marketplace = () => {
       {renderHeader()}
 
       <CommonStyles.Box>
-        <HeadWithSearching title='Market place' onSubmitSearch={() => {}} />
+        <HeadWithSearching
+          title='Market place'
+          onSubmitSearch={({ search }) => {
+            handleSearch(search);
+          }}
+        />
       </CommonStyles.Box>
 
-      <ListApp />
+      {isLoadingList ? <CommonStyles.Loading /> : <ListApp apps={data} />}
     </CommonStyles.Box>
   );
 };

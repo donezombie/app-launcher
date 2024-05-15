@@ -5,19 +5,28 @@ import AllApplicationDialog from 'pages/NewDesigns/AllApplication';
 import React from 'react';
 import ContentOfSection from './ContentOfSection';
 import HeaderOfSection from './HeaderOfSection';
+import useFiltersHandler from 'hooks/useFiltersHandler';
+import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
+import { useGetListInstalledApp } from 'hooks/app/useAppHooks';
+
+const initialValues = {
+  page: NUMBER_DEFAULT_PAGE,
+  rowsPerPage: 999,
+  search: '',
+};
 
 const ApplicationSection = () => {
   //! State
   const [open, setOpen] = React.useState(false);
-
-  const applicationMock = [
-    { label: 'Convey', href: '/' },
-    { label: 'Atomic', href: '/' },
-    { label: 'Quote', href: '/' },
-    { label: 'Manage', href: '/' },
-    { label: 'Reports', href: '/' },
-    { label: 'Verify', href: '/' },
-  ];
+  const { filters } = useFiltersHandler(initialValues);
+  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListInstalledApp({
+    skip:
+      (filters?.page || NUMBER_DEFAULT_PAGE) *
+      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
+    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
+    filter: filters?.search,
+  });
+  const dataInstallApp = resListInstalledApp?.data?.items || [];
 
   //! Function
   const handleClickOpen = () => {
@@ -41,9 +50,15 @@ const ApplicationSection = () => {
       />
 
       <ContentOfSection>
-        {applicationMock.map((el) => {
-          return <EachApplication key={el.label} application={el} />;
-        })}
+        {isInstalledLoading ? (
+          <CommonStyles.Loading />
+        ) : (
+          dataInstallApp
+            .map((el) => ({ label: el.name, href: el.launchUri, idApp: el.id }))
+            .map((el) => {
+              return <EachApplication key={el.label} application={el} />;
+            })
+        )}
       </ContentOfSection>
       <Dialog fullScreen open={open} onClose={handleClose}>
         <AllApplicationDialog onClickClose={handleClose} />

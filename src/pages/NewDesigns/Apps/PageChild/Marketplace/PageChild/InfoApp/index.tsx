@@ -1,9 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import ButtonBack from 'components/ButtonBack';
-import { Link } from 'react-router-dom';
 import { Rating, useTheme } from '@mui/material';
 import HeadWithSearching from 'components/HeadWithSearching';
 import exampleLogoApp from 'assets/example-img-app.png';
@@ -11,9 +7,7 @@ import preview1 from 'assets/preview1.png';
 import preview2 from 'assets/preview2.png';
 import EachReview from 'components/EachReview';
 
-interface InfoAppProps {}
-
-const InfoApp = (props: InfoAppProps) => {
+const InfoApp = () => {
   //! State
   const theme = useTheme();
 
@@ -58,7 +52,7 @@ const InfoApp = (props: InfoAppProps) => {
         <CommonStyles.Typography
           isLink
           className='feature__card__information__website is-hover'
-          variant='captionMedium'
+          variant='captionLMedium'
         >
           <a href={'https://google.com'} target='_blank' className='unstyle-link' rel='noreferrer'>
             Website

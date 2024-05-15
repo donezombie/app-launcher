@@ -5,7 +5,7 @@ import Searching from './Searching';
 
 interface HeadWithSearchingProps {
   title: React.ReactNode;
-  onSubmitSearch?: () => void;
+  onSubmitSearch?: ({ search }: { search: string }) => void;
   placeholder?: string;
   renderLeftContent?: React.ReactNode;
 }

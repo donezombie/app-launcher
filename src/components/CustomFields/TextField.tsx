@@ -30,7 +30,7 @@ const CustomTextField = styled(MuiTextField)(({ theme }) => ({
     borderWidth: 1,
   },
   '& .MuiFormHelperText-root': {
-    margin: '8px 0px 0px 0px',
+    margin: '10px 0px 0px 0px',
     color: theme.colors?.grayText,
   },
 }));
@@ -74,7 +74,7 @@ const TextField = ({
   return (
     <CommonStyles.Box sx={sxContainer}>
       {label && (
-        <CommonStyles.Typography component='p' variant='captionMedium' sx={{ mb: 1.5 }}>
+        <CommonStyles.Typography component='p' variant='captionLMedium' sx={{ mb: 1.5 }}>
           {label}
         </CommonStyles.Typography>
       )}
@@ -88,7 +88,9 @@ const TextField = ({
           helperText ? (
             <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '20px 1fr', gap: 0.5 }}>
               <CommonIcons.HintIcon size={SIZE_ICON_DEFAULT - 4} />
-              <CommonStyles.Typography variant='caption'>{helperText}</CommonStyles.Typography>
+              <CommonStyles.Typography variant='captionLRegular'>
+                {helperText}
+              </CommonStyles.Typography>
             </CommonStyles.Box>
           ) : (
             isString(msgError) && msgError

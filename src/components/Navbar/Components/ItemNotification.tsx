@@ -24,7 +24,7 @@ const ItemNotification = (props: ItemNotificationProps) => {
 
   //! Render
   return (
-    <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', my: 1, px: 2 }}>
+    <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', my: 1, px: '12px' }}>
       <CommonStyles.Avatar src={item?.avatar} sx={{ width: sizeAva, height: sizeAva }} />
       <CommonStyles.Box
         sx={{
@@ -36,11 +36,13 @@ const ItemNotification = (props: ItemNotificationProps) => {
         }}
       >
         <CommonStyles.Box maxWidth={250}>
-          <CommonStyles.Typography sx={{ flexShrink: 1, fontWeight: '600', fontSize: '0.8rem' }}>
+          <CommonStyles.Typography sx={{ flexShrink: 1 }} variant='captionMBold' component='p'>
             {item.title}
           </CommonStyles.Typography>
           <CommonStyles.Typography
-            sx={{ fontWeight: '400', fontSize: '0.6rem', color: theme.colors?.textGray }}
+            variant='captionSRegular'
+            sx={{ color: theme.colors?.text2 }}
+            component='p'
           >
             CASE: {item?.code}
           </CommonStyles.Typography>

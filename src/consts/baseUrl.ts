@@ -45,6 +45,11 @@ const BaseUrl = {
   Notification: {
     Index: '/apps/notification',
   },
+  Launcher: {
+    App: '/apps/launcher',
+    AppWithdDetail: (launchUri?: string | number, idApp?: string | number) =>
+      `/apps/launcher?uri=${launchUri}&id=${idApp}`,
+  },
 };
 
 export default BaseUrl;

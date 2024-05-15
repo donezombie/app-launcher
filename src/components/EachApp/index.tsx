@@ -1,13 +1,13 @@
 import { useTheme } from '@mui/material';
 import CommonStyles from 'components/CommonStyles';
 import { Field, Formik } from 'formik';
-import { IApp } from 'interfaces/apps';
+import { App } from 'interfaces/apps';
 import SwitchField from 'components/CustomFields/SwitchField';
 import { Link } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
 
 interface EachAppProps {
-  item: IApp;
+  item: App;
 }
 
 const EachApp = ({ item }: EachAppProps) => {
@@ -18,11 +18,11 @@ const EachApp = ({ item }: EachAppProps) => {
 
   //! Render
   const renderActions = () => {
-    if (item.isYourApp) {
-      return <CommonStyles.Button sx={{ width: 'fit-content' }}>Manage</CommonStyles.Button>;
-    }
+    // if (item.isYourApp) {
+    //   return <CommonStyles.Button sx={{ width: 'fit-content' }}>Manage</CommonStyles.Button>;
+    // }
 
-    if (item.isInstalled) {
+    if (item.isAssigned) {
       return (
         <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
           <Link to={BaseUrl.MyApps.DetailWithID(item.id || '')}>
@@ -70,22 +70,28 @@ const EachApp = ({ item }: EachAppProps) => {
                   background:
                     'linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)',
                 }}
-              />
+              >
+                <img
+                  src={item.icon}
+                  alt='icon-app'
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </CommonStyles.Box>
             </CommonStyles.Box>
             <CommonStyles.Box
               className='each-app__right'
-              sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}
+              sx={{ display: 'flex', gap: 2, flexDirection: 'column', flexGrow: 1 }}
             >
               <CommonStyles.Box
                 className='each-app__right__title'
                 sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
               >
-                <CommonStyles.Typography variant='h5'>{item.title}</CommonStyles.Typography>
-                {item.isInstalled && <Field component={SwitchField} name='active' />}
+                <CommonStyles.Typography variant='h5'>{item.name}</CommonStyles.Typography>
+                {item.isLive && <Field component={SwitchField} name='active' />}
               </CommonStyles.Box>
 
               <CommonStyles.Typography variant='body2' sx={{ color: theme.colors?.grayText }}>
-                {item.description}
+                {item.summary}
               </CommonStyles.Typography>
 
               {renderActions()}

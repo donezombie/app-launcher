@@ -145,6 +145,7 @@ const RightSide = () => {
       <CommonStyles.Typography className='is-hover' isLink onClick={() => auth.logout()}>
         Logout
       </CommonStyles.Typography>
+
       <Popover
         sx={{ mt: 2 }}
         id={id}

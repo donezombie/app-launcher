@@ -2,15 +2,16 @@ import React from 'react';
 import CommonStyles from 'components/CommonStyles';
 import EachApp from './EachApp';
 import { uniqueId } from 'lodash';
-import { IApp } from 'interfaces/apps';
+import { App, IApp } from 'interfaces/apps';
 import { useTheme } from '@mui/material';
 
 interface ListAppProps {
   isInstalled?: boolean;
   isYourApp?: boolean;
+  apps?: App[];
 }
 
-const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
+const ListApp = ({ isInstalled = false, isYourApp = false, apps = [] }: ListAppProps) => {
   //! State
   const theme = useTheme();
 
@@ -60,6 +61,14 @@ const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
   //! Function
 
   //! Render
+  if (apps.length <= 0) {
+    return (
+      <CommonStyles.Typography variant='captionLMedium' sx={{ color: theme.colors?.text2 }}>
+        No Application found!
+      </CommonStyles.Typography>
+    );
+  }
+
   return (
     <CommonStyles.Box
       className='component:ListApp'
@@ -70,7 +79,7 @@ const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
         [theme.breakpoints.down('md')]: { gridTemplateColumns: '1fr' },
       }}
     >
-      {items.map((el) => {
+      {apps.map((el) => {
         return <EachApp key={el.id} item={el} />;
       })}
     </CommonStyles.Box>

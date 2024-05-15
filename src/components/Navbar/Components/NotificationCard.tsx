@@ -47,22 +47,24 @@ const NotificationCard = (props: NotificationCardProps) => {
 
   //! Render
   return (
-    <CommonStyles.Box sx={{ minWidth: 500, px: '24px' }}>
+    <CommonStyles.Box className='component:NotificationCard' sx={{ width: 500 }}>
       <CommonStyles.Box
         sx={{
           display: 'flex',
           alignItems: 'center',
           alignContent: 'center',
           justifyContent: 'space-between',
-          my: 2,
+          borderBottom: `1px solid ${theme.colors?.borderBaseAlpha}`,
+          p: 3,
         }}
       >
         <CommonStyles.Typography fontWeight={600} fontSize='1.2rem'>
-          Notification
+          Notifications
         </CommonStyles.Typography>
+
         <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}>
           <Switch {...label} defaultChecked size='small' />
-          <CommonStyles.Typography fontWeight={500} fontSize='14px' mr='12px' ml='8px'>
+          <CommonStyles.Typography fontWeight={500} fontSize='14px' mr='32px' ml='16px'>
             Only show unread
           </CommonStyles.Typography>
           <CommonIcons.MdOutlineLaunch
@@ -73,56 +75,54 @@ const NotificationCard = (props: NotificationCardProps) => {
         </CommonStyles.Box>
       </CommonStyles.Box>
 
-      <CommonStyles.Box sx={{ mb: 1 }}>
-        <CommonStyles.Tabs tabs={tabs} />
-      </CommonStyles.Box>
-      {Object.entries(data)?.map((el, ind) => {
-        const key: string = el[0];
-        const value = el[1];
-        let title = '';
-        switch (key) {
-          case 'old':
-            title = `Yesterday`;
-            break;
-          case 'new':
-            title = `Older`;
-            break;
-        }
-        const isAllRead = value.every((item: INotification) => item.read);
+      <CommonStyles.Tabs tabs={tabs} />
 
-        return (
-          <CommonStyles.Box key={ind} sx={{ pb: 1 }}>
-            <CommonStyles.Box
-              sx={{ alignContent: 'center', display: 'flex', justifyContent: 'space-between' }}
-            >
-              <CommonStyles.Typography
-                sx={{
-                  color: theme.colors?.textGray,
-                  textTransform: 'uppercase',
-                  fontSize: '0.8rem',
-                  fontWeight: '600',
-                }}
+      <CommonStyles.Box sx={{ p: 3, pt: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        {Object.entries(data)?.map((el, ind) => {
+          const key: string = el[0];
+          const value = el[1];
+          let title = '';
+          switch (key) {
+            case 'old':
+              title = `Yesterday`;
+              break;
+            case 'new':
+              title = `Older`;
+              break;
+          }
+          const isAllRead = value.every((item: INotification) => item.read);
+
+          return (
+            <CommonStyles.Box className='each-notification' key={ind}>
+              <CommonStyles.Box
+                sx={{ alignContent: 'center', display: 'flex', justifyContent: 'space-between' }}
               >
-                {title}
-              </CommonStyles.Typography>
-              {isAllRead && (
                 <CommonStyles.Typography
-                  className='is-hover'
-                  isLink
-                  fontSize={'0.8rem'}
-                  mr={5}
-                  fontWeight={'600'}
+                  sx={{
+                    color: theme.colors?.text3,
+                    textTransform: 'uppercase',
+                  }}
+                  variant='captionMBold'
                 >
-                  Mark all as read
+                  {title}
                 </CommonStyles.Typography>
-              )}
+
+                {isAllRead && (
+                  <CommonStyles.Typography className='is-hover' isLink variant='captionLMedium'>
+                    Mark all as read
+                  </CommonStyles.Typography>
+                )}
+              </CommonStyles.Box>
+
+              <CommonStyles.Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
+                {value?.map((item: INotification, ind: number) => {
+                  return <ItemNotification key={ind} item={item} />;
+                })}
+              </CommonStyles.Box>
             </CommonStyles.Box>
-            {value?.map((item: INotification, ind: number) => {
-              return <ItemNotification key={ind} item={item} />;
-            })}
-          </CommonStyles.Box>
-        );
-      })}
+          );
+        })}
+      </CommonStyles.Box>
     </CommonStyles.Box>
   );
 };

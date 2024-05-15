@@ -16,7 +16,7 @@ const Badge = (props: PropsWithChildren<BadgeProps>) => {
       className='component:Badge'
       sx={{ padding: '2px 4px', backgroundColor: theme?.colors?.gray2, borderRadius: 0.5 }}
     >
-      <CommonStyles.Typography sx={{ color: theme.colors?.text2 }} variant='captionMedium'>
+      <CommonStyles.Typography sx={{ color: theme.colors?.text2 }} variant='captionLMedium'>
         {props.children}
       </CommonStyles.Typography>
     </CommonStyles.Box>

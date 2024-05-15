@@ -13,6 +13,7 @@ const Users = lazy(() => import('pages/Users'));
 // const Laucher = lazy(() => import('pages/Launcher'));
 // const AppManagement = lazy(() => import('pages/Apps'));
 // const DetailApp = lazy(() => import('pages/DetailApp'));
+const Launcher = lazy(() => import('pages/NewDesigns/Launcher'));
 
 const AppsLayout = lazy(() => import('layouts/AppsLayout'));
 
@@ -98,6 +99,11 @@ const routes: Route[] = [
         name: 'Notification',
         path: BaseUrl.Notification.Index,
         component: NotificationScreen,
+      },
+      {
+        name: 'Launcher',
+        path: BaseUrl.Launcher.App,
+        component: Launcher,
       },
     ],
   },

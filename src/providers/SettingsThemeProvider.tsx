@@ -88,7 +88,7 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
             letterSpacing: '-0.336px',
           },
           h6Medium: {},
-          captionMedium: {
+          captionLMedium: {
             fontSize: '14px',
             fontStyle: 'normal',
             fontWeight: 500,
@@ -109,11 +109,24 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
             lineHeight: '20px',
             letterSpacing: '-0.07px',
           },
+          captionMBold: {
+            fontSize: '12px',
+            fontStyle: 'normal',
+            fontWeight: 700,
+            lineHeight: '16px',
+            letterSpacing: '-0.072px',
+          },
           captionMRegular: {
             fontSize: '12px',
             fontStyle: 'normal',
             fontWeight: 400,
             lineHeight: '16px',
+          },
+          captionSRegular: {
+            fontSize: '10px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '14px',
           },
           bodyMBold: {
             fontSize: '18px',
@@ -167,6 +180,7 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           borderBaseAlpha: 'rgba(23, 25, 25, 0.08)',
           text1: '#171919',
           text2: '#17191999',
+          text3: '#666C6E',
         },
       }),
     [mainColour]

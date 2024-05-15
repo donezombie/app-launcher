@@ -39,7 +39,7 @@ const EachReview = (props: EachReviewProps) => {
         </CommonStyles.Box>
         <CommonStyles.Box
           className='each-review__header__author'
-          sx={{ display: 'flex', flexDirection: 'column', gap: 0.8 }}
+          sx={{ display: 'flex', flexDirection: 'column', gap: 0.8, alignItems: 'flex-end' }}
         >
           <CommonStyles.Typography variant='captionLRegular'>2d ago</CommonStyles.Typography>
           <CommonStyles.Typography variant='captionLRegular'>vhampton</CommonStyles.Typography>

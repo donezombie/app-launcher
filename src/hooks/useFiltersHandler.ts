@@ -1,3 +1,4 @@
+import { NUMBER_DEFAULT_PAGE } from 'consts';
 import { CommonFilters, Order } from 'interfaces/common';
 import { cloneDeep, get } from 'lodash';
 import React, { useCallback } from 'react';
@@ -71,6 +72,20 @@ function useFiltersHandler<T>(initialFilters?: T & CommonFilters) {
     });
   }, []);
 
+  const handleSearch = useCallback((search: string) => {
+    setFilters((prev) => {
+      if (prev) {
+        return {
+          ...prev,
+          page: NUMBER_DEFAULT_PAGE,
+          search,
+        };
+      }
+
+      return prev;
+    });
+  }, []);
+
   const handleResetToInitial = useCallback(() => {
     setFilters(cloneDeep(initialFilters));
     setSelected([]);
@@ -91,6 +106,7 @@ function useFiltersHandler<T>(initialFilters?: T & CommonFilters) {
     handleResetToInitial,
     handleCheckBox,
     handleResetSelected,
+    handleSearch,
   };
 }
 
