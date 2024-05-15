@@ -25,7 +25,7 @@ const HeadWithSearching = (props: HeadWithSearchingProps) => {
             className='component:HeadWithSearching'
             sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
           >
-            <CommonStyles.Typography variant='h5'>{title}</CommonStyles.Typography>
+            <CommonStyles.Typography variant='h6Bold'>{title}</CommonStyles.Typography>
 
             {onSubmitSearch && (
               <Form>

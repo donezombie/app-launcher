@@ -2,6 +2,7 @@ import { useTheme } from '@mui/material';
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
+import bannerImage from 'assets/banner.png';
 
 const Marketplace = () => {
   //! State
@@ -13,10 +14,19 @@ const Marketplace = () => {
   const renderHeader = () => {
     return (
       <CommonStyles.Box
-        sx={{ p: 3, backgroundColor: '#d5f2e4', borderRadius: 3 }}
+        sx={{
+          p: 3,
+          backgroundColor: '#d5f2e4',
+          borderRadius: 1.5,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 3,
+          position: 'relative',
+          overflow: 'hidden',
+        }}
         className='alert-information'
       >
-        <CommonStyles.Box sx={{ maxWidth: 500, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <CommonStyles.Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <CommonStyles.Typography variant='h5'>Verify 365</CommonStyles.Typography>
 
           <CommonStyles.Typography
@@ -29,6 +39,22 @@ const Marketplace = () => {
           <CommonStyles.Box>
             <CommonStyles.Button>More Information</CommonStyles.Button>
           </CommonStyles.Box>
+        </CommonStyles.Box>
+
+        <CommonStyles.Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden',
+            '& img': {
+              position: 'absolute',
+              width: 340,
+              top: -40,
+            },
+          }}
+        >
+          <img src={bannerImage} />
         </CommonStyles.Box>
       </CommonStyles.Box>
     );

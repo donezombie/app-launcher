@@ -6,6 +6,39 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    h6Bold: React.CSSProperties;
+    h6Medium?: React.CSSProperties;
+    captionMedium?: React.CSSProperties;
+    captionLRegular?: React.CSSProperties;
+    captionLBold?: React.CSSProperties;
+    captionMRegular?: React.CSSProperties;
+    bodyMBold?: React.CSSProperties;
+  }
+  interface TypographyVariantsOptions {
+    h6Bold?: React.CSSProperties;
+    h6Medium?: React.CSSProperties;
+    captionMedium?: React.CSSProperties;
+    captionLRegular?: React.CSSProperties;
+    captionLBold?: React.CSSProperties;
+    captionMRegular?: React.CSSProperties;
+    bodyMBold?: React.CSSProperties;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    h6Bold: true;
+    h6Medium: true;
+    captionMedium: true;
+    captionLRegular: true;
+    captionLBold: true;
+    captionMRegular: true;
+    bodyMBold: true;
+  }
+}
+
 type Colors = {
   purple?: string;
   green?: string;
@@ -15,15 +48,20 @@ type Colors = {
   white?: string;
   black?: string;
   gray?: string;
+  gray2?: string;
   grayLight?: string;
   grayText?: string;
   grayActiveMenu?: string;
   border?: string;
+  borderBaseAlpha?: string;
   borderInput?: string;
   borderInputLight?: string;
   borderIcon?: string;
   textGray?: string;
   borderLine?: string;
+  text1?: string;
+  text2?: string;
+  text3?: string;
 };
 
 type Sizes = {

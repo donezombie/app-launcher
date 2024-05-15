@@ -18,7 +18,7 @@ const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
     {
       id: uniqueId(),
       title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution ...`,
+      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
       image: '',
       isInstalled,
       isYourApp,
@@ -26,7 +26,7 @@ const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
     {
       id: uniqueId(),
       title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution ...`,
+      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
       image: '',
       isInstalled,
       isYourApp,
@@ -34,7 +34,7 @@ const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
     {
       id: uniqueId(),
       title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution ...`,
+      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
       image: '',
       isInstalled,
       isYourApp,
@@ -42,7 +42,7 @@ const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
     {
       id: uniqueId(),
       title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution ...`,
+      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
       image: '',
       isInstalled,
       isYourApp,
@@ -50,7 +50,7 @@ const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
     {
       id: uniqueId(),
       title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution ...`,
+      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
       image: '',
       isInstalled,
       isYourApp,
@@ -65,9 +65,8 @@ const ListApp = ({ isInstalled = false, isYourApp = false }: ListAppProps) => {
       className='component:ListApp'
       sx={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        gap: 4,
-        [theme.breakpoints.down('lg')]: { gridTemplateColumns: '1fr 1fr' },
+        gridTemplateColumns: '1fr 1fr',
+        gap: 3,
         [theme.breakpoints.down('md')]: { gridTemplateColumns: '1fr' },
       }}
     >

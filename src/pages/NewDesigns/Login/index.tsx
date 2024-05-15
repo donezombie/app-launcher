@@ -5,6 +5,8 @@ import { Link, Navigate } from 'react-router-dom';
 import FormLogin from 'components/FormLogin';
 import FormVerify from 'components/FormVerify';
 import { useAuth } from 'providers/AuthenticationProvider';
+import logoWithText from 'assets/logo-with-text.svg';
+import imageLogin from 'assets/image-login.png';
 
 const Login = () => {
   //! State
@@ -24,12 +26,34 @@ const Login = () => {
       <CommonStyles.Box
         className='login__left'
         sx={{
-          width: '30%',
+          width: 380,
           height: '100%',
-          backgroundColor: theme.palette.primary.main,
           flexShrink: 0,
+          p: 3,
+          background: `linear-gradient(to bottom, rgba(20, 123, 119, 0.8), rgba(20, 123, 119, 0.8)), url(${imageLogin}) lightgray 50% / cover no-repeat`,
         }}
-      />
+      >
+        <CommonStyles.Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: '100%',
+          }}
+        >
+          <img src={logoWithText} alt='logoWithText' style={{ height: 30, width: 140 }} />
+
+          <CommonStyles.Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <CommonStyles.Typography variant='captionLBold' sx={{ color: theme.colors?.white }}>
+              “We thrive on creating the property transaction clearer, faster and easier every day.”
+            </CommonStyles.Typography>
+
+            <CommonStyles.Typography variant='captionLRegular' sx={{ color: theme.colors?.white }}>
+              tmgroup Product Team
+            </CommonStyles.Typography>
+          </CommonStyles.Box>
+        </CommonStyles.Box>
+      </CommonStyles.Box>
 
       <CommonStyles.Box
         className='login__right'

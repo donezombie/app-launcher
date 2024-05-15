@@ -40,7 +40,7 @@ const Tabs = ({ tabs, defaultTab = 0, onChangeTab }: TabsProps) => {
           />
         ))}
       </TabsMui>
-      <CommonStyles.Box>
+      <CommonStyles.Box sx={{ pt: 2 }}>
         {tabs.map((tab, index) => {
           if (index === value) {
             return <tab.component key={tab.label} />;

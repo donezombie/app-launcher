@@ -78,7 +78,7 @@ const Sidebar = () => {
       sx={{
         position: 'fixed',
         height: `calc(100vh - ${theme.sizes?.heightNavbar}px)`,
-        width: 300,
+        width: theme.sizes?.widthSidebar,
         backgroundColor: theme.colors?.gray,
         top: theme.sizes?.heightNavbar,
         left: 0,

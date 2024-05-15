@@ -8,8 +8,10 @@ import Tooltip from './Tooltip';
 import TabPanel from './TabPanel';
 import Chip from './Chip';
 import Tabs from './Tabs';
+import Badge from './Badge';
 
 export default {
+  Badge,
   Tabs,
   Chip,
   TabPanel,
