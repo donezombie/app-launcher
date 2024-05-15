@@ -3,12 +3,14 @@ import CommonStyles from 'components/CommonStyles';
 import { useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
+import { isString } from 'lodash';
 
 interface EachApplicationProps {
   application: {
     label: string | React.ReactNode;
     href: string;
     idApp?: string;
+    icon?: any;
   };
 }
 
@@ -50,8 +52,22 @@ const EachApplication = ({ application }: EachApplicationProps) => {
 
             position: 'relative',
             overflow: 'hidden',
+
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
+          {isString(application.icon) ? (
+            <img
+              src={application.icon}
+              alt='app-icon'
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            application.icon
+          )}
+
           <CommonStyles.Box
             className='each-application__overlay'
             sx={{

@@ -8,6 +8,7 @@ import HeaderOfSection from './HeaderOfSection';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
 import { useGetListInstalledApp } from 'hooks/app/useAppHooks';
+import { IconApplication1, IconApplication2 } from 'components/CommonIcons';
 
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
@@ -54,7 +55,12 @@ const ApplicationSection = () => {
           <CommonStyles.Loading />
         ) : (
           dataInstallApp
-            .map((el) => ({ label: el.name, href: el.launchUri, idApp: el.id }))
+            .map((el, index) => ({
+              label: el.name,
+              href: el.launchUri,
+              idApp: el.id,
+              icon: index % 2 === 0 ? IconApplication1 : IconApplication2,
+            }))
             .map((el) => {
               return <EachApplication key={el.label} application={el} />;
             })

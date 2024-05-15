@@ -1,6 +1,6 @@
 import { isDevelopment } from 'consts';
 
-export const ROOT_URI = 'https://betterhome-mvp.auth.ap-southeast-1.amazoncognito.com';
+export const ROOT_URI = 'https://marketplace.auth.ap-southeast-1.amazoncognito.com';
 export const COGNITO_URI =
   'https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_7wzWV6yyL';
 export const WELL_KNOW =
