@@ -72,7 +72,7 @@ const TextField = ({
   return (
     <CommonStyles.Box sx={sxContainer}>
       {label && (
-        <CommonStyles.Typography component='p' variant='body2' sx={{ mb: 1.5, fontWeight: 600 }}>
+        <CommonStyles.Typography component='p' variant='captionMedium' sx={{ mb: 1.5 }}>
           {label}
         </CommonStyles.Typography>
       )}

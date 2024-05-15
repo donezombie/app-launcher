@@ -76,7 +76,45 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
     () =>
       createTheme({
         typography: {
-          fontFamily: `"Open Sans", sans-serif`,
+          fontFamily: `"Lato", sans-serif`,
+          allVariants: {
+            color: '#171919',
+          },
+          h6Bold: {
+            fontSize: '24px',
+            fontStyle: 'normal',
+            fontWeight: 700,
+            lineHeight: '32px',
+            letterSpacing: '-0.336px',
+          },
+          h6Medium: {},
+          captionMedium: {
+            fontSize: '14px',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            lineHeight: '20px',
+            letterSpacing: '-0.07px',
+          },
+          captionLRegular: {
+            fontSize: '14px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '20px',
+            letterSpacing: '-0.07px',
+          },
+          captionMRegular: {
+            fontSize: '12px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '16px',
+          },
+          bodyMBold: {
+            fontSize: '18px',
+            fontStyle: 'normal',
+            fontWeight: 700,
+            lineHeight: '26px',
+            letterSpacing: '-0.216px',
+          },
         },
         palette: {
           mode: mode,
@@ -98,7 +136,7 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
         },
         sizes: {
           heightNavbar: 76,
-          widthSidebar: 300,
+          widthSidebar: 280,
         },
         colors: {
           purple: '#611f69',
@@ -109,13 +147,18 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           white: '#fff',
           black: 'rgb(18, 18, 18)',
           gray: '#fafafb',
+          gray2: '#ECEEEF',
           grayLight: '#F2F2F2',
-          grayText: '#7a7a7a',
+          grayText: '#17191999',
           grayActiveMenu: '#f1f1f2',
           border: '#dde0e2',
           borderInput: '#e8ebeb',
           borderInputLight: '#ebeeef',
           borderIcon: '#f4f4f6',
+          borderBaseAlpha: 'rgba(23, 25, 25, 0.08)',
+
+          text1: '#171919',
+          text2: '#17191999',
         },
       }),
     [mainColour]
