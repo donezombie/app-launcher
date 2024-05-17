@@ -1,65 +1,19 @@
 import React from 'react';
 import CommonStyles from 'components/CommonStyles';
 import EachApp from './EachApp';
-import { uniqueId } from 'lodash';
-import { App, IApp } from 'interfaces/apps';
+import { App } from 'interfaces/apps';
 import { useTheme } from '@mui/material';
 
 interface ListAppProps {
-  isInstalled?: boolean;
+  isMyApps?: boolean;
   isYourApp?: boolean;
   apps?: App[];
 }
 
-const ListApp = ({ isInstalled = false, isYourApp = false, apps = [] }: ListAppProps) => {
+const ListApp = ({ isMyApps = false, isYourApp = false, apps = [] }: ListAppProps) => {
   //! State
   const theme = useTheme();
-
-  const items: IApp[] = [
-    {
-      id: uniqueId(),
-      title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
-      image: '',
-      isInstalled,
-      isYourApp,
-    },
-    {
-      id: uniqueId(),
-      title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
-      image: '',
-      isInstalled,
-      isYourApp,
-    },
-    {
-      id: uniqueId(),
-      title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
-      image: '',
-      isInstalled,
-      isYourApp,
-    },
-    {
-      id: uniqueId(),
-      title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
-      image: '',
-      isInstalled,
-      isYourApp,
-    },
-    {
-      id: uniqueId(),
-      title: 'e-Sign',
-      description: `Digitise document signing with eSign's secure electronic signature solution, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,  ...`,
-      image: '',
-      isInstalled,
-      isYourApp,
-    },
-  ];
-
   //! Function
-
   //! Render
   if (apps.length <= 0) {
     return (
@@ -80,7 +34,7 @@ const ListApp = ({ isInstalled = false, isYourApp = false, apps = [] }: ListAppP
       }}
     >
       {apps.map((el) => {
-        return <EachApp key={el.id} item={el} />;
+        return <EachApp key={el.id} item={el} isMyApps={isMyApps} isYourApp={isYourApp} />;
       })}
     </CommonStyles.Box>
   );

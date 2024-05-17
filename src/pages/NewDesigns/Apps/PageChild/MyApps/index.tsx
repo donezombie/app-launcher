@@ -39,11 +39,7 @@ const MyApps = () => {
         placeholder='Search App...'
       />
 
-      {isInstalledLoading ? (
-        <CommonStyles.Loading />
-      ) : (
-        <ListApp apps={dataInstallApp} isInstalled />
-      )}
+      {isInstalledLoading ? <CommonStyles.Loading /> : <ListApp apps={dataInstallApp} isMyApps />}
     </CommonStyles.Box>
   );
 };

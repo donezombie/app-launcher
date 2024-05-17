@@ -3,39 +3,126 @@ import CommonStyles from 'components/CommonStyles';
 import { Field, Formik } from 'formik';
 import { App } from 'interfaces/apps';
 import SwitchField from 'components/CustomFields/SwitchField';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
+import { useState } from 'react';
+import { useInstallApp, useUninstallApp } from 'hooks/app/useAppHooks';
+import { useQueryClient } from '@tanstack/react-query';
+import { showError, showSuccess } from 'helpers/toast';
+import { queryKeys } from 'consts';
+import Launcher from 'pages/Launcher';
+import { useTabHandler } from 'providers/TabHandlerProvider';
 
 interface EachAppProps {
   item: App;
+  isMyApps?: boolean;
+  isYourApp?: boolean;
 }
 
-const EachApp = ({ item }: EachAppProps) => {
+const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) => {
   //! State
   const theme = useTheme();
+  const [loading, setLoading] = useState(false);
+  const { mutateAsync: uninstallApp } = useUninstallApp();
+  const { mutateAsync: installApp } = useInstallApp();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { addNewTab } = useTabHandler();
 
   //! Function
+  const onClickUninstall = async () => {
+    try {
+      setLoading(true);
+      await uninstallApp({ id: item?.id });
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppInstalledList] });
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
 
+      showSuccess('Uninstall app successfully!');
+      setLoading(false);
+    } catch (error) {
+      showError(error);
+      setLoading(false);
+    }
+  };
+
+  const onClickInstall = async () => {
+    try {
+      setLoading(true);
+      await installApp({ id: item?.id });
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppInstalledList] });
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
+
+      showSuccess('Install app successfully!');
+      setLoading(false);
+    } catch (error) {
+      showError(error);
+      setLoading(false);
+    }
+  };
+
+  const onClickLaunch = () => {
+    addNewTab({
+      label: item.name,
+      value: item.id,
+      content: <Launcher idApp={item.id} launchUri={item.launchUri} />,
+      openNewTab: true,
+    });
+
+    if (!location.pathname.includes(BaseUrl.AppManagement)) {
+      navigate(BaseUrl.AppManagement);
+    }
+  };
   //! Render
   const renderActions = () => {
     // if (item.isYourApp) {
     //   return <CommonStyles.Button sx={{ width: 'fit-content' }}>Manage</CommonStyles.Button>;
     // }
 
-    if (item.isAssigned) {
+    if (isYourApp) {
       return (
         <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
           <Link to={BaseUrl.MyApps.DetailWithID(item.id || '')}>
             <CommonStyles.Button>Edit</CommonStyles.Button>
           </Link>
-          <CommonStyles.Button variant='outlined'>Uninstall</CommonStyles.Button>
+          <CommonStyles.Button variant='outlined' loading={loading} onClick={onClickUninstall}>
+            Uninstall
+          </CommonStyles.Button>
+        </CommonStyles.Box>
+      );
+    }
+
+    if (isMyApps) {
+      return (
+        <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
+          <CommonStyles.Button loading={loading} onClick={onClickLaunch}>
+            Launch
+          </CommonStyles.Button>
+          <CommonStyles.Button variant='outlined' loading={loading} onClick={onClickUninstall}>
+            Uninstall
+          </CommonStyles.Button>
+        </CommonStyles.Box>
+      );
+    }
+
+    if (item.isInstalled) {
+      return (
+        <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
+          <CommonStyles.Button loading={loading} onClick={onClickLaunch}>
+            Launch
+          </CommonStyles.Button>
+
+          <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
+            <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
+          </Link>
         </CommonStyles.Box>
       );
     }
 
     return (
       <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-        <CommonStyles.Button>Install</CommonStyles.Button>
+        <CommonStyles.Button loading={loading} onClick={onClickInstall}>
+          Install
+        </CommonStyles.Button>
 
         <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
           <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>

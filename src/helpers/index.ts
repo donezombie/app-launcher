@@ -1,5 +1,6 @@
 import { PERMISSION_ENUM } from 'consts/index';
 import { isString } from 'lodash';
+import moment from 'moment';
 export function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -71,4 +72,28 @@ export const file2Base64 = (file: File | string): string => {
   }
 
   return window.URL.createObjectURL(file);
+};
+
+export const convertStringToArrayWithComma = (data: string) => {
+  return data.split(',');
+};
+
+export const renderReviewTime = (dateTimeString: Date | string) => {
+  const momentObj = moment(dateTimeString);
+
+  // Get current date and time
+  const now = moment();
+
+  // Check if the date is today
+  if (momentObj.isSame(now, 'day')) {
+    return momentObj.format('HH:mm');
+  }
+
+  // Check if the date is within this week
+  if (momentObj.isSame(now, 'week')) {
+    return momentObj.format('ddd');
+  }
+
+  // If not within this week, display month and day
+  return momentObj.format('MMM YY');
 };

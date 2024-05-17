@@ -3,10 +3,14 @@ import { useParams } from 'react-router-dom';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { Rating, useTheme } from '@mui/material';
+import { IReview } from 'interfaces/apps';
+import { renderReviewTime } from 'helpers';
 
-interface EachReviewProps {}
+interface EachReviewProps {
+  item: IReview;
+}
 
-const EachReview = (props: EachReviewProps) => {
+const EachReview = ({ item }: EachReviewProps) => {
   //! State
   const theme = useTheme();
 
@@ -26,13 +30,11 @@ const EachReview = (props: EachReviewProps) => {
           className='each-review__header__title'
           sx={{ display: 'flex', flexDirection: 'column', gap: 0.8 }}
         >
-          <CommonStyles.Typography variant='bodyMBold'>
-            Best e signature app but could be
-          </CommonStyles.Typography>
+          <CommonStyles.Typography variant='bodyMBold'>{item?.title || ''}</CommonStyles.Typography>
 
           <Rating
             name='size-small'
-            defaultValue={4.8}
+            defaultValue={item?.rating || 0}
             size='small'
             sx={{ color: theme.colors?.black }}
           />
@@ -41,8 +43,12 @@ const EachReview = (props: EachReviewProps) => {
           className='each-review__header__author'
           sx={{ display: 'flex', flexDirection: 'column', gap: 0.8, alignItems: 'flex-end' }}
         >
-          <CommonStyles.Typography variant='captionLRegular'>2d ago</CommonStyles.Typography>
-          <CommonStyles.Typography variant='captionLRegular'>vhampton</CommonStyles.Typography>
+          <CommonStyles.Typography variant='captionLRegular'>
+            {renderReviewTime(item.reviewDateUtc || '')}
+          </CommonStyles.Typography>
+          <CommonStyles.Typography variant='captionLRegular'>
+            {item?.username || ''}
+          </CommonStyles.Typography>
         </CommonStyles.Box>
       </CommonStyles.Box>
 
@@ -52,9 +58,7 @@ const EachReview = (props: EachReviewProps) => {
         sx={{ mt: 1 }}
         variant='captionMRegular'
       >
-        e-sign is the most popular e signature choice because it just works, its intuitive, comes
-        with extensive features and works seamlessly with tmgroup products. you dont have to worry
-        about it breaking and you can freely sign any time.
+        {item?.description || ''}
       </CommonStyles.Typography>
     </CommonStyles.Box>
   );

@@ -24,6 +24,11 @@ export interface AppIntegration {
   appClientId?: string;
   appClientSecret?: string;
   requestCount?: number;
+  avgerageRating?: number;
+  tags?: string;
+  previewImgUrls?: string;
+  isInstalled?: boolean;
+  reviews?: IReview[];
 }
 
 export type App = Pick<
@@ -38,6 +43,7 @@ export type App = Pick<
   | 'launchUri'
   | 'requestCount'
   | 'isAssigned'
+  | 'isInstalled'
 >;
 
 export type IApp = {
@@ -47,4 +53,12 @@ export type IApp = {
   image?: string;
   isInstalled?: boolean;
   isYourApp?: boolean;
+};
+
+export type IReview = {
+  description: string;
+  rating: number;
+  reviewDateUtc: string | Date;
+  title: string;
+  username: string;
 };
