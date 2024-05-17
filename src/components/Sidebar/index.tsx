@@ -52,14 +52,14 @@ const Sidebar = () => {
       label: 'Settings',
       icon: CommonIcons.SettingsIcon,
       path: BaseUrl.Setting.Index,
-      show: isAdmin || isAppManager,
+      show: isAdmin,
     },
     {
       id: uniqueId('side-bar'),
       label: 'Develop',
       icon: CommonIcons.SparkesIcon,
       path: BaseUrl.Develop.Index,
-      show: isAdmin,
+      show: isAdmin || isAppManager,
       children: [
         {
           label: 'Upload App',

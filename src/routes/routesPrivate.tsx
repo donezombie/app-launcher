@@ -181,14 +181,14 @@ const routes: Route[] = [
       {
         name: 'Settings',
         path: BaseUrl.Setting.Index,
-        component: withCheckRole(Settings, [PERMISSION_ENUM.ADMIN, PERMISSION_ENUM.APP_MANAGER]),
+        component: withCheckRole(Settings, [PERMISSION_ENUM.ADMIN]),
         isPrivateRoute: true,
       },
 
       {
         name: 'Develop',
         path: BaseUrl.Develop.Index,
-        component: withCheckRole(DevelopPage, [PERMISSION_ENUM.ADMIN]),
+        component: withCheckRole(DevelopPage, [PERMISSION_ENUM.ADMIN, PERMISSION_ENUM.APP_MANAGER]),
       },
       {
         name: 'Upload apps',
