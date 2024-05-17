@@ -2,18 +2,78 @@ import CommonStyles from 'components/CommonStyles';
 import ButtonBack from 'components/ButtonBack';
 import { Rating, useTheme } from '@mui/material';
 import HeadWithSearching from 'components/HeadWithSearching';
-import exampleLogoApp from 'assets/example-img-app.png';
-import preview1 from 'assets/preview1.png';
-import preview2 from 'assets/preview2.png';
 import EachReview from 'components/EachReview';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGetAppIntegrationDetail, useInstallApp } from 'hooks/app/useAppHooks';
+import { useState } from 'react';
+import { showError, showSuccess } from 'helpers/toast';
+import Launcher from 'pages/Launcher';
+import BaseUrl from 'consts/baseUrl';
+import { useTabHandler } from 'providers/TabHandlerProvider';
+import { convertStringToArrayWithComma } from 'helpers';
 
 const InfoApp = () => {
   //! State
+  const [loading, setLoading] = useState(false);
+  const { mutateAsync: installApp } = useInstallApp();
   const theme = useTheme();
-
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { addNewTab } = useTabHandler();
+  const {
+    data: resDetailApp,
+    isLoading: isLoadingApp,
+    refetch,
+  } = useGetAppIntegrationDetail(id || '');
+  const detailData = resDetailApp?.data;
+  const previewImages = convertStringToArrayWithComma(detailData?.previewImgUrls || '');
+  const tagsData = convertStringToArrayWithComma(detailData?.tags || '');
+  const reviewsData = detailData?.reviews || [];
   //! Function
+  const onClickInstall = async () => {
+    try {
+      setLoading(true);
+      await installApp({ id: id || '' });
+      refetch();
+      showSuccess('Install app successfully!');
+      setLoading(false);
+    } catch (error) {
+      showError(error);
+      setLoading(false);
+    }
+  };
+
+  const onClickLaunch = () => {
+    addNewTab({
+      label: detailData?.name || '',
+      value: detailData?.id || '',
+      content: <Launcher idApp={detailData?.id} launchUri={detailData?.launchUri} />,
+      openNewTab: true,
+    });
+
+    if (!location.pathname.includes(BaseUrl.AppManagement)) {
+      navigate(BaseUrl.AppManagement);
+    }
+  };
 
   //! Render
+  const renderAction = () => {
+    if (detailData?.isInstalled) {
+      return (
+        <CommonStyles.Box>
+          <CommonStyles.Button onClick={onClickLaunch}>Launch</CommonStyles.Button>
+        </CommonStyles.Box>
+      );
+    }
+    return (
+      <CommonStyles.Box>
+        <CommonStyles.Button onClick={onClickInstall} loading={loading}>
+          Install
+        </CommonStyles.Button>
+      </CommonStyles.Box>
+    );
+  };
+
   const renderImage = () => {
     return (
       <CommonStyles.Box
@@ -24,7 +84,7 @@ const InfoApp = () => {
           '& img': { width: '100%', height: '100%', objectFit: 'cover' },
         }}
       >
-        <img src={exampleLogoApp} alt='example-logo-app' />
+        <img src={detailData?.icon || ''} alt='example-logo-app' />
       </CommonStyles.Box>
     );
   };
@@ -38,7 +98,7 @@ const InfoApp = () => {
           component='p'
           sx={{ mb: 1 }}
         >
-          LMS Integration
+          {detailData?.name || ''}
         </CommonStyles.Typography>
         <CommonStyles.Typography
           className='feature__card__information__description'
@@ -46,8 +106,7 @@ const InfoApp = () => {
           component='p'
           sx={{ color: theme.colors?.text2, mb: 2.5 }}
         >
-          Simply, easily, efficiently. We’ve created a solution that streamlines a range of
-          essential LMS products and services and embeds them within your case management system.
+          {detailData?.summary || ''}
         </CommonStyles.Typography>
         <CommonStyles.Typography
           isLink
@@ -69,30 +128,33 @@ const InfoApp = () => {
         sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}
       >
         <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <CommonStyles.Typography>4.8</CommonStyles.Typography>
+          <CommonStyles.Typography>{detailData?.avgerageRating || 0}</CommonStyles.Typography>
           <Rating
             name='size-small'
-            defaultValue={4.8}
+            defaultValue={detailData?.avgerageRating || 0}
             size='small'
             sx={{ color: theme.colors?.black }}
           />
         </CommonStyles.Box>
 
-        <CommonStyles.Box>
-          <CommonStyles.Button>Install</CommonStyles.Button>
-        </CommonStyles.Box>
+        {/* Action */}
+        {renderAction()}
 
         <CommonStyles.Box
           className='feature__card__review__badge'
           sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}
         >
-          {['API1', 'iOS', 'Integration'].map((el) => (
+          {tagsData.map((el) => (
             <CommonStyles.Badge key={el}>{el}</CommonStyles.Badge>
           ))}
         </CommonStyles.Box>
       </CommonStyles.Box>
     );
   };
+
+  if (isLoadingApp) {
+    return <CommonStyles.Loading />;
+  }
 
   return (
     <CommonStyles.Box
@@ -130,8 +192,9 @@ const InfoApp = () => {
             },
           }}
         >
-          <img src={preview1} />
-          <img src={preview2} />
+          {previewImages.map((item: string) => {
+            return <img src={item} key={item} alt={item} />;
+          })}
         </CommonStyles.Box>
       </CommonStyles.Box>
 
@@ -139,10 +202,9 @@ const InfoApp = () => {
         <HeadWithSearching title='Reviews' />
 
         <CommonStyles.Box sx={{ mt: 2.5, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
-          <EachReview />
-          <EachReview />
-          <EachReview />
-          <EachReview />
+          {reviewsData.map((el) => {
+            return <EachReview item={el} key={el.title} />;
+          })}
         </CommonStyles.Box>
       </CommonStyles.Box>
     </CommonStyles.Box>

@@ -57,7 +57,11 @@ const routes: Route[] = [
       {
         name: 'Homepage',
         path: BaseUrl.Homepage,
-        component: withCheckRole(Homepage, [PERMISSION_ENUM.PUBLIC]),
+        component: withCheckRole(Homepage, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
         isPrivateRoute: true,
       },
       // {
@@ -118,62 +122,89 @@ const routes: Route[] = [
       {
         name: 'Marketplace',
         path: BaseUrl.Marketplace.Index,
-        component: Marketplace,
+        component: withCheckRole(Marketplace, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
         isPrivateRoute: true,
       },
       {
         name: 'Products',
         path: BaseUrl.Marketplace.Products,
-        component: Products,
+        component: withCheckRole(Products, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
         isPrivateRoute: true,
       },
       {
         name: 'Quote',
         path: BaseUrl.Marketplace.Quote,
-        component: Quote,
+        component: withCheckRole(Quote, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
         isPrivateRoute: true,
       },
       {
         name: 'Info App',
         path: BaseUrl.Marketplace.Info,
-        component: InfoApp,
+        component: withCheckRole(InfoApp, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
         isPrivateRoute: true,
       },
 
       {
         name: 'MyApps',
         path: BaseUrl.MyApps.Index,
-        component: MyApps,
+        component: withCheckRole(MyApps, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
         isPrivateRoute: true,
       },
       {
         name: 'MyApp Detail',
         path: BaseUrl.MyApps.Detail,
-        component: MyAppDetail,
+        component: withCheckRole(MyAppDetail, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
         isPrivateRoute: true,
       },
 
       {
         name: 'Settings',
         path: BaseUrl.Setting.Index,
-        component: Settings,
+        component: withCheckRole(Settings, [PERMISSION_ENUM.ADMIN]),
         isPrivateRoute: true,
       },
 
       {
         name: 'Develop',
         path: BaseUrl.Develop.Index,
-        component: DevelopPage,
+        component: withCheckRole(DevelopPage, [PERMISSION_ENUM.ADMIN, PERMISSION_ENUM.APP_MANAGER]),
       },
       {
         name: 'Upload apps',
         path: BaseUrl.Develop.UploadApps,
-        component: UploadApps,
+        component: withCheckRole(UploadApps, [PERMISSION_ENUM.ADMIN, PERMISSION_ENUM.APP_MANAGER]),
       },
       {
         name: 'Manage your apps',
         path: BaseUrl.Develop.ManageYourApps,
-        component: ManageYourApps,
+        component: withCheckRole(ManageYourApps, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+        ]),
       },
       {
         name: 'News screen',
