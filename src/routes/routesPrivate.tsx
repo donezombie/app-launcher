@@ -44,6 +44,9 @@ const Settings = lazy(() => import('pages/NewDesigns/Apps/PageChild/Settings'));
 //! Notification
 const NotificationScreen = lazy(() => import('pages/NewDesigns/NotificationScreen'));
 
+//! News
+const NewsScreen = lazy(() => import('pages/NewDesigns/News'));
+
 const routes: Route[] = [
   {
     name: 'Home Layout',
@@ -171,6 +174,11 @@ const routes: Route[] = [
         name: 'Manage your apps',
         path: BaseUrl.Develop.ManageYourApps,
         component: ManageYourApps,
+      },
+      {
+        name: 'News screen',
+        path: BaseUrl.News.Index,
+        component: NewsScreen,
       },
     ],
   },

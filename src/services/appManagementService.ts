@@ -1,12 +1,14 @@
 import queryString from 'query-string';
-import { APP_INTEGRATION_URL, APP_MANAGEMENT_URL } from 'consts/apiUrl';
+import { APP_INTEGRATION_URL, APP_MANAGEMENT_URL, LIST_NEW } from 'consts/apiUrl';
 import { App, AppIntegration } from 'interfaces/apps';
 import { PromiseResponseBase, RequestPagingCommon, ResponseCommonPaging } from 'interfaces/common';
 import httpService from './httpService';
 import { UserRequestingApp } from 'interfaces/user';
 import { get } from 'lodash';
+import { News } from 'interfaces/news';
 
 type ResponseListApp = ResponseCommonPaging<App[]>;
+type ResponseListNew = ResponseCommonPaging<News[]>;
 
 export type RequestCreateApp = Omit<
   AppIntegration,
@@ -135,6 +137,10 @@ class AppManagementService {
 
   checkAppCredential(body: RequestCheckAppCredential) {
     return httpService.post(`${APP_INTEGRATION_URL}/check-app-credential`, body);
+  }
+
+  getListNews({ skip, take, filter }: RequestPagingCommon): PromiseResponseBase<ResponseListNew> {
+    return httpService.get(`${LIST_NEW}/?filter=${filter}&skip=${skip}&take=${take}`);
   }
 }
 

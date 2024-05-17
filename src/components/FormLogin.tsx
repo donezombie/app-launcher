@@ -55,6 +55,7 @@ const FormLogin = (props: FormLoginProps) => {
                   placeholder='name@company.com'
                   label='Email'
                   fullWidth
+                  disabled={true}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
@@ -72,6 +73,7 @@ const FormLogin = (props: FormLoginProps) => {
                   label='Password'
                   fullWidth
                   isShowHidePassword
+                  disabled={true}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
@@ -82,7 +84,7 @@ const FormLogin = (props: FormLoginProps) => {
                 />
               </CommonStyles.Box>
 
-              <CommonStyles.Button fullWidth type='submit'>
+              <CommonStyles.Button fullWidth type='submit' disabled>
                 Login
                 <CommonIcons.RightArrowIcon size={SIZE_ICON_DEFAULT} />
               </CommonStyles.Button>
@@ -96,8 +98,8 @@ const FormLogin = (props: FormLoginProps) => {
                   auth.loginRedirect();
                 }}
               >
-                <CommonIcons.LogoWindow11Icon size={SIZE_ICON_DEFAULT} />
-                Sign in with Microsoft
+                <CommonIcons.FaAws size={SIZE_ICON_DEFAULT} />
+                Sign in with Cognito
               </CommonStyles.Button>
 
               <CommonStyles.Typography

@@ -67,6 +67,12 @@ const Sidebar = () => {
       icon: CommonIcons.MedalIcon,
       path: '/apps/event-management',
     },
+    {
+      id: uniqueId('side-bar'),
+      label: 'News',
+      icon: CommonIcons.PiNewspaperLight,
+      path: BaseUrl.News.Index,
+    },
   ];
 
   //! Function

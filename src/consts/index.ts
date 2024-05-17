@@ -17,6 +17,7 @@ export const queryKeys = {
   updateUser: 'updateUser',
 
   getPlatformSettings: 'getPlatformSettings',
+  getListNew: 'getListNew',
 };
 
 export const LANG_ENUM = {
