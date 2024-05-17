@@ -193,12 +193,15 @@ const routes: Route[] = [
       {
         name: 'Upload apps',
         path: BaseUrl.Develop.UploadApps,
-        component: withCheckRole(UploadApps, [PERMISSION_ENUM.ADMIN]),
+        component: withCheckRole(UploadApps, [PERMISSION_ENUM.ADMIN, PERMISSION_ENUM.APP_MANAGER]),
       },
       {
         name: 'Manage your apps',
         path: BaseUrl.Develop.ManageYourApps,
-        component: withCheckRole(ManageYourApps, [PERMISSION_ENUM.ADMIN]),
+        component: withCheckRole(ManageYourApps, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+        ]),
       },
     ],
   },
