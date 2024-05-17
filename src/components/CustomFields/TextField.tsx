@@ -42,6 +42,7 @@ interface Props {
   sxContainer?: SxProps<Theme>;
   helperText?: string;
   iconStartInput?: ReactNode;
+  disabled?: boolean;
 }
 
 export type TextFieldFormikProps = Props & TextFieldProps;
@@ -56,6 +57,7 @@ const TextField = ({
   sxContainer,
   helperText,
   iconStartInput,
+  disabled,
   ...props
 }: Props & TextFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -84,6 +86,7 @@ const TextField = ({
         onBlur={onBlur}
         onChange={onChange}
         error={!!msgError}
+        disabled={disabled}
         helperText={
           helperText ? (
             <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '20px 1fr', gap: 0.5 }}>

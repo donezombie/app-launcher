@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import CommonStyles from 'components/CommonStyles';
 import { Field, useFormikContext } from 'formik';
 import TextField, { TextFieldFormikProps } from 'components/CustomFields/TextField';
@@ -20,8 +20,8 @@ const UploadField = (props: TextFieldFormikProps) => {
         ref={uploadRef}
         name={`${props.name}-upload-input`}
         style={{ display: 'none' }}
-        onChange={(files) => {
-          setFieldValue(props?.name || '', files);
+        onChange={(e) => {
+          setFieldValue(props?.name || '', e.target.files?.[0]?.name);
         }}
       />
 

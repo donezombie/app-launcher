@@ -102,5 +102,5 @@ export interface SidebarItem {
     path: string;
     showChildren: boolean;
   }[];
-  show: boolean;
+  show?: boolean;
 }

@@ -80,6 +80,12 @@ const Sidebar = () => {
       path: '/apps/event-management',
       show: isAdmin,
     },
+    {
+      id: uniqueId('side-bar'),
+      label: 'News',
+      icon: CommonIcons.PiNewspaperLight,
+      path: BaseUrl.News.Index,
+    },
   ];
 
   //! Function

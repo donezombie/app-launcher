@@ -50,6 +50,9 @@ const BaseUrl = {
     AppWithdDetail: (launchUri?: string | number, idApp?: string | number) =>
       `/apps/launcher?uri=${launchUri}&id=${idApp}`,
   },
+  News: {
+    Index: '/apps/news',
+  },
 };
 
 export default BaseUrl;

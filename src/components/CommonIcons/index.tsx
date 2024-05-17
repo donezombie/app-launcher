@@ -39,6 +39,10 @@ import {
 import { PiMedalLight } from 'react-icons/pi';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { MdOutlineLaunch } from 'react-icons/md';
+import { FaAws } from 'react-icons/fa6';
+import { PiNewspaperLight } from 'react-icons/pi';
+import { RiDeleteBin7Line } from 'react-icons/ri';
+import { RiEditLine } from 'react-icons/ri';
 
 export const IconApplication1 = (
   <svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64' fill='none'>
@@ -158,4 +162,8 @@ export default {
   IoClose: IoIcons.IoClose,
   LaunchIcon,
   MdOutlineLaunch,
+  FaAws,
+  PiNewspaperLight,
+  RiDeleteBin7Line,
+  RiEditLine,
 };
