@@ -19,11 +19,14 @@ const EachItemSidebar = ({ item }: EachItemSidebarProps) => {
   const { pathname } = history;
 
   const isActive = pathname.includes(item.path);
-  console.log('dqwdqwd', { pathname, path: item.path });
+  const isHidden = !item.show;
 
   //! Function
 
   //! Render
+  if (isHidden) {
+    return <></>;
+  }
   return (
     <CommonStyles.Box className='component:EachItemSidebar'>
       <Link to={item.path} className='unstyle-link'>
@@ -49,7 +52,11 @@ const EachItemSidebar = ({ item }: EachItemSidebarProps) => {
       {isActive && item.children && (
         <CommonStyles.Box className='each-sidebar__children' sx={{ my: 0.8 }}>
           {item.children.map((el) => {
+            const isHiddenChildren = !el.showChildren;
             const isActive = pathname.includes(el.path);
+            if (isHiddenChildren) {
+              return <></>;
+            }
             return (
               <Link key={el.path} to={el.path} className='unstyle-link'>
                 <CommonStyles.Box

@@ -4,32 +4,39 @@ import EachItemSidebar from './EachItemSidebar';
 import { uniqueId } from 'lodash';
 import CommonIcons from 'components/CommonIcons';
 import BaseUrl from 'consts/baseUrl';
+import { useAuth } from 'providers/AuthenticationProvider';
 
 const Sidebar = () => {
   //! State
   const theme = useTheme();
+  const { isAdmin, isUser, isAppManager } = useAuth();
   const items = [
     {
       id: uniqueId('side-bar'),
       label: 'Marketplace',
       icon: CommonIcons.BagHandleIcon,
       path: BaseUrl.Marketplace.Index,
+      show: isAdmin || isUser || isAppManager,
       children: [
         {
           label: 'Products',
           path: BaseUrl.Marketplace.Products,
+          showChildren: isAdmin || isUser || isAppManager,
         },
         {
           label: 'Integrations',
           path: '/apps/marketplace/integrations',
+          showChildren: isAdmin || isUser || isAppManager,
         },
         {
           label: 'Quote',
           path: BaseUrl.Marketplace.Quote,
+          showChildren: isAdmin || isUser || isAppManager,
         },
         {
           label: 'Search Ordering',
           path: '/apps/marketplace/search-ordering',
+          showChildren: isAdmin || isUser || isAppManager,
         },
       ],
     },
@@ -38,26 +45,31 @@ const Sidebar = () => {
       label: 'My Apps',
       icon: CommonIcons.SparkesIcon,
       path: BaseUrl.MyApps.Index,
+      show: isAdmin || isUser || isAppManager,
     },
     {
       id: uniqueId('side-bar'),
       label: 'Settings',
       icon: CommonIcons.SettingsIcon,
       path: BaseUrl.Setting.Index,
+      show: isAdmin,
     },
     {
       id: uniqueId('side-bar'),
       label: 'Develop',
       icon: CommonIcons.SparkesIcon,
       path: BaseUrl.Develop.Index,
+      show: isAdmin || isAppManager,
       children: [
         {
           label: 'Upload App',
           path: BaseUrl.Develop.UploadApps,
+          showChildren: isAdmin,
         },
         {
           label: 'Manage Your Apps',
           path: BaseUrl.Develop.ManageYourApps,
+          showChildren: isAdmin,
         },
       ],
     },
@@ -66,6 +78,7 @@ const Sidebar = () => {
       label: 'Event Management',
       icon: CommonIcons.MedalIcon,
       path: '/apps/event-management',
+      show: isAdmin,
     },
   ];
 
