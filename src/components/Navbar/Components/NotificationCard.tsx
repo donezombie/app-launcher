@@ -6,6 +6,8 @@ import React from 'react';
 import ItemNotification from './ItemNotification';
 import { useNavigate } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
+import NewsTab from './NewsTab';
+import NotiTab from './NotiTab';
 
 interface ITab {
   label: string;
@@ -26,18 +28,19 @@ interface DataItem {
 }
 
 interface NotificationCardProps {
-  tabs: ITab[];
-  data: DataItem;
   onClickNavigateNotiScreen?: () => void;
 }
 
 const NotificationCard = (props: NotificationCardProps) => {
-  const { tabs, data, onClickNavigateNotiScreen } = props;
+  const { onClickNavigateNotiScreen } = props;
   //! State
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const theme = useTheme();
   const navigate = useNavigate();
-
+  const tabs = [
+    { label: 'Direct', component: NotiTab },
+    { label: 'News', component: NewsTab },
+  ];
   //! Function
 
   const onOpenNotiSreen = () => {
@@ -76,53 +79,6 @@ const NotificationCard = (props: NotificationCardProps) => {
       </CommonStyles.Box>
 
       <CommonStyles.Tabs tabs={tabs} />
-
-      <CommonStyles.Box sx={{ p: 3, pt: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
-        {Object.entries(data)?.map((el, ind) => {
-          const key: string = el[0];
-          const value = el[1];
-          let title = '';
-          switch (key) {
-            case 'old':
-              title = `Yesterday`;
-              break;
-            case 'new':
-              title = `Older`;
-              break;
-          }
-          const isAllRead = value.every((item: INotification) => item.read);
-
-          return (
-            <CommonStyles.Box className='each-notification' key={ind}>
-              <CommonStyles.Box
-                sx={{ alignContent: 'center', display: 'flex', justifyContent: 'space-between' }}
-              >
-                <CommonStyles.Typography
-                  sx={{
-                    color: theme.colors?.text3,
-                    textTransform: 'uppercase',
-                  }}
-                  variant='captionMBold'
-                >
-                  {title}
-                </CommonStyles.Typography>
-
-                {isAllRead && (
-                  <CommonStyles.Typography className='is-hover' isLink variant='captionLMedium'>
-                    Mark all as read
-                  </CommonStyles.Typography>
-                )}
-              </CommonStyles.Box>
-
-              <CommonStyles.Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
-                {value?.map((item: INotification, ind: number) => {
-                  return <ItemNotification key={ind} item={item} />;
-                })}
-              </CommonStyles.Box>
-            </CommonStyles.Box>
-          );
-        })}
-      </CommonStyles.Box>
     </CommonStyles.Box>
   );
 };

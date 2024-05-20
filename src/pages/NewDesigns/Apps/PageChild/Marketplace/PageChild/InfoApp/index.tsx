@@ -26,7 +26,6 @@ const InfoApp = () => {
     refetch,
   } = useGetAppIntegrationDetail(id || '');
   const detailData = resDetailApp?.data;
-  const previewImages = convertStringToArrayWithComma(detailData?.previewImgUrls || '');
   const tagsData = convertStringToArrayWithComma(detailData?.tags || '');
   const reviewsData = detailData?.reviews || [];
   //! Function
@@ -192,9 +191,7 @@ const InfoApp = () => {
             },
           }}
         >
-          {previewImages.map((item: string) => {
-            return <img src={item} key={item} alt={item} />;
-          })}
+          <CommonStyles.Typography>{detailData?.description}</CommonStyles.Typography>
         </CommonStyles.Box>
       </CommonStyles.Box>
 
