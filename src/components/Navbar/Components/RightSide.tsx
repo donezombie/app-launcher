@@ -44,64 +44,6 @@ const RightSide = () => {
   const id = useId();
   const [anchorElNoti, setAnchorElNoti] = React.useState<HTMLButtonElement | null>(null);
   const openNoti = Boolean(anchorElNoti);
-  const tabs = [
-    { label: 'Direct', component: 'snsnsn' },
-    { label: 'News', component: 'snsnsn' },
-  ];
-  const data = {
-    old: [
-      {
-        avatar:
-          'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg',
-        title: 'donzombie work form home ',
-        code: '#828284774',
-        time: '20 hours ago',
-        read: true,
-      },
-      {
-        avatar:
-          'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg',
-        title: 'thanh in holiday',
-        code: '#828284774',
-        time: '18 hours ago',
-        read: false,
-      },
-      {
-        avatar:
-          'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg',
-        title: 'donzombie work form home',
-        code: '#828284774',
-        time: '16 hours ago',
-        read: false,
-      },
-      {
-        avatar:
-          'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg',
-        title: 'thanh in holiday',
-        code: '#828284774',
-        time: '14 hours ago',
-        read: true,
-      },
-    ],
-    new: [
-      {
-        avatar:
-          'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg',
-        title: 'donzombie work form home',
-        code: '#828284774',
-        time: '1 hours ago',
-        read: true,
-      },
-      {
-        avatar:
-          'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg',
-        title: 'donzombie work form home',
-        code: '#828284774',
-        time: '2 hours ago',
-        read: true,
-      },
-    ],
-  };
 
   //! Function
   const handleClickNoti = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -162,11 +104,7 @@ const RightSide = () => {
           horizontal: 'right',
         }}
       >
-        <NotificationCard
-          data={data}
-          tabs={tabs}
-          onClickNavigateNotiScreen={onClickNavigateNotiScreen}
-        />
+        <NotificationCard onClickNavigateNotiScreen={onClickNavigateNotiScreen} />
       </Popover>
     </CommonStyles.Box>
   );
