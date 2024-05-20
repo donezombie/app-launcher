@@ -1,8 +1,6 @@
 import { isDevelopment } from 'consts/index';
 
-const ROOT_URL = `${
-  isDevelopment ? 'http://103.104.122.210:10000/api' : window.location.origin
-}/api`;
+const ROOT_URL = `${isDevelopment ? 'http://103.104.122.210:10000' : window.location.origin}/api`;
 
 // Dont remove this command
 // ImportAPIURL
