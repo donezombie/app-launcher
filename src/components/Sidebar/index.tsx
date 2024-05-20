@@ -64,12 +64,12 @@ const Sidebar = () => {
         {
           label: 'Upload App',
           path: BaseUrl.Develop.UploadApps,
-          showChildren: isAdmin,
+          showChildren: isAdmin || isAppManager,
         },
         {
           label: 'Manage Your Apps',
           path: BaseUrl.Develop.ManageYourApps,
-          showChildren: isAdmin,
+          showChildren: isAdmin || isAppManager,
         },
       ],
     },

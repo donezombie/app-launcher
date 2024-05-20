@@ -81,7 +81,7 @@ const CellActions = ({ item }: CellActionsProps) => {
       )}
 
       <CommonStyles.Tooltip title='Edit'>
-        <Link to={BaseUrl.AppDetailWithID(item.id)}>
+        <Link to={BaseUrl.MyApps.DetailWithID(item.id)}>
           <CommonStyles.Button isIconButton>
             <CommonIcons.EditIcon />
           </CommonStyles.Button>
