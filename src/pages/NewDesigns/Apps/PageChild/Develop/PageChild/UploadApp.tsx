@@ -3,13 +3,18 @@ import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { Form, Formik, FormikProps } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
-import { useCreateAppIntegration, useUpdateAppIntegration } from 'hooks/app/useAppHooks';
+import {
+  useCreateAppIntegration,
+  useGenerateAppCredentials,
+  useUpdateAppIntegration,
+} from 'hooks/app/useAppHooks';
 import { useCallback, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AppAuthentication from '../Components/AppAuthentication';
 import AppInformation from '../Components/AppInformation';
 import * as Yup from 'yup';
 import BaseUrl from 'consts/baseUrl';
+import { isEmpty } from 'lodash';
 
 const initialValues = {
   appType: 0,
@@ -35,6 +40,10 @@ const validateCreateApp = Yup.object().shape({
   name: Yup.string().required('Name is required field!'),
   loginRedirectUri: Yup.string().required('Client ID is required field!'),
   logoutRedirectUri: Yup.string().required('Client Secret is required field!'),
+  homepage: Yup.string().required('Homepage is required field!'),
+  summary: Yup.string().required('Summary is required field!'),
+  // description: Yup.string().required('Description is required field!'),
+  icon: Yup.string().required('Icon is required field!'),
 });
 
 const UploadApp = () => {
@@ -44,7 +53,8 @@ const UploadApp = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const formikRef = useRef<FormikProps<any>>(null);
-
+  const { mutateAsync: generateAppCredentials, isLoading: isGenerating } =
+    useGenerateAppCredentials();
   // //! Function
 
   //! Render
@@ -72,14 +82,18 @@ const UploadApp = () => {
       <Formik
         initialValues={initialValues}
         enableReinitialize
+        validateOnBlur
+        validateOnMount
         innerRef={formikRef}
         validationSchema={validateCreateApp}
         onSubmit={(values, { setSubmitting }) => {
-          console.log(values);
           (async () => {
             try {
               const res = await createApp(values);
+              await generateAppCredentials({ appId: res?.data || '' });
               await updateAppIntegration({ id: res?.data || '', body: values });
+              console.log('updateAppIntegration', updateAppIntegration);
+
               navigate(BaseUrl.MyApps.Index);
               setSubmitting(true);
               showSuccess('Create successfully!');
@@ -91,13 +105,23 @@ const UploadApp = () => {
           })();
         }}
       >
-        {({ isSubmitting, handleSubmit }) => {
+        {({ isSubmitting, handleSubmit, errors }) => {
+          console.log('errors', errors);
           return (
             <Form>
               {renderStep()}
               {step === 0 ? (
                 <CommonStyles.Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <CommonStyles.Button onClick={() => setStep(step + 1)}>Next</CommonStyles.Button>
+                  <CommonStyles.Button
+                    disabled={
+                      !isEmpty(errors?.name) ||
+                      !isEmpty(errors?.loginRedirectUri) ||
+                      !isEmpty(errors?.logoutRedirectUri)
+                    }
+                    onClick={() => setStep(step + 1)}
+                  >
+                    Next
+                  </CommonStyles.Button>
                 </CommonStyles.Box>
               ) : null}
               {step === 1 ? (
@@ -107,6 +131,11 @@ const UploadApp = () => {
                     loading={isSubmitting}
                     type='submit'
                     onClick={() => handleSubmit()}
+                    disabled={
+                      !isEmpty(errors?.homepage) ||
+                      !isEmpty(errors?.summary) ||
+                      !isEmpty(errors?.icon)
+                    }
                     startIcon={<CommonIcons.SaveIcon />}
                   >
                     Save
