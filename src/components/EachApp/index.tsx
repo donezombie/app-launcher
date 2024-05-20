@@ -6,12 +6,14 @@ import SwitchField from 'components/CustomFields/SwitchField';
 import { Link, useNavigate } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
 import { useState } from 'react';
-import { useInstallApp, useUninstallApp } from 'hooks/app/useAppHooks';
+import { useCreateApproval, useInstallApp, useUninstallApp } from 'hooks/app/useAppHooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { showError, showSuccess } from 'helpers/toast';
 import { queryKeys } from 'consts';
 import Launcher from 'pages/Launcher';
 import { useTabHandler } from 'providers/TabHandlerProvider';
+import useToggleDialog from 'hooks/useToggleDialog';
+import DialogListRequesting from 'pages/Apps/Dialogs/DialogListRequesting';
 
 interface EachAppProps {
   item: App;
@@ -25,6 +27,7 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
   const [loading, setLoading] = useState(false);
   const { mutateAsync: uninstallApp } = useUninstallApp();
   const { mutateAsync: installApp } = useInstallApp();
+  const { mutateAsync: createRequest } = useCreateApproval();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { addNewTab } = useTabHandler();
@@ -73,6 +76,22 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
       navigate(BaseUrl.AppManagement);
     }
   };
+
+  const onClickRequestAccess = async () => {
+    try {
+      setLoading(true);
+      await createRequest({ appId: item?.id });
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppStore] });
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
+
+      showSuccess('Request access successfully!');
+      setLoading(false);
+    } catch (error) {
+      showError(error);
+      setLoading(false);
+    }
+  };
+
   //! Render
   const renderActions = () => {
     // if (item.isYourApp) {
@@ -80,14 +99,27 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
     // }
 
     if (isYourApp) {
+      const {
+        open: openRequesting,
+        toggle: toggleRequesting,
+        shouldRender: shoulRenderRequesting,
+      } = useToggleDialog();
       return (
         <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
           <Link to={BaseUrl.MyApps.DetailWithID(item.id || '')}>
             <CommonStyles.Button>Edit</CommonStyles.Button>
           </Link>
-          <CommonStyles.Button variant='outlined' loading={loading} onClick={onClickUninstall}>
-            Uninstall
+          <CommonStyles.Button variant='outlined' loading={loading} onClick={toggleRequesting}>
+            Requesting App
           </CommonStyles.Button>
+
+          {shoulRenderRequesting && (
+            <DialogListRequesting
+              isOpen={openRequesting}
+              toggle={toggleRequesting}
+              appId={item.id}
+            />
+          )}
         </CommonStyles.Box>
       );
     }
@@ -115,6 +147,16 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
           <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
             <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
           </Link>
+        </CommonStyles.Box>
+      );
+    }
+
+    if (!item.isAssigned) {
+      return (
+        <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
+          <CommonStyles.Button loading={loading} onClick={onClickRequestAccess}>
+            Request Access
+          </CommonStyles.Button>
         </CommonStyles.Box>
       );
     }
