@@ -11,6 +11,7 @@ const BaseUrl = {
   AppLauncherWithID: (id: string) => `/apps/${id}`,
   AppDetail: '/apps/detail/:id',
   AppDetailWithID: (id: string) => `/apps/detail/${id}`,
+  AppsManagement: 'apps/apps-management',
 
   CreateApp: '/create-app',
 

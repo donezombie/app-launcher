@@ -159,12 +159,7 @@ const TabAssignManager = () => {
         renderFilterFields={() => {
           return (
             <CommonStyles.Box sx={{ gap: 2, display: 'flex' }}>
-              <FastField
-                component={TextField}
-                name='username'
-                placeholder='Username'
-                label='Username'
-              />
+              <FastField component={TextField} name='username' placeholder='User Name...' />
 
               <CommonStyles.Button
                 variant='outlined'

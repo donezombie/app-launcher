@@ -70,12 +70,7 @@ const DialogListRequesting = (props: Props) => {
           renderFilterFields={() => {
             return (
               <CommonStyles.Box sx={{ gap: 2, display: 'flex' }}>
-                <FastField
-                  component={TextField}
-                  name='search'
-                  placeholder='Input search'
-                  label='Search'
-                />
+                <FastField component={TextField} name='search' placeholder='Search...' />
               </CommonStyles.Box>
             );
           }}
