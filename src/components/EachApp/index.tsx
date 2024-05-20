@@ -151,6 +151,20 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
       );
     }
 
+    if (item.isApproved) {
+      return (
+        <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
+          <CommonStyles.Button loading={loading} onClick={onClickInstall}>
+            Install
+          </CommonStyles.Button>
+
+          <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
+            <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
+          </Link>
+        </CommonStyles.Box>
+      );
+    }
+
     if (!item.isAssigned) {
       return (
         <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
