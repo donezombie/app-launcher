@@ -5,7 +5,7 @@ import UploadField from 'components/CommonStyles/UploadField';
 import SwitchField from 'components/CustomFields/SwitchField';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
-import { Field } from 'formik';
+import { FastField, Field } from 'formik';
 
 const AppInformation = () => {
   //! State
@@ -19,53 +19,23 @@ const AppInformation = () => {
       className='component:AppInformation'
       sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
     >
-      <HeadWithSearching
-        title='App Information'
-        renderLeftContent={
-          <CommonStyles.Button variant='outlined'>
-            <CommonIcons.DownArrowIcon /> Download Documentation
-          </CommonStyles.Button>
-        }
-      />
-
-      {/* <Formik initialValues={{}} onSubmit={() => {}}>
-        {() => {
-          return (
-            <Form> */}
-      <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
-        <Field
+      <HeadWithSearching title='Basic Information' />
+      <CommonStyles.Box>
+        <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
+          <FastField component={TextField} required name='homepage' label='Home page' fullWidth />
+          <FastField component={TextField} required name='summary' label='Summary' fullWidth />
+        </CommonStyles.Box>
+        <FastField
           component={TextField}
-          name='summary'
-          placeholder='Name of your app.'
-          label='Name'
-          fullWidth
-          helperText='Helper text'
-        />
-        <Field
-          component={TextField}
+          required
+          multiline
           name='description'
-          placeholder='Place a description of your app...'
           label='Description'
-          helperText='Helper text'
           fullWidth
         />
-        <UploadField
-          name='icon'
-          placeholder='Click here to upload feature images....'
-          label='Images'
-          helperText='Helper text'
-          fullWidth
-        />
-        <UploadField
-          name='images'
-          placeholder='Upload your app bundle...'
-          label='App Bundle'
-          helperText='Helper text'
-          fullWidth
-        />
+        <FastField component={TextField} required name='icon' label='Icon link' fullWidth />
       </CommonStyles.Box>
-
-      <CommonStyles.Box sx={{ display: 'flex', gap: 2, mt: 4, alignItems: 'baseline' }}>
+      <CommonStyles.Box sx={{ display: 'flex', gap: 2, alignItems: 'baseline' }}>
         <Field component={SwitchField} name='isApproved' sx={{ transform: 'translateY(3px)' }} />
         <CommonStyles.Box>
           <CommonStyles.Typography variant='body2' sx={{ fontWeight: 600 }}>
@@ -76,10 +46,6 @@ const AppInformation = () => {
           </CommonStyles.Typography>
         </CommonStyles.Box>
       </CommonStyles.Box>
-      {/* </Form>
-          );
-        }}
-      </Formik> */}
     </CommonStyles.Box>
   );
 };
