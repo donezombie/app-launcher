@@ -47,6 +47,9 @@ const NotificationScreen = lazy(() => import('pages/NewDesigns/NotificationScree
 //! News
 const NewsScreen = lazy(() => import('pages/NewDesigns/News'));
 
+//! Apps Management
+const AppsManagement = lazy(() => import('pages/NewDesigns/AppsManagement'));
+
 const routes: Route[] = [
   {
     name: 'Home Layout',
@@ -210,6 +213,12 @@ const routes: Route[] = [
         name: 'News screen',
         path: BaseUrl.News.Index,
         component: NewsScreen,
+      },
+      {
+        name: 'Apps Management',
+        path: BaseUrl.AppsManagement,
+        component: withCheckRole(AppsManagement, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
       },
     ],
   },

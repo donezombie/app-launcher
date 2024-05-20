@@ -82,6 +82,13 @@ const Sidebar = () => {
     },
     {
       id: uniqueId('side-bar'),
+      label: 'Apps Management',
+      icon: CommonIcons.LaunchIcon,
+      path: BaseUrl.AppsManagement,
+      show: isAdmin,
+    },
+    {
+      id: uniqueId('side-bar'),
       label: 'News',
       icon: CommonIcons.PiNewspaperLight,
       path: BaseUrl.News.Index,

@@ -51,6 +51,7 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
       await installApp({ id: item?.id });
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppInstalledList] });
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppStore] });
 
       showSuccess('Install app successfully!');
       setLoading(false);
