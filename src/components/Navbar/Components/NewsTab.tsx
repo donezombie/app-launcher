@@ -1,27 +1,26 @@
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
-import HeadWithSearching from 'components/HeadWithSearching';
-import NewsCard from './Components/NewsCard';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import { Order } from 'interfaces/common';
 import { useGetNewsListHooks } from 'hooks/news/useNewsHooks';
 import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
+import { Order } from 'interfaces/common';
+import { News } from 'interfaces/news';
+import ItemNew from './ItemNew';
+import { useTheme } from '@mui/material';
 
-interface NewsScreenProps {}
-
-const tabs = [
-  { label: 'Direct', component: 'snsnsn' },
-  { label: 'News', component: 'snsnsn' },
-];
+interface NewsTabProps {}
 const initialValues = {
   search: '',
   page: 0,
-  rowsPerPage: 5,
+  rowsPerPage: 15,
   order: Order.desc,
   orderBy: '',
 };
-
-const NewsScreen = (props: NewsScreenProps) => {
+const NewsTab = (props: NewsTabProps) => {
   //! State
+  const theme = useTheme();
 
   const { filters, setFilters, handleResetToInitial } = useFiltersHandler(initialValues);
 
@@ -38,20 +37,23 @@ const NewsScreen = (props: NewsScreenProps) => {
   });
 
   const data = resData?.data?.items || [];
-  const total = resData?.data?.totalCount || 0;
+  console.log('data', data);
 
   //! Function
-
+  const falseItems = data.filter((item) => item?.isNew === true);
+  falseItems.forEach((item) => {
+    item.title = 'new';
+  });
   //! Render
   return (
-    <CommonStyles.Box
-      className='component:Quote'
-      sx={{ display: 'flex', gap: 3, flexDirection: 'column' }}
-    >
-      <HeadWithSearching title='News' onSubmitSearch={() => {}} placeholder='Search News...' />
-      <NewsCard data={data} tabs={tabs} />
+    <CommonStyles.Box className='component:NewsTab'>
+      <CommonStyles.Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
+        {data?.map((item, ind: number) => {
+          return <ItemNew key={ind} item={item} />;
+        })}
+      </CommonStyles.Box>
     </CommonStyles.Box>
   );
 };
 
-export default NewsScreen;
+export default NewsTab;
