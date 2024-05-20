@@ -14,6 +14,7 @@ import CommonIcons from 'components/CommonIcons';
 import { OrderType } from 'interfaces/common';
 import * as React from 'react';
 import CommonStyles from '.';
+import { TablePagination } from '@mui/material';
 
 interface EnhancedTableProps<T> {
   numSelected: number;
@@ -138,11 +139,11 @@ function TableCommon<T>({
   isLoading,
   invisibleCheckBox,
   handleCheckBox,
-  // handleChangePage,
+  handleChangePage,
   handleSelectAllClick,
   handleRequestSort,
-}: // handleChangeRowsPerPage,
-TableCommonProps<T>) {
+  handleChangeRowsPerPage,
+}: TableCommonProps<T>) {
   const theme = useTheme();
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
@@ -276,7 +277,7 @@ TableCommonProps<T>) {
           </Table>
         </TableContainer>
 
-        {/* <TablePagination
+        <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
           count={totalCount}
@@ -284,7 +285,7 @@ TableCommonProps<T>) {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        /> */}
+        />
       </Paper>
     </Box>
   );
