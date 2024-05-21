@@ -5,11 +5,15 @@ import { uniqueId } from 'lodash';
 import CommonIcons from 'components/CommonIcons';
 import BaseUrl from 'consts/baseUrl';
 import { useAuth } from 'providers/AuthenticationProvider';
+import { useGetListCategory } from 'hooks/category/useGetListCategory';
+import { ICategory } from 'interfaces/category';
 
 const Sidebar = () => {
   //! State
   const theme = useTheme();
   const { isAdmin, isUser, isAppManager } = useAuth();
+  const { category } = useGetListCategory();
+  const childrenCategory = category || ([] as ICategory[]);
   const items = [
     {
       id: uniqueId('side-bar'),
@@ -17,28 +21,36 @@ const Sidebar = () => {
       icon: CommonIcons.BagHandleIcon,
       path: BaseUrl.Marketplace.Index,
       show: isAdmin || isUser || isAppManager,
-      children: [
-        {
-          label: 'Products',
-          path: BaseUrl.Marketplace.Products,
+      // children: [
+      //   {
+      //     label: 'Products',
+      //     path: BaseUrl.Marketplace.Products,
+      //     showChildren: isAdmin || isUser || isAppManager,
+      //   },
+      //   {
+      //     label: 'Integrations',
+      //     path: '/apps/marketplace/integrations',
+      //     showChildren: isAdmin || isUser || isAppManager,
+      //   },
+      //   {
+      //     label: 'Quote',
+      //     path: BaseUrl.Marketplace.Quote,
+      //     showChildren: isAdmin || isUser || isAppManager,
+      //   },
+      //   {
+      //     label: 'Search Ordering',
+      //     path: '/apps/marketplace/search-ordering',
+      //     showChildren: isAdmin || isUser || isAppManager,
+      //   },
+      // ],
+      children: childrenCategory.map((item: ICategory) => {
+        return {
+          key: item.id,
+          label: item.name,
+          path: BaseUrl.AppMarketPlaceWithID(item.id),
           showChildren: isAdmin || isUser || isAppManager,
-        },
-        {
-          label: 'Integrations',
-          path: '/apps/marketplace/integrations',
-          showChildren: isAdmin || isUser || isAppManager,
-        },
-        {
-          label: 'Quote',
-          path: BaseUrl.Marketplace.Quote,
-          showChildren: isAdmin || isUser || isAppManager,
-        },
-        {
-          label: 'Search Ordering',
-          path: '/apps/marketplace/search-ordering',
-          showChildren: isAdmin || isUser || isAppManager,
-        },
-      ],
+        };
+      }),
     },
     {
       id: uniqueId('side-bar'),
@@ -90,8 +102,15 @@ const Sidebar = () => {
     {
       id: uniqueId('side-bar'),
       label: 'Apps Management',
-      icon: CommonIcons.LaunchIcon,
+      icon: CommonIcons.BagHandleIcon,
       path: BaseUrl.AppsManagement,
+      show: isAdmin,
+    },
+    {
+      id: uniqueId('side-bar'),
+      label: 'Category Management',
+      icon: CommonIcons.IoListOutline,
+      path: BaseUrl.CategoryManagement,
       show: isAdmin,
     },
   ];

@@ -1,0 +1,43 @@
+import { uniqueId } from 'lodash';
+import { ICategory } from 'interfaces/category';
+import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+
+export interface RequestCreateNews {
+  title: string;
+  body: string;
+}
+
+class CategoryServices {
+  async getDetailCategory(id: string) {
+    const categoryRef = doc(db, 'categories', id);
+
+    const categorySnapshot = await getDoc(categoryRef);
+    return categorySnapshot.data();
+  }
+
+  async createNewCategory(name: string) {
+    const newIdCategory = uniqueId('category');
+    const itemCategory: ICategory = {
+      id: newIdCategory,
+      name: name,
+      apps: [''],
+    };
+    const categoryRef = doc(db, 'categories', newIdCategory);
+    setDoc(categoryRef, itemCategory);
+  }
+
+  async updateCategory(id: string, name: string) {
+    const categoryRef = doc(db, `categories/${id}`);
+    updateDoc(categoryRef, {
+      name: name,
+    });
+  }
+
+  async deleteCategory(id: string) {
+    const categoryRef = doc(db, `categories/${id}`);
+    deleteDoc(categoryRef);
+  }
+}
+
+export default new CategoryServices();
