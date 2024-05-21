@@ -37,7 +37,6 @@ const NewsTab = (props: NewsTabProps) => {
   });
 
   const data = resData?.data?.items || [];
-  console.log('data', data);
 
   //! Function
   const falseItems = data.filter((item) => item?.isNew === true);

@@ -80,7 +80,7 @@ const EachApplication = ({ application }: EachApplicationProps) => {
           />
         </CommonStyles.Box>
 
-        <CommonStyles.Typography fontWeight={600} fontSize='1.1rem'>
+        <CommonStyles.Typography fontWeight={600} fontSize='1.1rem' width={100}>
           {application.label}
         </CommonStyles.Typography>
       </CommonStyles.Box>
