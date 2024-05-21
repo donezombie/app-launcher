@@ -92,8 +92,6 @@ const UploadApp = () => {
               const res = await createApp(values);
               await generateAppCredentials({ appId: res?.data || '' });
               await updateAppIntegration({ id: res?.data || '', body: values });
-              console.log('updateAppIntegration', updateAppIntegration);
-
               navigate(BaseUrl.MyApps.Index);
               setSubmitting(true);
               showSuccess('Create successfully!');
@@ -106,7 +104,6 @@ const UploadApp = () => {
         }}
       >
         {({ isSubmitting, handleSubmit, errors }) => {
-          console.log('errors', errors);
           return (
             <Form>
               {renderStep()}

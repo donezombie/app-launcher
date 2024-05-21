@@ -2,20 +2,17 @@ import { useTheme } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { SIZE_ICON_DEFAULT } from 'consts';
+import { News } from 'interfaces/news';
 import React from 'react';
 
 interface EachLatestSectionProps {
-  application: {
-    title?: string | React.ReactNode;
-    subTitle?: string | React.ReactNode;
-    icon?: string | React.ReactNode;
-  };
+  application: News;
 }
 
 const EachLatestSection = ({ application }: EachLatestSectionProps) => {
   //! State
   const theme = useTheme();
-
+  const sizeAva = 54;
   //! Function
 
   //! Render
@@ -50,17 +47,9 @@ const EachLatestSection = ({ application }: EachLatestSectionProps) => {
           padding: '12px 16px 12px 16px',
         }}
       >
+        <CommonStyles.Avatar src={application?.thumbUrl} sx={{ width: sizeAva, height: sizeAva }} />
+
         {/* <CommonStyles.Box
-          className='each-application__overlay'
-          sx={{
-            backgroundColor: 'rgba(0, 0, 0, 0.2)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            transition: '.3s',
-          }}
-        /> */}
-        <CommonStyles.Box
           sx={{
             width: '46px',
             height: '46px',
@@ -73,14 +62,14 @@ const EachLatestSection = ({ application }: EachLatestSectionProps) => {
             size={SIZE_ICON_DEFAULT - 4}
             style={{ position: 'absolute', right: '12px', top: '14px' }}
           />
-        </CommonStyles.Box>
+        </CommonStyles.Box> */}
         <CommonStyles.Typography variant='h6' sx={{ fontWeight: '600' }}>
           {application.title}
         </CommonStyles.Typography>
         <CommonStyles.Typography
           sx={{ pr: 3, paddingTop: '8px', flexShrink: 1, fontWeight: '300', fontSize: 14 }}
         >
-          {application.subTitle}
+          {application.body}
         </CommonStyles.Typography>
       </CommonStyles.Box>
     </CommonStyles.Box>

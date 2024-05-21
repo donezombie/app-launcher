@@ -6,19 +6,23 @@ import React from 'react';
 import ContentOfSection from './ContentOfSection';
 import HeaderOfSection from './HeaderOfSection';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
-import { useGetListInstalledApp } from 'hooks/app/useAppHooks';
+import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE, PERMISSION_ENUM } from 'consts';
+import { useGetListApp, useGetListInstalledApp } from 'hooks/app/useAppHooks';
 import { IconApplication1, IconApplication2 } from 'components/CommonIcons';
+import { useAuth } from 'providers/AuthenticationProvider';
 
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: 999,
+  rowsPerPage: 10,
   search: '',
 };
 
 const ApplicationSection = () => {
   //! State
   const [open, setOpen] = React.useState(false);
+  const { user } = useAuth();
+  const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
+
   const { filters } = useFiltersHandler(initialValues);
   const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListInstalledApp({
     skip:
@@ -27,7 +31,17 @@ const ApplicationSection = () => {
     take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
     filter: filters?.search,
   });
-  const dataInstallApp = resListInstalledApp?.data?.items || [];
+  const { data: resListApp, isLoading } = useGetListApp({
+    skip:
+      (filters?.page || NUMBER_DEFAULT_PAGE) *
+      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
+    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
+    filter: filters?.search,
+  });
+  const dataInstallApp =
+    role === PERMISSION_ENUM.ADMIN
+      ? resListApp?.data?.items || []
+      : resListInstalledApp?.data?.items || [];
 
   //! Function
   const handleClickOpen = () => {
@@ -51,7 +65,7 @@ const ApplicationSection = () => {
       />
 
       <ContentOfSection>
-        {isInstalledLoading ? (
+        {isInstalledLoading || isLoading ? (
           <CommonStyles.Loading />
         ) : (
           dataInstallApp

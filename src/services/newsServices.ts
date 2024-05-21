@@ -12,6 +12,8 @@ type ResponseListNew = ResponseCommonPaging<News[]>;
 export interface RequestCreateNews {
   title: string;
   body: string;
+  thumbnail: string;
+  isNew: boolean;
 }
 
 class NewsServices {
@@ -20,11 +22,19 @@ class NewsServices {
   }
 
   postCreateNews(body: RequestCreateNews) {
-    return httpService.post(`${LIST_NEW}/create`, body);
+    const formData = new FormData();
+    for (const key in body) {
+      formData.append(key, get(body, key));
+    }
+    return httpService.post(`${LIST_NEW}/create`, formData);
   }
 
   putEditNews(id: string, body: RequestCreateNews) {
-    return httpService.put(`${LIST_NEW}/update?id=${id}`, body);
+    const formData = new FormData();
+    for (const key in body) {
+      formData.append(key, get(body, key));
+    }
+    return httpService.put(`${LIST_NEW}/update?id=${id}`, formData);
   }
   deleteNews(id?: string) {
     return httpService.delete(`${LIST_NEW}/delete?id=${id}`);

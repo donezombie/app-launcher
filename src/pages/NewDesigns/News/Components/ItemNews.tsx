@@ -42,7 +42,7 @@ const ItemNews = (props: ItemNewsProps) => {
           justifyContent: 'space-between',
         }}
       >
-        <CommonStyles.Box maxWidth={250}>
+        <CommonStyles.Box maxWidth={300}>
           <CommonStyles.Typography sx={{ flexShrink: 1 }} variant='body2' component='h3'>
             {item.title}
           </CommonStyles.Typography>
