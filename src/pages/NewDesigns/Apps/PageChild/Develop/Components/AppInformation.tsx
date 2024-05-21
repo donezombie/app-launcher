@@ -35,15 +35,19 @@ const AppInformation = () => {
           <FastField component={TextField} required name='homepage' label='Home page' fullWidth />
           <FastField component={TextField} required name='summary' label='Summary' fullWidth />
         </CommonStyles.Box>
-        <FastField
-          component={TextField}
-          required
-          multiline
-          name='description'
-          label='Description'
-          fullWidth
-        />
-        <FastField component={TextField} required name='icon' label='Icon link' fullWidth />
+        <CommonStyles.Box sx={{ mt: 1 }}>
+          <FastField
+            component={TextField}
+            required
+            multiline
+            name='description'
+            label='Description'
+            fullWidth
+          />
+        </CommonStyles.Box>
+        <CommonStyles.Box sx={{ mt: 1 }}>
+          <FastField component={TextField} required name='icon' label='Icon link' fullWidth />
+        </CommonStyles.Box>
       </CommonStyles.Box>
 
       <CommonStyles.Box>

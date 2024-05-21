@@ -3,6 +3,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { useQueryClient } from '@tanstack/react-query';
 import CommonStyles from 'components/CommonStyles';
+import UploadField from 'components/CommonStyles/UploadField';
 import TextField from 'components/CustomFields/TextField';
 import { queryKeys } from 'consts';
 import { FastField, Form, Formik } from 'formik';
@@ -20,6 +21,7 @@ interface Props extends DialogI<RequestCreateNews> {
 const validateAddNew = Yup.object().shape({
   title: Yup.string().required('Title is required field!'),
   body: Yup.string().required('Body is required field!'),
+  thumbnail: Yup.string().required('Thumbnail is required field!'),
 });
 
 const DialogAddNews = (props: Props) => {
@@ -32,6 +34,8 @@ const DialogAddNews = (props: Props) => {
   const initialValues = {
     title: item ? item?.title : '',
     body: item ? item?.body : '',
+    thumbnail: item ? item?.thumbUrl : '',
+    isNew: item ? item?.isNew : true,
   };
 
   const isEdit = !!item?.id;
@@ -85,6 +89,14 @@ const DialogAddNews = (props: Props) => {
                     />
 
                     <FastField component={TextField} name='body' label='Body ' required fullWidth />
+                    <UploadField
+                      name='thumbnail'
+                      placeholder='Upload your new thumbnail...'
+                      label='Thumbnail'
+                      helperText='Helper text'
+                      fullWidth
+                      required
+                    />
                   </CommonStyles.Box>
                 </CommonStyles.Box>
               </Form>

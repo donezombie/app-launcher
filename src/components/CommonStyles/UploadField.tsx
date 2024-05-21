@@ -21,7 +21,7 @@ const UploadField = (props: TextFieldFormikProps) => {
         name={`${props.name}-upload-input`}
         style={{ display: 'none' }}
         onChange={(e) => {
-          setFieldValue(props?.name || '', e.target.files?.[0]?.name);
+          setFieldValue(props?.name || '', e.target.files?.[0]);
         }}
       />
 
