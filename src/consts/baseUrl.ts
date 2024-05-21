@@ -9,9 +9,13 @@ const BaseUrl = {
   AppManagement: '/apps',
   AppLauncher: '/apps/:id',
   AppLauncherWithID: (id: string) => `/apps/${id}`,
+  AppLauncherDetail: '/apps/:id',
   AppDetail: '/apps/detail/:id',
   AppDetailWithID: (id: string) => `/apps/detail/${id}`,
   AppsManagement: 'apps/apps-management',
+  CategoryManagement: 'apps/category-management',
+  AppMarketPlaceWithID: (id: string) => `marketplace/list?category=${id}`,
+  AppMarketPlace: 'marketplace/list',
 
   CreateApp: '/create-app',
 

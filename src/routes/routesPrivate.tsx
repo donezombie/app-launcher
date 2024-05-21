@@ -12,7 +12,7 @@ const Users = lazy(() => import('pages/Users'));
 
 // const Laucher = lazy(() => import('pages/Launcher'));
 // const AppManagement = lazy(() => import('pages/Apps'));
-// const DetailApp = lazy(() => import('pages/DetailApp'));
+const DetailApp = lazy(() => import('pages/NewDesigns/Apps/PageChild/Marketplace/DetailApp'));
 const Launcher = lazy(() => import('pages/NewDesigns/Launcher'));
 
 const AppsLayout = lazy(() => import('layouts/AppsLayout'));
@@ -49,6 +49,9 @@ const NewsScreen = lazy(() => import('pages/NewDesigns/News'));
 
 //! Apps Management
 const AppsManagement = lazy(() => import('pages/NewDesigns/AppsManagement'));
+
+//! Category Management
+const CategoryManagement = lazy(() => import('pages/NewDesigns/CategoryManagement'));
 
 const routes: Route[] = [
   {
@@ -89,8 +92,12 @@ const routes: Route[] = [
       // },
       // {
       //   name: 'Detail App',
-      //   path: BaseUrl.AppDetail,
-      //   component: withCheckRole(DetailApp, [PERMISSION_ENUM.APP_MANAGER, PERMISSION_ENUM.ADMIN]),
+      //   path: BaseUrl.AppLauncherDetail,
+      //   component: withCheckRole(DetailApp, [
+      //     PERMISSION_ENUM.ADMIN,
+      //     PERMISSION_ENUM.APP_MANAGER,
+      //     PERMISSION_ENUM.USER,
+      //   ]),
       //   isPrivateRoute: true,
       // },
       {
@@ -218,6 +225,22 @@ const routes: Route[] = [
         name: 'Apps Management',
         path: BaseUrl.AppsManagement,
         component: withCheckRole(AppsManagement, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Category Management',
+        path: BaseUrl.CategoryManagement,
+        component: withCheckRole(CategoryManagement, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Detail App',
+        path: BaseUrl.AppMarketPlace,
+        component: withCheckRole(DetailApp, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
         isPrivateRoute: true,
       },
     ],
