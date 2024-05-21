@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { Form, Formik, FormikProps } from 'formik';
@@ -9,12 +8,13 @@ import {
   useUpdateAppIntegration,
 } from 'hooks/app/useAppHooks';
 import { useCallback, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AppAuthentication from '../Components/AppAuthentication';
 import AppInformation from '../Components/AppInformation';
 import * as Yup from 'yup';
 import BaseUrl from 'consts/baseUrl';
 import { isEmpty } from 'lodash';
+import { useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
 
 const initialValues = {
   appType: 0,
@@ -50,11 +50,11 @@ const UploadApp = () => {
   //! State
   const { mutateAsync: createApp } = useCreateAppIntegration();
   const { mutateAsync: updateAppIntegration } = useUpdateAppIntegration();
+  const { mutateAsync: updateAppIDCategory } = useUpdateAppIDCategory();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const formikRef = useRef<FormikProps<any>>(null);
-  const { mutateAsync: generateAppCredentials, isLoading: isGenerating } =
-    useGenerateAppCredentials();
+  const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
   // //! Function
 
   //! Render
@@ -90,6 +90,7 @@ const UploadApp = () => {
           (async () => {
             try {
               const res = await createApp(values);
+              await updateAppIDCategory({ id: values.scopes, appID: res.data });
               await generateAppCredentials({ appId: res?.data || '' });
               await updateAppIntegration({ id: res?.data || '', body: values });
               navigate(BaseUrl.MyApps.Index);

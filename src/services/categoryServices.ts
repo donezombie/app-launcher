@@ -34,6 +34,20 @@ class CategoryServices {
     });
   }
 
+  async updateAppIDCategory(id: string, appID: string) {
+    const categoryRef = doc(db, `categories/${id}`);
+    const detailCategoryRef = doc(db, 'categories', id);
+
+    const detailCategorySnapshot = await getDoc(detailCategoryRef);
+    const detailData = detailCategorySnapshot.data() as ICategory;
+    const appsDetailData = detailData?.apps || [];
+    const newData = {
+      ...detailData,
+      apps: [...appsDetailData, appID],
+    };
+    updateDoc(categoryRef, newData);
+  }
+
   async deleteCategory(id: string) {
     const categoryRef = doc(db, `categories/${id}`);
     deleteDoc(categoryRef);

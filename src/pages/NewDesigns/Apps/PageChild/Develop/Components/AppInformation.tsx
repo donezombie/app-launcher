@@ -48,21 +48,21 @@ const AppInformation = () => {
         <CommonStyles.Box sx={{ mt: 1 }}>
           <FastField component={TextField} required name='icon' label='Icon link' fullWidth />
         </CommonStyles.Box>
+        <CommonStyles.Box sx={{ mt: 1 }}>
+          <CommonStyles.Typography component='p' variant='captionLMedium' sx={{ mb: 1.5 }}>
+            Category
+          </CommonStyles.Typography>
+          <Field
+            name='scopes'
+            component={SelectField}
+            options={categoryOptions()}
+            fullWidth
+            required
+            sx={{ height: '42px' }}
+          />
+        </CommonStyles.Box>
       </CommonStyles.Box>
 
-      <CommonStyles.Box>
-        <CommonStyles.Typography component='p' variant='captionLMedium' sx={{ mb: 1.5 }}>
-          Category
-        </CommonStyles.Typography>
-        <Field
-          name='scopes'
-          component={SelectField}
-          options={categoryOptions()}
-          fullWidth
-          required
-          sx={{ height: '42px' }}
-        />
-      </CommonStyles.Box>
       <CommonStyles.Box sx={{ display: 'flex', gap: 2, alignItems: 'baseline' }}>
         <Field component={SwitchField} name='isApproved' sx={{ transform: 'translateY(3px)' }} />
         <CommonStyles.Box>

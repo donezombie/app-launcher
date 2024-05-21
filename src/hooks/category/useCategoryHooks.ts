@@ -14,6 +14,13 @@ export const useUpdateCategory = () => {
   });
 };
 
+export const useUpdateAppIDCategory = () => {
+  return useMutation({
+    mutationFn: ({ id, appID }: { id: string; appID: string }) =>
+      categoryServices.updateAppIDCategory(id, appID),
+  });
+};
+
 export const useDeleteCategory = () => {
   return useMutation({
     mutationFn: ({ id }: { id: string }) => categoryServices.deleteCategory(id),

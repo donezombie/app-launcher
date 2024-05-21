@@ -6,6 +6,7 @@ import { useGetAppStore } from 'hooks/app/useAppHooks';
 import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
 import { useLocation } from 'react-router-dom';
 import { useGetDetailCategory } from 'hooks/category/useGetDetailCategory';
+import { App } from 'interfaces/apps';
 
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
@@ -26,6 +27,7 @@ const DetailApp = () => {
 
   const { categoryDetail } = useGetDetailCategory(category || '');
 
+  const appIDCategory = categoryDetail?.apps || [''];
   const { data: resList, isLoading: isLoadingList } = useGetAppStore({
     skip:
       (filters?.page || NUMBER_DEFAULT_PAGE) *
@@ -34,6 +36,11 @@ const DetailApp = () => {
     filter: filters?.search,
   });
   const data = resList?.data?.items || [];
+  const filterAppsByIds = (listApp: App[], AppIDs: string[]) => {
+    return listApp.filter((app) => AppIDs.includes(app.id));
+  };
+
+  const dataFiltered = filterAppsByIds(data, appIDCategory);
 
   //! Function
 
@@ -45,14 +52,14 @@ const DetailApp = () => {
     >
       <CommonStyles.Box>
         <HeadWithSearching
-          title={`Market Place ${categoryDetail?.name}`}
+          title={`${categoryDetail?.name}`}
           onSubmitSearch={({ search }) => {
             handleSearch(search);
           }}
         />
       </CommonStyles.Box>
 
-      {isLoadingList ? <CommonStyles.Loading /> : <ListApp apps={data} />}
+      {isLoadingList ? <CommonStyles.Loading /> : <ListApp apps={dataFiltered} />}
     </CommonStyles.Box>
   );
 };
