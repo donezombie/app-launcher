@@ -7,13 +7,17 @@ import BaseUrl from 'consts/baseUrl';
 import { useAuth } from 'providers/AuthenticationProvider';
 import { useGetListCategory } from 'hooks/category/useGetListCategory';
 import { ICategory } from 'interfaces/category';
+import { useSearchParams } from 'react-router-dom';
 
 const Sidebar = () => {
   //! State
   const theme = useTheme();
   const { isAdmin, isUser, isAppManager } = useAuth();
   const { category } = useGetListCategory();
+  const [searchParams] = useSearchParams({ category: '' });
   const childrenCategory = category || ([] as ICategory[]);
+  const categoryFromURL = searchParams.get('category');
+
   const items = [
     {
       id: uniqueId('side-bar'),
@@ -47,8 +51,9 @@ const Sidebar = () => {
         return {
           key: item.id,
           label: item.name,
-          path: BaseUrl.AppMarketPlaceWithID(item.id),
+          path: BaseUrl.Marketplace.AppMarketPlaceWithID(item.id),
           showChildren: isAdmin || isUser || isAppManager,
+          forceActive: categoryFromURL === item.id,
         };
       }),
     },

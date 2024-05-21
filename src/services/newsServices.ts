@@ -1,9 +1,6 @@
-import queryString from 'query-string';
-import { APP_INTEGRATION_URL, APP_MANAGEMENT_URL, LIST_NEW } from 'consts/apiUrl';
-import { App, AppIntegration } from 'interfaces/apps';
+import { LIST_NEW } from 'consts/apiUrl';
 import { PromiseResponseBase, RequestPagingCommon, ResponseCommonPaging } from 'interfaces/common';
 import httpService from './httpService';
-import { UserRequestingApp } from 'interfaces/user';
 import { get } from 'lodash';
 import { News } from 'interfaces/news';
 

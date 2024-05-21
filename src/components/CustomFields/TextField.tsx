@@ -26,7 +26,7 @@ const CustomTextField = styled(MuiTextField)(({ theme }) => ({
     paddingRight: 0,
   },
   '& input:invalid + fieldset': {
-    borderColor: theme?.colors?.red,
+    // borderColor: theme?.colors?.red,
     borderWidth: 1,
   },
   '& .MuiFormHelperText-root': {
@@ -101,10 +101,6 @@ const TextField = ({
         }
         variant='outlined'
         size='small'
-        sx={{
-          '& label': {},
-          '& input': {},
-        }}
         type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
         InputProps={{
           endAdornment: isShowHidePassword ? (

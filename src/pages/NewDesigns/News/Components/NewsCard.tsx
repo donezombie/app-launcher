@@ -1,9 +1,7 @@
-import { useTheme } from '@mui/material';
 import CommonStyles from 'components/CommonStyles';
 import useToggleDialog from 'hooks/useToggleDialog';
 import { News } from 'interfaces/news';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import DialogAddNews from './DialogAddNews';
 import ItemNews from './ItemNews';
 import { Order } from 'interfaces/common';

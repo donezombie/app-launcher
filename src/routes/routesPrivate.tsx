@@ -235,7 +235,7 @@ const routes: Route[] = [
       },
       {
         name: 'Detail App',
-        path: BaseUrl.AppMarketPlace,
+        path: BaseUrl.Marketplace.AppMarketPlace,
         component: withCheckRole(DetailApp, [
           PERMISSION_ENUM.ADMIN,
           PERMISSION_ENUM.APP_MANAGER,

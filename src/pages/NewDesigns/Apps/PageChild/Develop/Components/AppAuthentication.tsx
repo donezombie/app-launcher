@@ -32,6 +32,7 @@ const AppAuthentication = (props: AppAuthenticationProps) => {
           required
           autoFocus
           fullWidth
+          placeholder='Education report'
         />
 
         <FastField
@@ -40,6 +41,7 @@ const AppAuthentication = (props: AppAuthenticationProps) => {
           label='Login Redirect URI'
           required
           fullWidth
+          placeholder='https://your-domain.com/login/callback'
         />
 
         <FastField
@@ -48,6 +50,7 @@ const AppAuthentication = (props: AppAuthenticationProps) => {
           label='Logout Redirect URI'
           required
           fullWidth
+          placeholder='https://your-domain.com/logout'
         />
       </CommonStyles.Box>
     </CommonStyles.Box>

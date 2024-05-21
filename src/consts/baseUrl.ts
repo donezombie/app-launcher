@@ -14,8 +14,6 @@ const BaseUrl = {
   AppDetailWithID: (id: string) => `/apps/detail/${id}`,
   AppsManagement: 'apps/apps-management',
   CategoryManagement: 'apps/category-management',
-  AppMarketPlaceWithID: (id: string) => `marketplace/list?category=${id}`,
-  AppMarketPlace: 'marketplace/list',
 
   CreateApp: '/create-app',
 
@@ -30,6 +28,9 @@ const BaseUrl = {
     Quote: '/apps/marketplace/quote',
     Info: '/apps/marketplace/app/:id',
     InfoWithID: (id: string | number) => `/apps/marketplace/app/${id}`,
+
+    AppMarketPlace: '/apps/marketplace/list',
+    AppMarketPlaceWithID: (id: string) => `/apps/marketplace/list?category=${id}`,
   },
 
   Setting: {

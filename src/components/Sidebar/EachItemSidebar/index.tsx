@@ -5,6 +5,7 @@ import { SIZE_ICON_DEFAULT } from 'consts';
 import { useTheme } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { isBoolean } from 'lodash';
 
 interface EachItemSidebarProps {
   item: SidebarItem;
@@ -53,10 +54,15 @@ const EachItemSidebar = ({ item }: EachItemSidebarProps) => {
         <CommonStyles.Box className='each-sidebar__children' sx={{ my: 0.8 }}>
           {item.children.map((el) => {
             const isHiddenChildren = !el.showChildren;
-            const isActive = pathname.includes(el.path);
+            const newRegexPathName = new RegExp(pathname, 'g');
+            const isActive = isBoolean(el.forceActive)
+              ? el.forceActive
+              : newRegexPathName.test(el.path);
+
             if (isHiddenChildren) {
               return <></>;
             }
+
             return (
               <Link key={el.path} to={el.path} className='unstyle-link'>
                 <CommonStyles.Box

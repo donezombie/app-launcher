@@ -101,6 +101,7 @@ export interface SidebarItem {
     label: string;
     path: string;
     showChildren: boolean;
+    forceActive?: boolean;
   }[];
   show?: boolean;
 }
