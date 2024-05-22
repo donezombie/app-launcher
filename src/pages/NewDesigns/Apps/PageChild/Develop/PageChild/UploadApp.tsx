@@ -1,5 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
+import { PERMISSION_ENUM, queryKeys } from 'consts';
+import BaseUrl from 'consts/baseUrl';
 import { Form, Formik, FormikProps } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
 import {
@@ -8,16 +11,14 @@ import {
   useGetAppIntegrationDetail,
   useUpdateAppIntegration,
 } from 'hooks/app/useAppHooks';
+import { useDeleteAppIDCategory, useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
+import { isEmpty } from 'lodash';
+import { useAuth } from 'providers/AuthenticationProvider';
 import { useCallback, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import AppAuthentication from '../Components/AppAuthentication';
 import AppInformation from '../Components/AppInformation';
-import * as Yup from 'yup';
-import BaseUrl from 'consts/baseUrl';
-import { isEmpty } from 'lodash';
-import { useDeleteAppIDCategory, useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
-import { useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from 'consts';
 
 // const initialValues = {
 //   appType: 0,
@@ -65,6 +66,8 @@ const UploadApp = (props: Iprops) => {
   const [step, setStep] = useState(0);
   const formikRef = useRef<FormikProps<any>>(null);
   const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
+  const { user } = useAuth();
+  const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
   const queryClient = useQueryClient();
   // //! Function
   const initialValues = {
@@ -121,7 +124,9 @@ const UploadApp = (props: Iprops) => {
             try {
               const res = isEdit ? null : await createApp(values);
               await updateAppIDCategory({ id: values.scopes, appID: res?.data || id });
-              await generateAppCredentials({ appId: res?.data || id });
+              role === PERMISSION_ENUM?.ADMIN
+                ? null
+                : await generateAppCredentials({ appId: res?.data || id });
               await updateAppIntegration({ id: res?.data || id, body: values });
               if (resDetailApp?.data?.scopes) {
                 await deleteAppIDCategory({
