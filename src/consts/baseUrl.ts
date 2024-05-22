@@ -59,6 +59,9 @@ const BaseUrl = {
   News: {
     Index: '/apps/news',
   },
+  EvenManagement: {
+    Index: 'apps/event-management',
+  },
 };
 
 export default BaseUrl;

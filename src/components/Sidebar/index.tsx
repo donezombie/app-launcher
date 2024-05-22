@@ -101,7 +101,7 @@ const Sidebar = () => {
       id: uniqueId('side-bar'),
       label: 'Event Management',
       icon: CommonIcons.MedalIcon,
-      path: '/apps/event-management',
+      path: BaseUrl.EvenManagement.Index,
       show: isAdmin,
     },
     {
