@@ -1,5 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
+import { PERMISSION_ENUM, queryKeys } from 'consts';
+import BaseUrl from 'consts/baseUrl';
 import { Form, Formik, FormikProps } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
 import {
@@ -8,16 +11,14 @@ import {
   useGetAppIntegrationDetail,
   useUpdateAppIntegration,
 } from 'hooks/app/useAppHooks';
+import { useDeleteAppIDCategory, useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
+import { isEmpty } from 'lodash';
+import { useAuth } from 'providers/AuthenticationProvider';
 import { useCallback, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import AppAuthentication from '../Components/AppAuthentication';
 import AppInformation from '../Components/AppInformation';
-import * as Yup from 'yup';
-import BaseUrl from 'consts/baseUrl';
-import { isEmpty } from 'lodash';
-import { useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
-import { PERMISSION_ENUM } from 'consts';
-import { useAuth } from 'providers/AuthenticationProvider';
 
 // const initialValues = {
 //   appType: 0,
@@ -60,12 +61,14 @@ const UploadApp = (props: Iprops) => {
   const { mutateAsync: createApp } = useCreateAppIntegration();
   const { mutateAsync: updateAppIntegration } = useUpdateAppIntegration();
   const { mutateAsync: updateAppIDCategory } = useUpdateAppIDCategory();
+  const { mutateAsync: deleteAppIDCategory } = useDeleteAppIDCategory();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const formikRef = useRef<FormikProps<any>>(null);
   const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
   const { user } = useAuth();
   const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
+  const queryClient = useQueryClient();
   // //! Function
   const initialValues = {
     appType: 0,
@@ -125,6 +128,18 @@ const UploadApp = (props: Iprops) => {
                 ? null
                 : await generateAppCredentials({ appId: res?.data || id });
               await updateAppIntegration({ id: res?.data || id, body: values });
+              if (resDetailApp?.data?.scopes) {
+                await deleteAppIDCategory({
+                  id: resDetailApp.data.scopes || '',
+                  appID: id as string,
+                });
+              }
+              await queryClient.refetchQueries({
+                queryKey: [queryKeys.getAppList],
+              });
+              await queryClient.refetchQueries({
+                queryKey: [queryKeys.getAppDetail, id],
+              });
               navigate(BaseUrl.MyApps.Index);
               setSubmitting(true);
               showSuccess(isEdit ? 'Edit successfully!' : 'Create successfully!');
