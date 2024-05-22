@@ -15,7 +15,9 @@ import AppInformation from '../Components/AppInformation';
 import * as Yup from 'yup';
 import BaseUrl from 'consts/baseUrl';
 import { isEmpty } from 'lodash';
-import { useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
+import { useDeleteAppIDCategory, useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
+import { useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from 'consts';
 
 // const initialValues = {
 //   appType: 0,
@@ -58,10 +60,12 @@ const UploadApp = (props: Iprops) => {
   const { mutateAsync: createApp } = useCreateAppIntegration();
   const { mutateAsync: updateAppIntegration } = useUpdateAppIntegration();
   const { mutateAsync: updateAppIDCategory } = useUpdateAppIDCategory();
+  const { mutateAsync: deleteAppIDCategory } = useDeleteAppIDCategory();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const formikRef = useRef<FormikProps<any>>(null);
   const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
+  const queryClient = useQueryClient();
   // //! Function
   const initialValues = {
     appType: 0,
@@ -119,6 +123,18 @@ const UploadApp = (props: Iprops) => {
               await updateAppIDCategory({ id: values.scopes, appID: res?.data || id });
               await generateAppCredentials({ appId: res?.data || id });
               await updateAppIntegration({ id: res?.data || id, body: values });
+              if (resDetailApp?.data?.scopes) {
+                await deleteAppIDCategory({
+                  id: resDetailApp.data.scopes || '',
+                  appID: id as string,
+                });
+              }
+              await queryClient.refetchQueries({
+                queryKey: [queryKeys.getAppList],
+              });
+              await queryClient.refetchQueries({
+                queryKey: [queryKeys.getAppDetail, id],
+              });
               navigate(BaseUrl.MyApps.Index);
               setSubmitting(true);
               showSuccess(isEdit ? 'Edit successfully!' : 'Create successfully!');
