@@ -3,6 +3,7 @@ import CommonStyles from 'components/CommonStyles';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
 import { FastField } from 'formik';
+import { copyToClipboard } from 'helpers';
 
 interface AppAuthenticationProps {}
 
@@ -32,7 +33,7 @@ const AppAuthentication = (props: AppAuthenticationProps) => {
           required
           autoFocus
           fullWidth
-          placeholder='Name App'
+          placeholder='Education report'
         />
 
         <FastField

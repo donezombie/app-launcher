@@ -7,6 +7,8 @@ import { FastField, useFormikContext } from 'formik';
 import TextField from 'components/CustomFields/TextField';
 import { useTheme } from '@mui/material';
 import { useGenerateAppCredentials } from 'hooks/app/useAppHooks';
+import { copyToClipboard } from 'helpers';
+import ButtonCopy from 'components/ButtonCopy';
 
 interface AppCredentialsProps {
   idProps: string;
@@ -19,7 +21,8 @@ const AppCredentials = (props: AppCredentialsProps) => {
   const theme = useTheme();
   const { mutateAsync: generateAppCredentials, isLoading } = useGenerateAppCredentials();
 
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue, values } = useFormikContext<any>();
+
   //! Function
   const onGenerate = async () => {
     const res = await generateAppCredentials({ appId: idProps });
@@ -48,21 +51,7 @@ const AppCredentials = (props: AppCredentialsProps) => {
           required
           helperText='Helper text'
           InputProps={{
-            endAdornment: (
-              <CommonStyles.Button
-                variant='text'
-                sx={{
-                  color: theme.colors?.black,
-                  borderLeft: '1px solid',
-                  borderColor: theme.colors?.border,
-                  px: 3,
-                  height: 43,
-                  borderRadius: 0,
-                }}
-              >
-                <CommonStyles.Typography variant='body2'>Copy</CommonStyles.Typography>
-              </CommonStyles.Button>
-            ),
+            endAdornment: <ButtonCopy text={values.clientID} />,
           }}
         />
 
@@ -75,21 +64,7 @@ const AppCredentials = (props: AppCredentialsProps) => {
           required
           helperText='Helper text'
           InputProps={{
-            endAdornment: (
-              <CommonStyles.Button
-                variant='text'
-                sx={{
-                  color: theme.colors?.black,
-                  borderLeft: '1px solid',
-                  borderColor: theme.colors?.border,
-                  px: 3,
-                  height: 43,
-                  borderRadius: 0,
-                }}
-              >
-                <CommonStyles.Typography variant='body2'>Copy</CommonStyles.Typography>
-              </CommonStyles.Button>
-            ),
+            endAdornment: <ButtonCopy text={values.clientSecret} />,
           }}
         />
 
@@ -102,21 +77,7 @@ const AppCredentials = (props: AppCredentialsProps) => {
           required
           helperText='Helper text'
           InputProps={{
-            endAdornment: (
-              <CommonStyles.Button
-                variant='text'
-                sx={{
-                  color: theme.colors?.black,
-                  borderLeft: '1px solid',
-                  borderColor: theme.colors?.border,
-                  px: 3,
-                  height: 43,
-                  borderRadius: 0,
-                }}
-              >
-                <CommonStyles.Typography variant='body2'>Copy</CommonStyles.Typography>
-              </CommonStyles.Button>
-            ),
+            endAdornment: <ButtonCopy text={values.clientName} />,
           }}
         />
       </CommonStyles.Box>
