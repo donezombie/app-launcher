@@ -12,7 +12,8 @@ import * as Yup from 'yup';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from 'consts';
 import { showError, showSuccess } from 'helpers/toast';
-import { useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
+import { useDeleteAppIDCategory, useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
+import { AppIntegration } from 'interfaces/apps';
 
 export const validateEditApp = Yup.object().shape({
   name: Yup.string().required('Name is required field!'),
@@ -26,10 +27,11 @@ const AppInformation = () => {
   const { category } = useGetListCategory();
   const { mutateAsync: updateApp } = useUpdateAppIntegration();
   const { mutateAsync: updateAppIDCategory } = useUpdateAppIDCategory();
+  const { mutateAsync: deleteAppIDCategory } = useDeleteAppIDCategory();
 
   const queryClient = useQueryClient();
 
-  const itemFound = resDetailApp?.data;
+  const itemFound = resDetailApp?.data as AppIntegration;
 
   //! Function
   const initialValues = {
@@ -69,10 +71,12 @@ const AppInformation = () => {
                   ...itemFound,
                   name: values.name,
                   scopes: values.scopes,
-                  developerName: values.developerName,
-                } as any,
+                },
               });
               await updateAppIDCategory({ id: values.scopes, appID: id as string });
+              if (itemFound?.scopes) {
+                await deleteAppIDCategory({ id: itemFound.scopes || '', appID: id as string });
+              }
               await queryClient.refetchQueries({
                 queryKey: [queryKeys.getAppList],
               });

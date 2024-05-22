@@ -2,6 +2,7 @@ import { uniqueId } from 'lodash';
 import { ICategory } from 'interfaces/category';
 import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { removeAppID } from 'helpers';
 
 export interface RequestCreateNews {
   title: string;
@@ -44,6 +45,20 @@ class CategoryServices {
     const newData = {
       ...detailData,
       apps: [...appsDetailData, appID],
+    };
+    updateDoc(categoryRef, newData);
+  }
+
+  async deleteAppIDCategory(id: string, appID: string) {
+    const categoryRef = doc(db, `categories/${id}`);
+    const detailCategoryRef = doc(db, 'categories', id);
+    const detailCategorySnapshot = await getDoc(detailCategoryRef);
+    const detailData = detailCategorySnapshot.data() as ICategory;
+    const appsDetailData = detailData?.apps || [];
+    const dataRemoved = removeAppID(appsDetailData, appID);
+    const newData = {
+      ...detailData,
+      apps: [...dataRemoved],
     };
     updateDoc(categoryRef, newData);
   }

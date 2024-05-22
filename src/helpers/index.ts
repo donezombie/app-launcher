@@ -97,3 +97,11 @@ export const renderReviewTime = (dateTimeString: Date | string) => {
   // If not within this week, display month and day
   return momentObj.format('MMM YY');
 };
+
+export const removeAppID = (appsDetailData: string[], appID: string) => {
+  const index = appsDetailData.indexOf(appID);
+  if (index !== -1) {
+    appsDetailData.splice(index, 1);
+  }
+  return appsDetailData;
+};
