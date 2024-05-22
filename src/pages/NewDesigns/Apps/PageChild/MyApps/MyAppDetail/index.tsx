@@ -2,6 +2,7 @@ import CommonStyles from 'components/CommonStyles';
 import ButtonBack from 'components/ButtonBack';
 import AppAuthentication from './Tabs/AppAuthentication';
 import AppInformation from './Tabs/AppInformation';
+import UploadApp from '../../Develop/PageChild/UploadApp';
 
 const MyAppDetail = () => {
   //! State
@@ -14,7 +15,8 @@ const MyAppDetail = () => {
       className='component:MyAppDetail'
       sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
     >
-      <ButtonBack />
+      <UploadApp isEdit={true} />
+      {/* <ButtonBack />
 
       <CommonStyles.Tabs
         tabs={[
@@ -27,7 +29,7 @@ const MyAppDetail = () => {
             component: AppInformation,
           },
         ]}
-      />
+      /> */}
     </CommonStyles.Box>
   );
 };

@@ -5,10 +5,11 @@ import { showError, showSuccess } from 'helpers/toast';
 import {
   useCreateAppIntegration,
   useGenerateAppCredentials,
+  useGetAppIntegrationDetail,
   useUpdateAppIntegration,
 } from 'hooks/app/useAppHooks';
 import { useCallback, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AppAuthentication from '../Components/AppAuthentication';
 import AppInformation from '../Components/AppInformation';
 import * as Yup from 'yup';
@@ -16,25 +17,25 @@ import BaseUrl from 'consts/baseUrl';
 import { isEmpty } from 'lodash';
 import { useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
 
-const initialValues = {
-  appType: 0,
-  loginRedirectUri: '',
-  logoutRedirectUri: '',
-  scopes: '',
-  name: '',
-  icon: '',
-  supportEmail: '',
-  phone: '',
-  homepage: '',
-  launchUri: '',
-  termsConditionsUri: '',
-  privacyPolicyUri: '',
-  summary: '',
-  description: '',
-  developerName: '',
-  isApproved: false,
-  isLive: true,
-};
+// const initialValues = {
+//   appType: 0,
+//   loginRedirectUri: '',
+//   logoutRedirectUri: '',
+//   scopes: '',
+//   name: '',
+//   icon: '',
+//   supportEmail: '',
+//   phone: '',
+//   homepage: '',
+//   launchUri: '',
+//   termsConditionsUri: '',
+//   privacyPolicyUri: '',
+//   summary: '',
+//   description: '',
+//   developerName: '',
+//   isApproved: false,
+//   isLive: true,
+// };
 
 const validateCreateApp = Yup.object().shape({
   name: Yup.string().required('Name is required field!'),
@@ -45,9 +46,15 @@ const validateCreateApp = Yup.object().shape({
   // description: Yup.string().required('Description is required field!'),
   icon: Yup.string().required('Icon is required field!'),
 });
+interface Iprops {
+  isEdit: boolean;
+}
+const UploadApp = (props: Iprops) => {
+  const { isEdit = false } = props;
 
-const UploadApp = () => {
   //! State
+  const { id } = useParams();
+  const { data: resDetailApp } = useGetAppIntegrationDetail(id || '');
   const { mutateAsync: createApp } = useCreateAppIntegration();
   const { mutateAsync: updateAppIntegration } = useUpdateAppIntegration();
   const { mutateAsync: updateAppIDCategory } = useUpdateAppIDCategory();
@@ -56,6 +63,25 @@ const UploadApp = () => {
   const formikRef = useRef<FormikProps<any>>(null);
   const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
   // //! Function
+  const initialValues = {
+    appType: 0,
+    loginRedirectUri: resDetailApp?.data?.loginRedirectUri || '',
+    logoutRedirectUri: resDetailApp?.data?.logoutRedirectUri || '',
+    scopes: resDetailApp?.data?.scopes || '',
+    name: resDetailApp?.data?.name || '',
+    icon: resDetailApp?.data?.icon || '',
+    supportEmail: resDetailApp?.data?.supportEmail || '',
+    phone: resDetailApp?.data?.phone || '',
+    homepage: resDetailApp?.data?.homepage || '',
+    launchUri: resDetailApp?.data?.launchUri || '',
+    termsConditionsUri: resDetailApp?.data?.termsConditionsUri || '',
+    privacyPolicyUri: resDetailApp?.data?.privacyPolicyUri || '',
+    summary: resDetailApp?.data?.summary || '',
+    description: resDetailApp?.data?.description || '',
+    developerName: resDetailApp?.data?.developerName || '',
+    isApproved: resDetailApp?.data?.isApproved || false,
+    isLive: resDetailApp?.data?.isLive || true,
+  };
 
   //! Render
 
@@ -89,13 +115,13 @@ const UploadApp = () => {
         onSubmit={(values, { setSubmitting }) => {
           (async () => {
             try {
-              const res = await createApp(values);
-              await updateAppIDCategory({ id: values.scopes, appID: res.data });
-              await generateAppCredentials({ appId: res?.data || '' });
-              await updateAppIntegration({ id: res?.data || '', body: values });
+              const res = isEdit ? null : await createApp(values);
+              await updateAppIDCategory({ id: values.scopes, appID: res?.data || id });
+              await generateAppCredentials({ appId: res?.data || id });
+              await updateAppIntegration({ id: res?.data || id, body: values });
               navigate(BaseUrl.MyApps.Index);
               setSubmitting(true);
-              showSuccess('Create successfully!');
+              showSuccess(isEdit ? 'Edit successfully!' : 'Create successfully!');
               setSubmitting(false);
             } catch (error) {
               setSubmitting(false);
