@@ -16,6 +16,8 @@ import * as Yup from 'yup';
 import BaseUrl from 'consts/baseUrl';
 import { isEmpty } from 'lodash';
 import { useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
+import { PERMISSION_ENUM } from 'consts';
+import { useAuth } from 'providers/AuthenticationProvider';
 
 // const initialValues = {
 //   appType: 0,
@@ -62,6 +64,8 @@ const UploadApp = (props: Iprops) => {
   const [step, setStep] = useState(0);
   const formikRef = useRef<FormikProps<any>>(null);
   const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
+  const { user } = useAuth();
+  const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
   // //! Function
   const initialValues = {
     appType: 0,
@@ -117,7 +121,9 @@ const UploadApp = (props: Iprops) => {
             try {
               const res = isEdit ? null : await createApp(values);
               await updateAppIDCategory({ id: values.scopes, appID: res?.data || id });
-              await generateAppCredentials({ appId: res?.data || id });
+              role === PERMISSION_ENUM?.ADMIN
+                ? null
+                : await generateAppCredentials({ appId: res?.data || id });
               await updateAppIntegration({ id: res?.data || id, body: values });
               navigate(BaseUrl.MyApps.Index);
               setSubmitting(true);
