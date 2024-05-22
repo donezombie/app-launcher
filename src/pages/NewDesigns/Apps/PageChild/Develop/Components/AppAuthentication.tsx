@@ -32,7 +32,7 @@ const AppAuthentication = (props: AppAuthenticationProps) => {
           required
           autoFocus
           fullWidth
-          placeholder='Education report'
+          placeholder='Name App'
         />
 
         <FastField
