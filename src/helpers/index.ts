@@ -61,8 +61,7 @@ export const copyToClipboard = (text = '') => {
   el.value = text;
   document.body.appendChild(el);
   el.select();
-  el.setSelectionRange(0, 99999);
-  navigator.clipboard.writeText(text);
+  document.execCommand('copy');
   document.body.removeChild(el);
 };
 
