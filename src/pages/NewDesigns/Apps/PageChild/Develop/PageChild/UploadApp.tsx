@@ -124,7 +124,7 @@ const UploadApp = (props: Iprops) => {
             try {
               const res = isEdit ? null : await createApp(values);
               await updateAppIDCategory({ id: values.scopes, appID: res?.data || id });
-              role === PERMISSION_ENUM?.ADMIN
+              role !== PERMISSION_ENUM?.ADMIN
                 ? null
                 : await generateAppCredentials({ appId: res?.data || id });
               await updateAppIntegration({ id: res?.data || id, body: values });
