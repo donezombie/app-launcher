@@ -2,7 +2,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { PERMISSION_ENUM, queryKeys } from 'consts';
-import BaseUrl from 'consts/baseUrl';
 import { Form, Formik, FormikProps } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
 import {
@@ -18,27 +17,9 @@ import { useCallback, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import AppAuthentication from '../Components/AppAuthentication';
+import AppCredentials from '../Components/AppCredentials';
 import AppInformation from '../Components/AppInformation';
-
-// const initialValues = {
-//   appType: 0,
-//   loginRedirectUri: '',
-//   logoutRedirectUri: '',
-//   scopes: '',
-//   name: '',
-//   icon: '',
-//   supportEmail: '',
-//   phone: '',
-//   homepage: '',
-//   launchUri: '',
-//   termsConditionsUri: '',
-//   privacyPolicyUri: '',
-//   summary: '',
-//   description: '',
-//   developerName: '',
-//   isApproved: false,
-//   isLive: true,
-// };
+import BaseUrl from 'consts/baseUrl';
 
 const validateCreateApp = Yup.object().shape({
   name: Yup.string().required('Name is required field!'),
@@ -64,8 +45,9 @@ const UploadApp = (props: Iprops) => {
   const { mutateAsync: deleteAppIDCategory } = useDeleteAppIDCategory();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
+  const [idProps, setIdProps] = useState('');
   const formikRef = useRef<FormikProps<any>>(null);
-  const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
+  // const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
   const { user } = useAuth();
   const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
   const queryClient = useQueryClient();
@@ -88,6 +70,9 @@ const UploadApp = (props: Iprops) => {
     developerName: resDetailApp?.data?.developerName || '',
     isApproved: resDetailApp?.data?.isApproved || false,
     isLive: resDetailApp?.data?.isLive || true,
+    clientID: resDetailApp?.data?.appClientId || '',
+    clientSecret: resDetailApp?.data?.appClientSecret || '',
+    clientName: resDetailApp?.data?.appClientName || '',
   };
 
   //! Render
@@ -98,6 +83,8 @@ const UploadApp = (props: Iprops) => {
         return <AppAuthentication />;
       case 1:
         return <AppInformation />;
+      case 2:
+        return <AppCredentials idProps={idProps} />;
       default:
         return <div />;
     }
@@ -124,9 +111,10 @@ const UploadApp = (props: Iprops) => {
             try {
               const res = isEdit ? null : await createApp(values);
               await updateAppIDCategory({ id: values.scopes, appID: res?.data || id });
-              role !== PERMISSION_ENUM?.ADMIN
-                ? null
-                : await generateAppCredentials({ appId: res?.data || id });
+              // role !== PERMISSION_ENUM?.ADMIN
+              //   ? await generateAppCredentials({ appId: res?.data || id })
+              //   : null;
+              setIdProps(res?.data);
               await updateAppIntegration({ id: res?.data || id, body: values });
               if (resDetailApp?.data?.scopes) {
                 await deleteAppIDCategory({
@@ -140,9 +128,10 @@ const UploadApp = (props: Iprops) => {
               await queryClient.refetchQueries({
                 queryKey: [queryKeys.getAppDetail, id],
               });
-              navigate(BaseUrl.MyApps.Index);
+              // navigate(BaseUrl.MyApps.Index);
               setSubmitting(true);
               showSuccess(isEdit ? 'Edit successfully!' : 'Create successfully!');
+              setStep(step + 1);
               setSubmitting(false);
             } catch (error) {
               setSubmitting(false);
@@ -151,7 +140,7 @@ const UploadApp = (props: Iprops) => {
           })();
         }}
       >
-        {({ isSubmitting, handleSubmit, errors }) => {
+        {({ isSubmitting, handleSubmit, errors, values }) => {
           return (
             <Form>
               {renderStep()}
@@ -184,6 +173,21 @@ const UploadApp = (props: Iprops) => {
                     startIcon={<CommonIcons.SaveIcon />}
                   >
                     Save
+                  </CommonStyles.Button>
+                </CommonStyles.Box>
+              ) : null}
+              {step === 2 ? (
+                <CommonStyles.Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                  <CommonStyles.Button onClick={() => setStep(step - 1)}>Back</CommonStyles.Button>
+                  <CommonStyles.Button
+                    onClick={() => navigate(BaseUrl.MyApps.Index)}
+                    disabled={
+                      isEmpty(values?.clientID) ||
+                      isEmpty(values?.clientSecret) ||
+                      isEmpty(values?.clientName)
+                    }
+                  >
+                    Done
                   </CommonStyles.Button>
                 </CommonStyles.Box>
               ) : null}
