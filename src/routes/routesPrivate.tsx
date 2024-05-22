@@ -52,6 +52,8 @@ const AppsManagement = lazy(() => import('pages/NewDesigns/AppsManagement'));
 
 //! Category Management
 const CategoryManagement = lazy(() => import('pages/NewDesigns/CategoryManagement'));
+//! Event Management Management
+const EventManagement = lazy(() => import('pages/NewDesigns/EventManagement'));
 
 const routes: Route[] = [
   {
@@ -241,6 +243,12 @@ const routes: Route[] = [
           PERMISSION_ENUM.APP_MANAGER,
           PERMISSION_ENUM.USER,
         ]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Detail App',
+        path: BaseUrl.EvenManagement.Index,
+        component: withCheckRole(EventManagement, [PERMISSION_ENUM.ADMIN]),
         isPrivateRoute: true,
       },
     ],
