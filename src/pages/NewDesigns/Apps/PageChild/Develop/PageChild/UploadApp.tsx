@@ -29,6 +29,7 @@ const validateCreateApp = Yup.object().shape({
   summary: Yup.string().required('Summary is required field!'),
   // description: Yup.string().required('Description is required field!'),
   icon: Yup.string().required('Icon is required field!'),
+  launchUri: Yup.string().required('Launch uri is required field!'),
 });
 interface Iprops {
   isEdit: boolean;

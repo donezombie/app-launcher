@@ -5,7 +5,7 @@ import { App } from 'interfaces/apps';
 import SwitchField from 'components/CustomFields/SwitchField';
 import { Link, useNavigate } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useCreateApproval, useInstallApp, useUninstallApp } from 'hooks/app/useAppHooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { showError, showSuccess } from 'helpers/toast';
@@ -14,14 +14,16 @@ import Launcher from 'pages/Launcher';
 import { useTabHandler } from 'providers/TabHandlerProvider';
 import useToggleDialog from 'hooks/useToggleDialog';
 import DialogListRequesting from 'pages/Apps/Dialogs/DialogListRequesting';
+import { IconApplication1, IconApplication2 } from 'components/CommonIcons';
 
 interface EachAppProps {
   item: App;
   isMyApps?: boolean;
   isYourApp?: boolean;
+  ind: number;
 }
 
-const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) => {
+const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProps) => {
   //! State
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
@@ -94,6 +96,7 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
   };
 
   //! Render
+  const checkIcon = ind % 2 === 0 ? IconApplication1 : IconApplication2;
   const renderActions = () => {
     // if (item.isYourApp) {
     //   return <CommonStyles.Button sx={{ width: 'fit-content' }}>Manage</CommonStyles.Button>;
@@ -208,18 +211,30 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
           >
             <CommonStyles.Box className='each-app__left'>
               <CommonStyles.Box
+                className='each-application__logo'
                 sx={{
-                  width: 70,
-                  height: 70,
+                  width: 100,
+                  height: 100,
+                  backgroundColor: theme.palette.primary.main,
                   borderRadius: 2,
-                  background:
-                    'linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)',
+                  boxShadow: 3,
+                  position: 'relative',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                <img
-                  src={item.icon}
-                  alt='icon-app'
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                {checkIcon}
+                <CommonStyles.Box
+                  className='each-application__overlay'
+                  sx={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    transition: '.3s',
+                  }}
                 />
               </CommonStyles.Box>
             </CommonStyles.Box>

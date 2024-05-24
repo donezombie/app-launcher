@@ -36,6 +36,9 @@ const AppInformation = () => {
           <FastField component={TextField} required name='summary' label='Summary' fullWidth />
         </CommonStyles.Box>
         <CommonStyles.Box sx={{ mt: 1 }}>
+          <FastField component={TextField} required name='launchUri' label='Launch Uri' fullWidth />
+        </CommonStyles.Box>
+        <CommonStyles.Box sx={{ mt: 1 }}>
           <FastField
             component={TextField}
             required
