@@ -17,6 +17,7 @@ interface EachApplicationProps {
 const EachApplication = ({ application }: EachApplicationProps) => {
   //! State
   const theme = useTheme();
+  console.log('application.icon', application.icon);
 
   //! Function
 

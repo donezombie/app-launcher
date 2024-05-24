@@ -33,8 +33,10 @@ const ListApp = ({ isMyApps = false, isYourApp = false, apps = [] }: ListAppProp
         [theme.breakpoints.down('md')]: { gridTemplateColumns: '1fr' },
       }}
     >
-      {apps.map((el) => {
-        return <EachApp key={el.id} item={el} isMyApps={isMyApps} isYourApp={isYourApp} />;
+      {apps.map((el, ind) => {
+        return (
+          <EachApp key={el.id} item={el} isMyApps={isMyApps} isYourApp={isYourApp} ind={ind} />
+        );
       })}
     </CommonStyles.Box>
   );
