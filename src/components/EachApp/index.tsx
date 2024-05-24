@@ -65,16 +65,17 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false }: EachAppProps) =>
   };
 
   const onClickLaunch = () => {
-    addNewTab({
-      label: item.name,
-      value: item.id,
-      content: <Launcher idApp={item.id} launchUri={item.launchUri} />,
-      openNewTab: true,
-    });
+    navigate(BaseUrl.Launcher.AppWithdDetail(item.launchUri, item.id));
+    // addNewTab({
+    //   label: item.name,
+    //   value: item.id,
+    //   content: <Launcher idApp={item.id} launchUri={item.launchUri} />,
+    //   openNewTab: true,
+    // });
 
-    if (!location.pathname.includes(BaseUrl.AppManagement)) {
-      navigate(BaseUrl.AppManagement);
-    }
+    // if (!location.pathname.includes(BaseUrl.AppManagement)) {
+    //   navigate(BaseUrl.AppManagement);
+    // }
   };
 
   const onClickRequestAccess = async () => {
