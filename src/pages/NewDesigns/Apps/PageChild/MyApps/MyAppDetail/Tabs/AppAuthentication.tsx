@@ -1,12 +1,14 @@
 import CommonStyles from 'components/CommonStyles';
-import HeadWithSearching from 'components/HeadWithSearching';
-import { Field, Form, Formik } from 'formik';
 import TextField from 'components/CustomFields/TextField';
-import { useTheme } from '@mui/material';
+import { FastField } from 'formik';
 
-const AppAuthentication = () => {
+interface AppAuthenticationProps {
+  showUri?: boolean;
+}
+
+const AppAuthentication = (props: AppAuthenticationProps) => {
   //! State
-  const theme = useTheme();
+  const { showUri = false } = props;
 
   //! Function
 
@@ -16,100 +18,45 @@ const AppAuthentication = () => {
       className='component:AppAuthentication'
       sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
     >
-      <HeadWithSearching
+      {/* <HeadWithSearching
         title='Authentication'
         renderLeftContent={
           <CommonStyles.Button variant='outlined'>Generate New Credentials</CommonStyles.Button>
         }
-      />
+      /> */}
+      <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
+        <FastField
+          component={TextField}
+          name='name'
+          label='Name App'
+          required
+          autoFocus
+          fullWidth
+          placeholder='Education report'
+        />
 
-      <Formik initialValues={{}} onSubmit={() => {}}>
-        {() => {
-          return (
-            <Form>
-              <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
-                <Field
-                  component={TextField}
-                  name='clientID'
-                  placeholder='dwaej3r8y92yr793yf9hyfqh80'
-                  label='Authentication Client ID'
-                  fullWidth
-                  helperText='Helper text'
-                  InputProps={{
-                    endAdornment: (
-                      <CommonStyles.Button
-                        variant='text'
-                        sx={{
-                          color: theme.colors?.black,
-                          borderLeft: '1px solid',
-                          borderColor: theme.colors?.border,
-                          px: 3,
-                          height: 43,
-                          borderRadius: 0,
-                        }}
-                      >
-                        <CommonStyles.Typography variant='body2'>Copy</CommonStyles.Typography>
-                      </CommonStyles.Button>
-                    ),
-                  }}
-                />
+        {showUri && (
+          <FastField
+            component={TextField}
+            name='loginRedirectUri'
+            label='Login Redirect URI'
+            required
+            fullWidth
+            placeholder='https://your-domain.com/login/callback'
+          />
+        )}
 
-                <Field
-                  component={TextField}
-                  name='clientSecret'
-                  placeholder='dwaej3r8y92yr793yf9hyfqh80'
-                  label='Authentication Client Secret'
-                  fullWidth
-                  helperText='Helper text'
-                  InputProps={{
-                    endAdornment: (
-                      <CommonStyles.Button
-                        variant='text'
-                        sx={{
-                          color: theme.colors?.black,
-                          borderLeft: '1px solid',
-                          borderColor: theme.colors?.border,
-                          px: 3,
-                          height: 43,
-                          borderRadius: 0,
-                        }}
-                      >
-                        <CommonStyles.Typography variant='body2'>Copy</CommonStyles.Typography>
-                      </CommonStyles.Button>
-                    ),
-                  }}
-                />
-
-                <Field
-                  component={TextField}
-                  name='clientName'
-                  placeholder='dwaej3r8y92yr793yf9hyfqh80'
-                  label='App Client Name'
-                  fullWidth
-                  helperText='Helper text'
-                  InputProps={{
-                    endAdornment: (
-                      <CommonStyles.Button
-                        variant='text'
-                        sx={{
-                          color: theme.colors?.black,
-                          borderLeft: '1px solid',
-                          borderColor: theme.colors?.border,
-                          px: 3,
-                          height: 43,
-                          borderRadius: 0,
-                        }}
-                      >
-                        <CommonStyles.Typography variant='body2'>Copy</CommonStyles.Typography>
-                      </CommonStyles.Button>
-                    ),
-                  }}
-                />
-              </CommonStyles.Box>
-            </Form>
-          );
-        }}
-      </Formik>
+        {showUri && (
+          <FastField
+            component={TextField}
+            name='logoutRedirectUri'
+            label='Logout Redirect URI'
+            required
+            fullWidth
+            placeholder='https://your-domain.com/logout'
+          />
+        )}
+      </CommonStyles.Box>
     </CommonStyles.Box>
   );
 };

@@ -1,30 +1,27 @@
 import { useQueryClient } from '@tanstack/react-query';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
-import { PERMISSION_ENUM, queryKeys } from 'consts';
-import { Form, Formik, FormikProps } from 'formik';
+import { queryKeys } from 'consts';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
 import {
   useCreateAppIntegration,
-  useGenerateAppCredentials,
   useGetAppIntegrationDetail,
   useUpdateAppIntegration,
 } from 'hooks/app/useAppHooks';
 import { useDeleteAppIDCategory, useUpdateAppIDCategory } from 'hooks/category/useCategoryHooks';
 import { isEmpty } from 'lodash';
-import { useAuth } from 'providers/AuthenticationProvider';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import AppAuthentication from '../Components/AppAuthentication';
 import AppCredentials from '../Components/AppCredentials';
 import AppInformation from '../Components/AppInformation';
 import BaseUrl from 'consts/baseUrl';
+import SwitchField from 'components/CustomFields/SwitchField';
 
 const validateCreateApp = Yup.object().shape({
   name: Yup.string().required('Name is required field!'),
-  loginRedirectUri: Yup.string().required('Client ID is required field!'),
-  logoutRedirectUri: Yup.string().required('Client Secret is required field!'),
   homepage: Yup.string().required('Homepage is required field!'),
   summary: Yup.string().required('Summary is required field!'),
   // description: Yup.string().required('Description is required field!'),
@@ -47,16 +44,14 @@ const UploadApp = (props: Iprops) => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [idProps, setIdProps] = useState('');
+  const [isSSO, setIsSSO] = useState(false);
   const formikRef = useRef<FormikProps<any>>(null);
-  // const { mutateAsync: generateAppCredentials } = useGenerateAppCredentials();
-  const { user } = useAuth();
-  const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
   const queryClient = useQueryClient();
   // //! Function
   const initialValues = {
     appType: 0,
-    loginRedirectUri: resDetailApp?.data?.loginRedirectUri || '',
-    logoutRedirectUri: resDetailApp?.data?.logoutRedirectUri || '',
+    loginRedirectUri: resDetailApp?.data?.loginRedirectUri || 'notSSO',
+    logoutRedirectUri: resDetailApp?.data?.logoutRedirectUri || 'notSSO',
     scopes: resDetailApp?.data?.scopes || '',
     name: resDetailApp?.data?.name || '',
     icon: resDetailApp?.data?.icon || '',
@@ -76,12 +71,24 @@ const UploadApp = (props: Iprops) => {
     clientName: resDetailApp?.data?.appClientName || '',
   };
 
+  useEffect(() => {
+    if (isEdit) {
+      if (
+        resDetailApp?.data?.loginRedirectUri === 'notSSO' ||
+        resDetailApp?.data?.logoutRedirectUri === 'notSSO'
+      ) {
+        setIsSSO(false);
+      } else {
+        setIsSSO(true);
+      }
+    }
+  }, [resDetailApp, isEdit]);
   //! Render
 
   const renderStep = useCallback(() => {
     switch (step) {
       case 0:
-        return <AppAuthentication />;
+        return <AppAuthentication showUri={isSSO} />;
       case 1:
         return <AppInformation />;
       case 2:
@@ -89,7 +96,7 @@ const UploadApp = (props: Iprops) => {
       default:
         return <div />;
     }
-  }, [step]);
+  }, [step, isSSO]);
 
   return (
     <CommonStyles.Box
@@ -141,17 +148,40 @@ const UploadApp = (props: Iprops) => {
           })();
         }}
       >
-        {({ isSubmitting, handleSubmit, errors, values }) => {
+        {({ isSubmitting, handleSubmit, errors, values, setFieldValue }) => {
           return (
             <Form>
+              {step === 0 ? (
+                <CommonStyles.Box sx={{ display: 'flex', gap: 3 }}>
+                  <CommonStyles.Typography
+                    component='p'
+                    variant='captionLMedium'
+                    sx={{ mb: 1.5, fontWeight: 'bold' }}
+                  >
+                    Use Marketplace SSO
+                  </CommonStyles.Typography>
+                  <Field
+                    component={SwitchField}
+                    name='isUseSSO'
+                    checked={isSSO}
+                    sx={{ transform: 'translateY(3px)' }}
+                    afterOnChange={(values: any) => {
+                      const checked = values.target.checked as boolean;
+                      setIsSSO(checked);
+                      setFieldValue('loginRedirectUri', '');
+                      setFieldValue('logoutRedirectUri', '');
+                    }}
+                  />
+                </CommonStyles.Box>
+              ) : null}
               {renderStep()}
               {step === 0 ? (
                 <CommonStyles.Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <CommonStyles.Button
                     disabled={
                       !isEmpty(errors?.name) ||
-                      !isEmpty(errors?.loginRedirectUri) ||
-                      !isEmpty(errors?.logoutRedirectUri)
+                      (isSSO && isEmpty(values?.loginRedirectUri)) ||
+                      (isSSO && isEmpty(values?.logoutRedirectUri))
                     }
                     onClick={() => setStep(step + 1)}
                   >
