@@ -5,11 +5,14 @@ import HeadWithSearching from 'components/HeadWithSearching';
 import { FastField } from 'formik';
 import { copyToClipboard } from 'helpers';
 
-interface AppAuthenticationProps {}
+interface AppAuthenticationProps {
+  showUri?: boolean;
+}
 
 const AppAuthentication = (props: AppAuthenticationProps) => {
   //! State
   const theme = useTheme();
+  const { showUri } = props;
 
   //! Function
 
@@ -36,23 +39,27 @@ const AppAuthentication = (props: AppAuthenticationProps) => {
           placeholder='Education report'
         />
 
-        <FastField
-          component={TextField}
-          name='loginRedirectUri'
-          label='Login Redirect URI'
-          required
-          fullWidth
-          placeholder='https://your-domain.com/login/callback'
-        />
+        {showUri && (
+          <FastField
+            component={TextField}
+            name='loginRedirectUri'
+            label='Login Redirect URI'
+            required
+            fullWidth
+            placeholder='https://your-domain.com/login/callback'
+          />
+        )}
 
-        <FastField
-          component={TextField}
-          name='logoutRedirectUri'
-          label='Logout Redirect URI'
-          required
-          fullWidth
-          placeholder='https://your-domain.com/logout'
-        />
+        {showUri && (
+          <FastField
+            component={TextField}
+            name='logoutRedirectUri'
+            label='Logout Redirect URI'
+            required
+            fullWidth
+            placeholder='https://your-domain.com/logout'
+          />
+        )}
       </CommonStyles.Box>
     </CommonStyles.Box>
   );
