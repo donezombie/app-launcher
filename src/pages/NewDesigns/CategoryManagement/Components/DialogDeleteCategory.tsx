@@ -6,12 +6,12 @@ import CommonStyles from 'components/CommonStyles';
 import { queryKeys } from 'consts';
 import { showError, showSuccess } from 'helpers/toast';
 import { useDeleteCategory } from 'hooks/category/useCategoryHooks';
-import { ICategory } from 'interfaces/category';
+import { Category, ICategory } from 'interfaces/category';
 import { DialogI } from 'interfaces/common';
 import { RequestCreateNews } from 'services/newsServices';
 
 interface Props extends DialogI<RequestCreateNews> {
-  item?: ICategory;
+  item?: Category;
 }
 
 const DialogDeleteCategory = (props: Props) => {
@@ -21,7 +21,7 @@ const DialogDeleteCategory = (props: Props) => {
 
   const handleDeleteNews = async () => {
     try {
-      await deleteCategory({ id: item?.id || '' });
+      await deleteCategory({ id: String(item?.id) || '' });
       toggle();
       showSuccess('Delete news successfully!');
       queryClient.refetchQueries([queryKeys.getListNew]);

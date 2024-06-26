@@ -1,7 +1,11 @@
+import { useQuery } from '@tanstack/react-query';
 import { db } from '../../firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { ICategory } from 'interfaces/category';
 import { useEffect, useState } from 'react';
+import appManagementService from 'services/appManagementService';
+import { queryKeys } from 'consts';
+import { RequestPagingCommon } from 'interfaces/common';
 
 export const useGetListCategory = () => {
   const [category, setcategory] = useState<ICategory[]>([]);
@@ -23,4 +27,11 @@ export const useGetListCategory = () => {
     };
   }, []);
   return { category, loading };
+};
+
+export const useGetCategoryList = (filters?: RequestPagingCommon) => {
+  return useQuery({
+    queryKey: [queryKeys.getListNew, filters],
+    queryFn: () => appManagementService.getListCategory(filters),
+  });
 };

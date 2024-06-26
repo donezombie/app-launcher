@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LOGOUT_REDIRECT_URI } from 'consts/configAWS';
 import { User } from 'oidc-client-ts';
 import AuthService from './authService';
+import { IUser } from 'providers/AuthenticationProvider';
 // import AuthService from './authService';
 
 export const TOKEN_KEY = 'token';
@@ -56,7 +57,8 @@ class Services {
     );
   }
 
-  attachTokenToHeader(token: string) {
+  attachTokenToHeader() {
+    const token = localStorage.getItem(TOKEN_KEY);
     this.axios.interceptors.request.use(
       function (config) {
         if (config.headers) {
@@ -75,7 +77,7 @@ class Services {
     return this.axios.get(url, config);
   }
 
-  post(url: string, data: any, config?: AxiosRequestConfig) {
+  post(url: string, data?: any, config?: AxiosRequestConfig) {
     return this.axios.post(url, data, config);
   }
 
@@ -87,11 +89,15 @@ class Services {
     return this.axios.put(url, data, config);
   }
 
+  patch(url: string, data: any, config?: AxiosRequestConfig) {
+    return this.axios.patch(url, data, config);
+  }
+
   saveTokenStorage(token: string) {
     localStorage.setItem(TOKEN_KEY, token);
   }
 
-  saveUserStorage(user: User) {
+  saveUserStorage(user: IUser) {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 

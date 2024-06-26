@@ -3,6 +3,9 @@ import CommonStyles from 'components/CommonStyles';
 import { useAuth } from 'providers/AuthenticationProvider';
 import { useNavigate } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
+import userService from 'services/userService';
+import httpService from 'services/httpService';
+import { showError } from 'helpers/toast';
 
 const Callbacks = () => {
   //! State
@@ -12,8 +15,18 @@ const Callbacks = () => {
   //! Function
 
   React.useEffect(() => {
-    auth.loginRedirectCallback().then(() => {
-      navigate(BaseUrl.Homepage);
+    auth.loginRedirectCallback().then(async (respone: any) => {
+      try {
+        const accessTokenCognito = respone.access_token;
+        const user = await userService.loginWithCognito(accessTokenCognito);
+        if (user.data.statusCode === 200) {
+          httpService.saveTokenStorage(user.data.data);
+          window.location.href = BaseUrl.Homepage;
+        }
+      } catch (error) {
+        showError(error);
+        navigate(BaseUrl.Login);
+      }
     });
   }, []);
 

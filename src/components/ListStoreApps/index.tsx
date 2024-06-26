@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import CommonStyles from 'components/CommonStyles';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import { useGetAppStore } from 'hooks/app/useAppHooks';
+import { useGetAppStore, useGetListApp } from 'hooks/app/useAppHooks';
 import { NUMBER_DEFAULT_ROW_PER_PAGE, NUMBER_DEFAULT_PAGE } from 'consts';
 import { useTheme } from '@mui/material';
 import EachApp from '../../pages/Apps/AppsForUser/Components/EachApp';
@@ -13,7 +13,7 @@ import { cloneDeep } from 'lodash';
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
   rowsPerPage: 999,
-  search: '',
+  textSearch: '',
 };
 
 const ListStoreApps = () => {
@@ -21,15 +21,9 @@ const ListStoreApps = () => {
   const theme = useTheme();
   const { filters, setFilters, handleResetToInitial } = useFiltersHandler(initialValues);
 
-  const { data: resList, isLoading: isLoadingList } = useGetAppStore({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
-  const data = resList?.data?.items || [];
-  const totalCount = resList?.data?.totalCount || 0;
+  const { data: resList, isLoading: isLoadingList } = useGetListApp(filters);
+  const data = resList?.data?.data?.items || [];
+  const totalCount = resList?.data?.data?.totalItems || 0;
 
   //! Function
 
@@ -57,7 +51,7 @@ const ListStoreApps = () => {
               handleResetToInitial();
             }}
             renderFilterFields={() => {
-              return <FastField component={TextField} name='search' label='Search apps' />;
+              return <FastField component={TextField} name='textSearch' label='Search apps' />;
             }}
           />
         </CommonStyles.Box>

@@ -6,7 +6,7 @@ import { FastField, Form, Formik } from 'formik';
 import CommonStyles from 'components/CommonStyles';
 import TextField from 'components/CustomFields/TextField';
 import { RequestCreateApp } from 'services/appManagementService';
-import { App } from 'interfaces/apps';
+import { App, NewApp } from 'interfaces/apps';
 import { useGenerateAppCredentials, useGetAppIntegrationDetail } from 'hooks/app/useAppHooks';
 import CommonIcons from 'components/CommonIcons';
 import { showError, showSuccess } from 'helpers/toast';
@@ -15,7 +15,7 @@ import * as Yup from 'yup';
 import { useAuth } from 'providers/AuthenticationProvider';
 
 interface Props extends DialogI<RequestCreateApp> {
-  item?: App;
+  item?: App | NewApp;
 }
 
 export const validateCreateApp = Yup.object().shape({

@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { SortOrder } from 'consts/enum';
 import { FormikHelpers } from 'formik';
 import React from 'react';
 
@@ -28,6 +29,7 @@ export interface SelectOption {
 export interface ResponseCommonPaging<T> {
   items: T;
   totalCount: number;
+  totalItems?: number;
 }
 
 export type PromiseResponseBase<T> = Promise<AxiosResponse<T>>;
@@ -39,10 +41,11 @@ export enum Order {
 export type OrderType = Order.desc | Order.asc;
 
 export interface CommonFilters {
-  order?: OrderType;
+  order?: Order;
   page?: number;
   rowsPerPage?: number;
   orderBy?: string | number | symbol;
+  search?: string;
 }
 
 export interface DialogI<T> {
@@ -52,9 +55,17 @@ export interface DialogI<T> {
 }
 
 export interface RequestPagingCommon {
-  skip: number;
-  take: number;
+  skip?: number;
+  take?: number;
   filter?: string;
+  order?: Order;
+  page?: number;
+  rowsPerPage?: number;
+  orderBy?: string | number | symbol;
+  search?: string;
+  categoryId?: number;
+  isLive?: boolean;
+  myApp?: boolean;
 }
 
 export interface ResponsePagingCommon<T> {

@@ -34,25 +34,19 @@ const Settings = () => {
   return (
     <Fragment>
       <Formik
-        initialValues={{
-          firstname: user?.firstname || '',
-          lastname: user?.lastname || '',
-          company: user?.company || '',
-          address: user?.address || '',
-          phoneNumber: user?.phoneNumber || '',
-        }}
+        initialValues={{}}
         onSubmit={(values, { setSubmitting }) => {
           (async () => {
-            try {
-              setSubmitting(true);
-              await updateUserInfo(values);
-              await queryClient.refetchQueries({ queryKey: [queryKeys.getUserInfo] });
-              showSuccess('Update successfully!');
-              setSubmitting(false);
-            } catch (error) {
-              setSubmitting(false);
-              showError(error);
-            }
+            // try {
+            //   setSubmitting(true);
+            //   await updateUserInfo(values);
+            //   await queryClient.refetchQueries({ queryKey: [queryKeys.getUserInfo] });
+            //   showSuccess('Update successfully!');
+            //   setSubmitting(false);
+            // } catch (error) {
+            //   setSubmitting(false);
+            //   showError(error);
+            // }
           })();
         }}
       >

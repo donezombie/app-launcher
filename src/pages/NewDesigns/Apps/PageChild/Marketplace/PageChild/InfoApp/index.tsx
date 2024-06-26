@@ -5,7 +5,7 @@ import HeadWithSearching from 'components/HeadWithSearching';
 import EachReview from 'components/EachReview';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetAppIntegrationDetail, useInstallApp } from 'hooks/app/useAppHooks';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { showError, showSuccess } from 'helpers/toast';
 import Launcher from 'pages/Launcher';
 import BaseUrl from 'consts/baseUrl';
@@ -25,7 +25,10 @@ const InfoApp = () => {
     isLoading: isLoadingApp,
     refetch,
   } = useGetAppIntegrationDetail(id || '');
-  const detailData = resDetailApp?.data;
+
+  const detailData = useMemo(() => {
+    return resDetailApp?.data?.data;
+  }, [resDetailApp]);
   const tagsData = convertStringToArrayWithComma(detailData?.tags || '');
   const reviewsData = detailData?.reviews || [];
   //! Function
@@ -43,34 +46,37 @@ const InfoApp = () => {
   };
 
   const onClickLaunch = () => {
-    addNewTab({
-      label: detailData?.name || '',
-      value: detailData?.id || '',
-      content: <Launcher idApp={detailData?.id} launchUri={detailData?.launchUri} />,
-      openNewTab: true,
-    });
+    window.open('http://192.168.1.10:3000/');
+    // navigate(BaseUrl.Launcher.AppWithdDetail(detailData.launchUri, detailData.id));
 
-    if (!location.pathname.includes(BaseUrl.AppManagement)) {
-      navigate(BaseUrl.AppManagement);
-    }
+    // addNewTab({
+    //   label: detailData?.name || '',
+    //   value: detailData?.id || '',
+    //   content: <Launcher idApp={detailData?.id} launchUri={detailData?.launchUri} />,
+    //   openNewTab: true,
+    // });
+
+    // if (!location.pathname.includes(BaseUrl.AppManagement)) {
+    //   navigate(BaseUrl.AppManagement);
+    // }
   };
 
   //! Render
   const renderAction = () => {
-    if (detailData?.isInstalled) {
-      return (
-        <CommonStyles.Box>
-          <CommonStyles.Button onClick={onClickLaunch}>Launch</CommonStyles.Button>
-        </CommonStyles.Box>
-      );
-    }
     return (
       <CommonStyles.Box>
-        <CommonStyles.Button onClick={onClickInstall} loading={loading}>
-          Install
-        </CommonStyles.Button>
+        <CommonStyles.Button onClick={onClickLaunch}>Launch</CommonStyles.Button>
       </CommonStyles.Box>
     );
+    // if (detailData?.isInstalled) {
+    // }
+    // return (
+    //   <CommonStyles.Box>
+    //     <CommonStyles.Button onClick={onClickInstall} loading={loading}>
+    //       Install
+    //     </CommonStyles.Button>
+    //   </CommonStyles.Box>
+    // );
   };
 
   const renderImage = () => {
@@ -112,7 +118,7 @@ const InfoApp = () => {
           className='feature__card__information__website is-hover'
           variant='captionLMedium'
         >
-          <a href={'https://google.com'} target='_blank' className='unstyle-link' rel='noreferrer'>
+          <a href={detailData?.homepage} target='_blank' className='unstyle-link' rel='noreferrer'>
             Website
           </a>
         </CommonStyles.Typography>
@@ -199,7 +205,7 @@ const InfoApp = () => {
         <HeadWithSearching title='Reviews' />
 
         <CommonStyles.Box sx={{ mt: 2.5, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
-          {reviewsData.map((el) => {
+          {reviewsData.map((el: any) => {
             return <EachReview item={el} key={el.title} />;
           })}
         </CommonStyles.Box>

@@ -11,7 +11,7 @@ import { useGetNewsListHooks } from 'hooks/news/useNewsHooks';
 
 const initialValues = {
   search: '',
-  page: 0,
+  page: NUMBER_DEFAULT_PAGE,
   rowsPerPage: 15,
   order: Order.desc,
   orderBy: '',
@@ -23,20 +23,9 @@ const LatestSection = () => {
   const { filters, setFilters, handleResetToInitial, handleSearch } =
     useFiltersHandler(initialValues);
 
-  const {
-    data: resData,
-    isLoading,
-    refetch: refetchListNews,
-  } = useGetNewsListHooks({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
+  const { data: resData, isLoading, refetch: refetchListNews } = useGetNewsListHooks(filters);
 
-  const data = resData?.data?.items || [];
-  const total = resData?.data?.totalCount || 0;
+  const data = resData?.data?.data?.items || [];
 
   const SectionMock = [
     { title: 'Convey', subTitle: 'We have update Cases and the way we handle them', href: '/' },

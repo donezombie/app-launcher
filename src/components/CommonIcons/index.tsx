@@ -43,6 +43,10 @@ import { FaAws } from 'react-icons/fa6';
 import { PiNewspaperLight } from 'react-icons/pi';
 import { RiDeleteBin7Line } from 'react-icons/ri';
 import { RiEditLine } from 'react-icons/ri';
+import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined';
+import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined';
+import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
+import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 
 export const IconApplication1 = (
   <svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64' fill='none'>
@@ -166,4 +170,8 @@ export default {
   PiNewspaperLight,
   RiDeleteBin7Line,
   RiEditLine,
+  ReportIcon: FactCheckOutlinedIcon,
+  Brightness1OutlinedIcon,
+  BookmarkAddOutlinedIcon,
+  Company: BusinessOutlinedIcon,
 };

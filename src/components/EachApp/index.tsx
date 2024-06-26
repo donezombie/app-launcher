@@ -1,23 +1,28 @@
 import { useTheme } from '@mui/material';
-import CommonStyles from 'components/CommonStyles';
-import { Field, Formik } from 'formik';
-import { App } from 'interfaces/apps';
-import SwitchField from 'components/CustomFields/SwitchField';
-import { Link, useNavigate } from 'react-router-dom';
-import BaseUrl from 'consts/baseUrl';
-import { useMemo, useState } from 'react';
-import { useCreateApproval, useInstallApp, useUninstallApp } from 'hooks/app/useAppHooks';
 import { useQueryClient } from '@tanstack/react-query';
-import { showError, showSuccess } from 'helpers/toast';
-import { queryKeys } from 'consts';
-import Launcher from 'pages/Launcher';
-import { useTabHandler } from 'providers/TabHandlerProvider';
-import useToggleDialog from 'hooks/useToggleDialog';
-import DialogListRequesting from 'pages/Apps/Dialogs/DialogListRequesting';
 import { IconApplication1, IconApplication2 } from 'components/CommonIcons';
+import CommonStyles from 'components/CommonStyles';
+import SwitchField from 'components/CustomFields/SwitchField';
+import { queryKeys } from 'consts';
+import BaseUrl from 'consts/baseUrl';
+import { AppStatus, UserAppStatus } from 'consts/enum';
+import { Field, Formik, FormikValues } from 'formik';
+import { showError, showSuccess } from 'helpers/toast';
+import {
+  useCreateApproval,
+  useInstallApp,
+  useSetLiveApp,
+  useUninstallApp,
+} from 'hooks/app/useAppHooks';
+import useToggleDialog from 'hooks/useToggleDialog';
+import { NewApp } from 'interfaces/apps';
+import DialogListRequesting from 'pages/Apps/Dialogs/DialogListRequesting';
+import { useAuth } from 'providers/AuthenticationProvider';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface EachAppProps {
-  item: App;
+  item: NewApp;
   isMyApps?: boolean;
   isYourApp?: boolean;
   ind: number;
@@ -32,10 +37,15 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
   const { mutateAsync: createRequest } = useCreateApproval();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { addNewTab } = useTabHandler();
+  // const { addNewTab } = useTabHandler();
+  const { mutateAsync: setLiveApp } = useSetLiveApp();
+  const { user, isAdmin } = useAuth();
+  const isAccess = item.typeAccessApp === UserAppStatus.ACCESS || item.ownerUserId === user?.id;
+  const isRequesing = item.typeAccessApp === UserAppStatus.REQUEST;
 
   //! Function
   const onClickUninstall = async () => {
+    return;
     try {
       setLoading(true);
       await uninstallApp({ id: item?.id });
@@ -67,7 +77,9 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
   };
 
   const onClickLaunch = () => {
-    navigate(BaseUrl.Launcher.AppWithdDetail(item.launchUri, item.id));
+    window.open('http://192.168.1.10:3000/');
+
+    // navigate(BaseUrl.Launcher.AppWithdDetail(item.launchUri, item.id));
     // addNewTab({
     //   label: item.name,
     //   value: item.id,
@@ -83,7 +95,7 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
   const onClickRequestAccess = async () => {
     try {
       setLoading(true);
-      await createRequest({ appId: item?.id });
+      await createRequest(item?.id);
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppStore] });
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
 
@@ -128,6 +140,20 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
       );
     }
 
+    if (isAccess) {
+      return (
+        <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
+          <CommonStyles.Button loading={loading} onClick={onClickLaunch}>
+            Launch
+          </CommonStyles.Button>
+
+          <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
+            <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
+          </Link>
+        </CommonStyles.Box>
+      );
+    }
+
     if (isMyApps) {
       return (
         <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
@@ -141,60 +167,98 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
       );
     }
 
-    if (item.isInstalled) {
+    if (isRequesing) {
       return (
-        <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-          <CommonStyles.Button loading={loading} onClick={onClickLaunch}>
-            Launch
-          </CommonStyles.Button>
-
-          <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
-            <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
-          </Link>
-        </CommonStyles.Box>
-      );
-    }
-
-    if (item.isApproved) {
-      return (
-        <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-          <CommonStyles.Button loading={loading} onClick={onClickInstall}>
-            Install
-          </CommonStyles.Button>
-
-          <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
-            <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
-          </Link>
-        </CommonStyles.Box>
-      );
-    }
-
-    if (!item.isAssigned) {
-      return (
-        <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-          <CommonStyles.Button loading={loading} onClick={onClickRequestAccess}>
-            Request Access
-          </CommonStyles.Button>
+        <CommonStyles.Box sx={{ display: 'flex' }}>
+          <CommonStyles.Box
+            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            <div
+              style={{
+                height: '1rem',
+                width: '1rem',
+                borderRadius: '10px',
+                backgroundColor: 'yellow',
+                marginRight: '0.5rem',
+              }}
+            />
+          </CommonStyles.Box>
+          <CommonStyles.Typography>Waiting Access</CommonStyles.Typography>
         </CommonStyles.Box>
       );
     }
 
     return (
       <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-        <CommonStyles.Button loading={loading} onClick={onClickInstall}>
-          Install
+        <CommonStyles.Button loading={loading} onClick={onClickRequestAccess}>
+          Request Access
         </CommonStyles.Button>
-
-        <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
-          <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
-        </Link>
       </CommonStyles.Box>
     );
+
+    // if (isApproved) {
+    //   return (
+    //     <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
+    //       <CommonStyles.Button loading={loading} onClick={onClickInstall}>
+    //         Install
+    //       </CommonStyles.Button>
+
+    //       <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
+    //         <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
+    //       </Link>
+    //     </CommonStyles.Box>
+    //   );
+    // }
+
+    // return (
+    //   <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
+    //     <CommonStyles.Button loading={loading} onClick={onClickInstall}>
+    //       Install
+    //     </CommonStyles.Button>
+
+    //     <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
+    //       <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
+    //     </Link>
+    //   </CommonStyles.Box>
+    // );
+  };
+
+  const handleSubmit = async (
+    values: FormikValues,
+    setSubmitting: (isSubmitting: boolean) => void
+  ) => {
+    try {
+      setSubmitting(true);
+      await setLiveApp({
+        appId: item?.id || '',
+        isAlive: !item.isLive,
+      });
+
+      if (!values.isAlive) {
+        showSuccess(`Active [${item.name}] successfully!`);
+      } else {
+        showSuccess(`InActive [${item.name}] successfully!`);
+      }
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
+
+      // if (isAdmin) {
+      //   await queryClient.refetchQueries({ queryKey: [queryKeys.getAppInstalledList] });
+      // }
+
+      setSubmitting(false);
+    } catch (error) {
+      setSubmitting(false);
+      showError(error);
+    }
   };
 
   return (
-    <Formik initialValues={{ active: true }} onSubmit={() => {}}>
-      {() => {
+    <Formik
+      initialValues={{ isAlive: item.isLive }}
+      onSubmit={(values, { setSubmitting }) => handleSubmit(values, setSubmitting)}
+      enableReinitialize
+    >
+      {({ values, setSubmitting, isSubmitting }) => {
         return (
           <CommonStyles.Box
             className='component:EachApp'
@@ -247,7 +311,17 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
                 sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
               >
                 <CommonStyles.Typography variant='h5'>{item.name}</CommonStyles.Typography>
-                {item.isLive && <Field component={SwitchField} name='active' />}
+                {(isAccess || isAdmin) && (
+                  <Field
+                    component={SwitchField}
+                    name='isAlive'
+                    afterOnChange={() => {
+                      handleSubmit(values, setSubmitting);
+                    }}
+                    disabled={item.status !== AppStatus.APPROVED}
+                    loading={isSubmitting}
+                  />
+                )}
               </CommonStyles.Box>
 
               <CommonStyles.Typography variant='body2' sx={{ color: theme.colors?.grayText }}>

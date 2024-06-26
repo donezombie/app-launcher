@@ -3,6 +3,9 @@ import { ICategory } from 'interfaces/category';
 import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { removeAppID } from 'helpers';
+import httpService from './httpService';
+import { BASE_URL } from 'consts/apiUrl';
+import { BodyCreateCategory } from 'hooks/category/useCategoryHooks';
 
 export interface RequestCreateNews {
   title: string;
@@ -17,23 +20,23 @@ class CategoryServices {
     return categorySnapshot.data();
   }
 
-  async createNewCategory(name: string) {
-    const newIdCategory = uniqueId('category');
-    const itemCategory: ICategory = {
-      id: newIdCategory,
-      name: name,
-      apps: [''],
-    };
-    const categoryRef = doc(db, 'categories', newIdCategory);
-    setDoc(categoryRef, itemCategory);
-  }
+  // async createNewCategory(name: string) {
+  //   const newIdCategory = uniqueId('category');
+  //   const itemCategory: ICategory = {
+  //     id: newIdCategory,
+  //     name: name,
+  //     apps: [''],
+  //   };
+  //   const categoryRef = doc(db, 'categories', newIdCategory);
+  //   setDoc(categoryRef, itemCategory);
+  // }
 
-  async updateCategory(id: string, name: string) {
-    const categoryRef = doc(db, `categories/${id}`);
-    updateDoc(categoryRef, {
-      name: name,
-    });
-  }
+  // async updateCategory(id: string, name: string) {
+  //   const categoryRef = doc(db, `categories/${id}`);
+  //   updateDoc(categoryRef, {
+  //     name: name,
+  //   });
+  // }
 
   async updateAppIDCategory(id: string, appID: string) {
     const categoryRef = doc(db, `categories/${id}`);
@@ -63,9 +66,19 @@ class CategoryServices {
     updateDoc(categoryRef, newData);
   }
 
-  async deleteCategory(id: string) {
-    const categoryRef = doc(db, `categories/${id}`);
-    deleteDoc(categoryRef);
+  // async deleteCategory(id: string) {
+  //   const categoryRef = doc(db, `categories/${id}`);
+  //   deleteDoc(categoryRef);
+  // }
+
+  createNewCategory(body: BodyCreateCategory) {
+    return httpService.post(`${BASE_URL}/category`, body);
+  }
+  updateCategory(id: string, body: BodyCreateCategory) {
+    return httpService.patch(`${BASE_URL}/category/${id}`, body);
+  }
+  deleteCategory(id: string) {
+    return httpService.delete(`${BASE_URL}/category/${id}`);
   }
 }
 

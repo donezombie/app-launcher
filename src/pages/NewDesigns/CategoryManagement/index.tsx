@@ -1,14 +1,28 @@
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import CategoryCard from './Components/CategoryCard';
-import { useGetListCategory } from 'hooks/category/useGetListCategory';
-import { ICategory } from 'interfaces/category';
+import { useGetCategoryList } from 'hooks/category/useGetListCategory';
+import { useMemo } from 'react';
+import { CategoryType, SortOrder } from 'consts/enum';
+import useFiltersHandler from 'hooks/useFiltersHandler';
+import { cloneDeep } from 'lodash';
+
+const initialValues = {
+  page: 1,
+  perPage: 999,
+  textSearch: '',
+  sortOrder: SortOrder.ASC,
+  sortField: 'createdAt',
+  categoryType: CategoryType.DEFAULT,
+};
 
 const CategoryManagement = () => {
   //! State
-
-  const { category, loading: isLoadingList } = useGetListCategory();
-  const data = category as ICategory[];
+  const { filters, handleSearch, setFilters } = useFiltersHandler(initialValues);
+  const { data: category, isLoading: isLoadingList } = useGetCategoryList(filters);
+  const data = useMemo(() => {
+    return category?.data?.data?.items;
+  }, [category]);
 
   //! Function
 
@@ -20,10 +34,16 @@ const CategoryManagement = () => {
     >
       <HeadWithSearching
         title='Category Management'
-        onSubmitSearch={() => {}}
-        placeholder='Search News...'
+        onSubmitSearch={({ search }) => {
+          handleSearch(search);
+        }}
+        placeholder='Search Category...'
       />
-      {isLoadingList ? <CommonStyles.Loading /> : <CategoryCard data={data} />}
+      {isLoadingList ? (
+        <CommonStyles.Loading />
+      ) : (
+        <CategoryCard data={data} setFilters={setFilters} />
+      )}
     </CommonStyles.Box>
   );
 };

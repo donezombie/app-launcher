@@ -3,12 +3,14 @@ import Switch, { SwitchProps } from '@mui/material/Switch';
 import { FieldInputProps, FormikProps } from 'formik';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
+import CommonStyles from 'components/CommonStyles';
 
 interface SwitchFieldI {
   field: FieldInputProps<any>;
   form: FormikProps<any>;
   label?: string;
   afterOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  loading?: boolean;
 }
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
@@ -53,7 +55,7 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 function SwitchField(props: SwitchFieldI & SwitchProps) {
-  const { field, form, label, afterOnChange, sx, ...restProps } = props;
+  const { field, form, label, afterOnChange, sx, loading, ...restProps } = props;
   const { name, value } = field;
   const { setFieldValue } = form;
 
@@ -72,6 +74,10 @@ function SwitchField(props: SwitchFieldI & SwitchProps) {
       {...restProps}
     />
   );
+
+  if (loading) {
+    return <CommonStyles.Loading />;
+  }
 
   if (label) {
     return (

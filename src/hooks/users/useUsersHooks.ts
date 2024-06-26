@@ -17,7 +17,8 @@ export const useGetUserInfo = (isTrigger?: boolean) => {
 
 export const useUpdateUserInfo = () => {
   return useMutation({
-    mutationFn: (body: RequestUpdateUserInfo) => userService.updateUserInfo(body),
+    mutationFn: ({ id, body }: { id: string; body: RequestUpdateUserInfo }) =>
+      userService.updateUserInfo(id, body),
   });
 };
 
@@ -57,5 +58,12 @@ export const useUpdateUser = () => {
 export const useLogoutUser = () => {
   return useMutation({
     mutationFn: (accessToken: string) => userService.signOut(accessToken),
+  });
+};
+
+export const useGetProfile = () => {
+  return useQuery({
+    queryKey: [queryKeys.userInfo],
+    queryFn: () => userService.profile(),
   });
 };

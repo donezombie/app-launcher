@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
-import { App } from 'interfaces/apps';
+import { App, NewApp } from 'interfaces/apps';
 import { useTheme } from '@mui/material';
 import { showError, showSuccess } from 'helpers/toast';
 import { useInstallApp, useUninstallApp, useCreateApproval } from 'hooks/app/useAppHooks';
@@ -11,9 +11,10 @@ import { useTabHandler } from 'providers/TabHandlerProvider';
 import Launcher from 'pages/Launcher';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
+import { useAuth } from 'providers/AuthenticationProvider';
 
 interface EachAppProps {
-  item: App;
+  item: NewApp;
   isInstalled?: boolean;
 }
 
@@ -28,7 +29,7 @@ const EachApp = ({ item, isInstalled }: EachAppProps) => {
   const { mutateAsync: uninstallApp } = useUninstallApp();
   const { mutateAsync: createRequest } = useCreateApproval();
   const [loading, setLoading] = useState(false);
-
+  const { user } = useAuth();
   //! Function
   const onClickInstall = async () => {
     try {
@@ -63,7 +64,7 @@ const EachApp = ({ item, isInstalled }: EachAppProps) => {
   const onClickRequestAccess = async () => {
     try {
       setLoading(true);
-      await createRequest({ appId: item?.id });
+      await createRequest(item?.id);
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppStore] });
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
 
@@ -90,7 +91,7 @@ const EachApp = ({ item, isInstalled }: EachAppProps) => {
 
   //! Render
   const renderButton = () => {
-    if (isInstalled) {
+    if (isInstalled || item.ownerUserId === user?.id) {
       return (
         <CommonStyles.Box
           sx={{
@@ -120,25 +121,13 @@ const EachApp = ({ item, isInstalled }: EachAppProps) => {
       );
     }
 
-    if (!item.isAssigned) {
-      return (
-        <CommonStyles.Button
-          loading={loading}
-          startIcon={<CommonIcons.RequestAccess />}
-          onClick={onClickRequestAccess}
-        >
-          Request Access
-        </CommonStyles.Button>
-      );
-    }
-
     return (
       <CommonStyles.Button
         loading={loading}
-        startIcon={<CommonIcons.DownloadingIcon />}
-        onClick={onClickInstall}
+        startIcon={<CommonIcons.RequestAccess />}
+        onClick={onClickRequestAccess}
       >
-        Install
+        Request Access
       </CommonStyles.Button>
     );
   };

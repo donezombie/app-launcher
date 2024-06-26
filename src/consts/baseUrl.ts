@@ -47,6 +47,7 @@ const BaseUrl = {
     Index: '/apps/develop',
     UploadApps: '/apps/develop/upload-apps',
     ManageYourApps: '/apps/develop/manage-apps',
+    UploadReport: '/apps/develop/upload-report',
   },
   Notification: {
     Index: '/apps/notification',
@@ -62,6 +63,19 @@ const BaseUrl = {
   EvenManagement: {
     Index: 'apps/event-management',
   },
+  Report: {
+    Index: 'apps/report',
+    DetailReport: 'apps/report/:id',
+    DetailReportWithId: (id: string | number) => `/apps/apps/report/${id}`,
+  },
+
+  Company: {
+    Index: 'apps/company',
+    AddCompany: '/apps/apps/company/add-company',
+    Edit: '/apps/apps/company/edit/:id',
+    DetailWithID: (id: string | number) => `/apps/apps/company/edit/${id}`,
+  },
+  AccountSetting: '/apps/account-setting',
 };
 
 export default BaseUrl;

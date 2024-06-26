@@ -2,26 +2,27 @@ import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
 import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
-import { useGetListInstalledApp } from 'hooks/app/useAppHooks';
+import { useGetListApp, useGetListInstalledApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
+import { useMemo } from 'react';
 
 const initialValues = {
-  page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: 999,
-  search: '',
+  page: 1,
+  perPage: 999,
+  textSearch: '',
 };
 
 const MyApps = () => {
   //! State
   const { filters, handleSearch } = useFiltersHandler(initialValues);
-  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListInstalledApp({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
+  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListApp({
+    ...filters,
+    myApp: true,
   });
-  const dataInstallApp = resListInstalledApp?.data?.items || [];
+  const dataInstallApp =
+    useMemo(() => {
+      return resListInstalledApp?.data?.data?.items;
+    }, [isInstalledLoading]) || [];
 
   //! Function
 

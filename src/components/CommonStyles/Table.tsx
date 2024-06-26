@@ -148,7 +148,7 @@ function TableCommon<T>({
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalCount) : 0;
+  const emptyRows = page > 1 ? Math.max(0, page * rowsPerPage - totalCount) : 0;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -232,8 +232,11 @@ function TableCommon<T>({
                         gap: 1,
                       }}
                     >
-                      <CommonIcons.InboxIcon fontSize='large' htmlColor={theme.colors?.gray} />
-                      <CommonStyles.Typography variant='body1' sx={{ color: theme.colors?.gray }}>
+                      <CommonIcons.InboxIcon fontSize='large' htmlColor={theme.colors?.textGray} />
+                      <CommonStyles.Typography
+                        variant='body1'
+                        sx={{ color: theme.colors?.textGray }}
+                      >
                         No data found...
                       </CommonStyles.Typography>
                     </CommonStyles.Box>
@@ -282,7 +285,7 @@ function TableCommon<T>({
           component='div'
           count={totalCount}
           rowsPerPage={rowsPerPage}
-          page={page}
+          page={page - 1}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />

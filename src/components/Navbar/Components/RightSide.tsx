@@ -1,4 +1,4 @@
-import { Badge, Popover, Switch } from '@mui/material';
+import { Badge, Drawer, Popover, Switch } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
@@ -8,6 +8,8 @@ import { useAuth } from 'providers/AuthenticationProvider';
 import React, { useId } from 'react';
 import ItemNotification from './ItemNotification';
 import NotificationCard from './NotificationCard';
+import SettingCard from './SettingCard';
+import HelpDrawer from './HelpDrawer';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -43,7 +45,10 @@ const RightSide = () => {
   const auth = useAuth();
   const id = useId();
   const [anchorElNoti, setAnchorElNoti] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorElSetting, setAnchorElSetting] = React.useState<HTMLButtonElement | null>(null);
+  const [openDrawer, setOpenDrawer] = React.useState(false);
   const openNoti = Boolean(anchorElNoti);
+  const openSetting = Boolean(anchorElSetting);
 
   //! Function
   const handleClickNoti = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -52,6 +57,7 @@ const RightSide = () => {
 
   const handleClose = () => {
     setAnchorElNoti(null);
+    setAnchorElSetting(null);
   };
 
   const onClickNavigateNotiScreen = () => {
@@ -72,8 +78,18 @@ const RightSide = () => {
         }}
         style={{ cursor: 'pointer' }}
       />
-      <CommonIcons.HelpIcon className='is-hover' size={SIZE_ICON_DEFAULT + 3} />
-      <CommonIcons.SettingsIcon className='is-hover' size={SIZE_ICON_DEFAULT} />
+      <CommonIcons.HelpIcon
+        className='is-hover'
+        size={SIZE_ICON_DEFAULT + 3}
+        onClick={() => setOpenDrawer(true)}
+      />
+      <CommonIcons.SettingsIcon
+        className='is-hover'
+        size={SIZE_ICON_DEFAULT}
+        onClick={(e: any) => {
+          setAnchorElSetting(e.currentTarget);
+        }}
+      />
 
       <StyledBadge
         overlap='circular'
@@ -84,9 +100,9 @@ const RightSide = () => {
         <Avatar sx={{ width: 35, height: 35 }} src='https://mui.com/static/images/avatar/1.jpg' />
       </StyledBadge>
 
-      <CommonStyles.Typography className='is-hover' isLink onClick={() => auth.logout()}>
+      {/* <CommonStyles.Typography className='is-hover' isLink onClick={() => auth.logout()}>
         Logout
-      </CommonStyles.Typography>
+      </CommonStyles.Typography> */}
 
       <Popover
         sx={{ mt: 2 }}
@@ -106,6 +122,27 @@ const RightSide = () => {
       >
         <NotificationCard onClickNavigateNotiScreen={onClickNavigateNotiScreen} />
       </Popover>
+      <Popover
+        sx={{ mt: 2 }}
+        id={id}
+        open={openSetting}
+        anchorEl={anchorElSetting}
+        onClose={handleClose}
+        keepMounted={false}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <SettingCard handleClose={handleClose} />
+      </Popover>
+      <Drawer anchor='right' open={openDrawer} onClose={() => setOpenDrawer(false)}>
+        <HelpDrawer />
+      </Drawer>
     </CommonStyles.Box>
   );
 };

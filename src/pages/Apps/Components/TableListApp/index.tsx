@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import CommonStyles from 'components/CommonStyles';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
@@ -13,8 +13,8 @@ import { cloneDeep } from 'lodash';
 import CellApproval from './Cells/CellApproval';
 
 const initialValues = {
-  search: '',
-  page: 0,
+  textSearch: '',
+  page: 1,
   rowsPerPage: 5,
   order: Order.asc,
   orderBy: 'CreatedDate',
@@ -33,15 +33,12 @@ const TableListApp = () => {
     handleResetToInitial,
   } = useFiltersHandler(initialValues);
 
-  const { data: resListApp, isLoading } = useGetListApp({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
-  const data = resListApp?.data?.items || [];
-  const totalCount = resListApp?.data?.totalCount || 0;
+  const { data: resListApp, isLoading } = useGetListApp(filters);
+  const data =
+    useMemo(() => {
+      return resListApp?.data?.data?.items;
+    }, [isLoading]) || [];
+  const totalCount = resListApp?.data?.data?.totalItems || 0;
 
   //! Function
 
@@ -65,7 +62,7 @@ const TableListApp = () => {
           handleResetToInitial();
         }}
         renderFilterFields={() => {
-          return <FastField component={TextField} name='search' label='Search' />;
+          return <FastField component={TextField} name='textSearch' label='Search' />;
         }}
       />
 

@@ -31,10 +31,10 @@ export const useGetListInstalledApp = (filters: RequestPagingCommon) => {
   });
 };
 
-export const useGetListRequestingApp = (filters: RequestListAppRequesting) => {
+export const useGetListRequestingApp = (id: string, filters: RequestPagingCommon) => {
   return useQuery({
     queryKey: [queryKeys.getAppRequesting, filters],
-    queryFn: () => appManagementService.getListAppRequesting(filters),
+    queryFn: () => appManagementService.getListAppRequesting(id, filters),
   });
 };
 
@@ -80,15 +80,15 @@ export const useUninstallApp = () => {
 
 export const useApproveApp = () => {
   return useMutation({
-    mutationFn: ({ appId, isApproved }: RequestApproveApp) =>
-      appManagementService.setApproveState({ appId, isApproved }),
+    mutationFn: ({ appId, isApprove }: RequestApproveApp) =>
+      appManagementService.setApproveState({ appId, isApprove }),
   });
 };
 
 export const useSetLiveApp = () => {
   return useMutation({
-    mutationFn: ({ appId, isLive }: RequestLiveApp) =>
-      appManagementService.setLiveState({ appId, isLive }),
+    mutationFn: ({ appId, isAlive }: RequestLiveApp) =>
+      appManagementService.setLiveState({ appId, isAlive }),
   });
 };
 
@@ -113,6 +113,12 @@ export const useRequestApproval = () => {
 
 export const useCreateApproval = () => {
   return useMutation({
-    mutationFn: (body: RequestCreateApproval) => appManagementService.requestCreate(body),
+    mutationFn: (id: string) => appManagementService.requestCreate(id),
+  });
+};
+
+export const useApprovalAll = () => {
+  return useMutation({
+    mutationFn: (body: { id: number; isAccess: boolean }) => appManagementService.approvalAll(body),
   });
 };

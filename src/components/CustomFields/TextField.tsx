@@ -58,6 +58,7 @@ const TextField = ({
   helperText,
   iconStartInput,
   disabled,
+  required,
   ...props
 }: Props & TextFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -77,7 +78,7 @@ const TextField = ({
     <CommonStyles.Box sx={sxContainer}>
       {label && (
         <CommonStyles.Typography component='p' variant='captionLMedium' sx={{ mb: 1.5 }}>
-          {label}
+          {label} {required && <span style={{ color: 'red' }}>*</span>}
         </CommonStyles.Typography>
       )}
       <CustomTextField

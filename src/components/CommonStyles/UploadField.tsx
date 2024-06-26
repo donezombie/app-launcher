@@ -11,6 +11,9 @@ const UploadField = (props: TextFieldFormikProps) => {
   const { setFieldValue } = useFormikContext();
 
   //! Function
+  const handleChange = (event: any) => {
+    setFieldValue(props?.name || '', event.target.files?.[0]);
+  };
 
   //! Render
   return (
@@ -20,9 +23,7 @@ const UploadField = (props: TextFieldFormikProps) => {
         ref={uploadRef}
         name={`${props.name}-upload-input`}
         style={{ display: 'none' }}
-        onChange={(e) => {
-          setFieldValue(props?.name || '', e.target.files?.[0]);
-        }}
+        onChange={props.onChange ? props.onChange : handleChange}
       />
 
       <Field

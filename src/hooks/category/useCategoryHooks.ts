@@ -1,16 +1,22 @@
 import { useMutation } from '@tanstack/react-query';
+import { CategoryType } from 'consts/enum';
 import categoryServices from 'services/categoryServices';
+
+export interface BodyCreateCategory {
+  name: string;
+  categoryType: CategoryType;
+}
 
 export const useCreateCategory = () => {
   return useMutation({
-    mutationFn: (name: string) => categoryServices.createNewCategory(name),
+    mutationFn: (body: BodyCreateCategory) => categoryServices.createNewCategory(body),
   });
 };
 
 export const useUpdateCategory = () => {
   return useMutation({
-    mutationFn: ({ id, name }: { id: string; name: string }) =>
-      categoryServices.updateCategory(id, name),
+    mutationFn: ({ id, body }: { id: string; body: BodyCreateCategory }) =>
+      categoryServices.updateCategory(id, body),
   });
 };
 

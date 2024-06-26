@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import CommonStyles from 'components/CommonStyles';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { useGetListApp, useGetListAppForManager } from 'hooks/app/useAppHooks';
@@ -14,7 +14,7 @@ import { useAuth } from 'providers/AuthenticationProvider';
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
   rowsPerPage: 999,
-  search: '',
+  textSearch: '',
 };
 
 const ListAvailableApps = () => {
@@ -24,15 +24,12 @@ const ListAvailableApps = () => {
   const { filters, setFilters, handleResetToInitial } = useFiltersHandler(initialValues);
   const useGetListData = isAppManager ? useGetListAppForManager : useGetListApp;
 
-  const { data: resData, isLoading: isInstalledLoading } = useGetListData({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
-  const data = resData?.data?.items || [];
-  const total = resData?.data?.totalCount || 0;
+  const { data: resData, isLoading: isInstalledLoading } = useGetListData(filters);
+  const data =
+    useMemo(() => {
+      return resData?.data?.data?.items;
+    }, [resData]) || [];
+  const total = resData?.data?.data?.totalItems || 0;
 
   //! Function
 
@@ -60,7 +57,7 @@ const ListAvailableApps = () => {
               handleResetToInitial();
             }}
             renderFilterFields={() => {
-              return <FastField component={TextField} name='search' label='Search apps' />;
+              return <FastField component={TextField} name='textSearch' label='Search apps' />;
             }}
           />
         </CommonStyles.Box>

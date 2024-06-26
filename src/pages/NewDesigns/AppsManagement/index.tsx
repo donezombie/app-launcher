@@ -10,13 +10,15 @@ import { cloneDeep } from 'lodash';
 import CellActive from 'pages/Apps/Components/TableListApp/Cells/CellActive';
 import CellApproval from 'pages/Apps/Components/TableListApp/Cells/CellApproval';
 import CellActions from 'pages/Apps/Components/TableListApp/Cells/CellActions';
+import { SortOrder } from 'consts/enum';
+import { useMemo } from 'react';
 
 const initialValues = {
-  search: '',
-  page: 0,
-  rowsPerPage: 5,
-  order: Order.asc,
-  orderBy: 'CreatedDate',
+  page: 1,
+  perPage: 5,
+  textSearch: '',
+  sortOrder: SortOrder.ASC,
+  sortField: 'createdAt',
 };
 
 const AppsManagement = () => {
@@ -33,15 +35,12 @@ const AppsManagement = () => {
   } = useFiltersHandler(initialValues);
 
   //! Function
-  const { data: resListApp, isLoading } = useGetListApp({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
-  const data = resListApp?.data?.items || [];
-  const totalCount = resListApp?.data?.totalCount || 0;
+  const { data: resListApp, isLoading } = useGetListApp(filters);
+  const data =
+    useMemo(() => {
+      return resListApp?.data?.data?.items;
+    }, [resListApp]) || [];
+  const totalCount = resListApp?.data?.data?.totalItems || 0;
 
   //! Render
   return (
@@ -58,10 +57,9 @@ const AppsManagement = () => {
           handleResetToInitial();
         }}
         renderFilterFields={() => {
-          return <FastField component={TextField} name='search' placeholder='Search...' />;
+          return <FastField component={TextField} name='textSearch' placeholder='Search...' />;
         }}
       />
-
       <CommonStyles.Table
         order={filters?.order || Order.desc}
         orderBy={filters?.orderBy}
@@ -103,13 +101,13 @@ const AppsManagement = () => {
               return <CellActive item={row} />;
             },
           },
-          {
-            label: 'Approved',
-            id: 'isApproved',
-            Cell: (row) => {
-              return <CellApproval item={row} />;
-            },
-          },
+          // {
+          //   label: 'Approved',
+          //   id: 'isApproved',
+          //   Cell: (row) => {
+          //     return <CellApproval item={row} />;
+          //   },
+          // },
           {
             label: '',
             id: 'actions',

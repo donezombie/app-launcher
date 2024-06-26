@@ -36,7 +36,6 @@ const AppAuthentication = (props: AppAuthenticationProps) => {
           required
           autoFocus
           fullWidth
-          placeholder='Education report'
         />
 
         {showUri && (
