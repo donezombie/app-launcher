@@ -18,6 +18,11 @@ export const queryKeys = {
 
   getPlatformSettings: 'getPlatformSettings',
   getListNew: 'getListNew',
+  detailCategoty: 'detailCategoty',
+  listReport: 'listReport',
+  listCompany: 'listCompany',
+  getCompanyDetail: 'getCompanyDetail',
+  userInfo: 'userInfo',
 };
 
 export const LANG_ENUM = {
@@ -27,9 +32,9 @@ export const LANG_ENUM = {
 
 export enum PERMISSION_ENUM {
   PUBLIC = 'PUBLIC',
-  ADMIN = 'admin',
-  USER = 'user',
-  APP_MANAGER = 'appmanager',
+  ADMIN = 'ADMIN',
+  USER = 'CUSTOMER',
+  APP_MANAGER = 'MANAGER',
 }
 
 export const PermissionOptions = Object.entries(PERMISSION_ENUM)
@@ -46,7 +51,7 @@ export const PermissionOptions = Object.entries(PERMISSION_ENUM)
   });
 
 export const NUMBER_DEFAULT_ROW_PER_PAGE = 5;
-export const NUMBER_DEFAULT_PAGE = 0;
+export const NUMBER_DEFAULT_PAGE = 1;
 export const API_KEY_TINY_EDITOR = 'pyfe4ygo4uskbsupyjwkvj16peu92u1qlp1liqki0rnv1zct';
 
 export const SIZE_ICON_DEFAULT = 24;

@@ -1,21 +1,29 @@
-import { useTheme } from '@mui/material';
-import CommonStyles from 'components/CommonStyles';
-import EachItemSidebar from './EachItemSidebar';
-import { uniqueId } from 'lodash';
+import { CircularProgress, useTheme } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
+import CommonStyles from 'components/CommonStyles';
 import BaseUrl from 'consts/baseUrl';
+import { useGetCategoryList } from 'hooks/category/useGetListCategory';
+import { Category } from 'interfaces/category';
+import { uniqueId } from 'lodash';
 import { useAuth } from 'providers/AuthenticationProvider';
-import { useGetListCategory } from 'hooks/category/useGetListCategory';
-import { ICategory } from 'interfaces/category';
 import { useSearchParams } from 'react-router-dom';
+import EachItemSidebar from './EachItemSidebar';
+import { CategoryType } from 'consts/enum';
+import useFiltersHandler from 'hooks/useFiltersHandler';
+
+const initialValues = {
+  categoryType: CategoryType.DEFAULT,
+};
 
 const Sidebar = () => {
   //! State
   const theme = useTheme();
   const { isAdmin, isUser, isAppManager } = useAuth();
-  const { category } = useGetListCategory();
+  const { filters, handleSearch } = useFiltersHandler(initialValues);
+  const { data: category, isLoading: isLoadingList } = useGetCategoryList(filters);
+  const data = category?.data?.data?.items;
   const [searchParams] = useSearchParams({ category: '' });
-  const childrenCategory = category || ([] as ICategory[]);
+  const childrenCategory = data || ([] as Category[]);
   const categoryFromURL = searchParams.get('category');
 
   const items = [
@@ -47,13 +55,13 @@ const Sidebar = () => {
       //     showChildren: isAdmin || isUser || isAppManager,
       //   },
       // ],
-      children: childrenCategory.map((item: ICategory) => {
+      children: childrenCategory.map((item: Category) => {
         return {
           key: item.id,
           label: item.name,
-          path: BaseUrl.Marketplace.AppMarketPlaceWithID(item.id),
+          path: BaseUrl.Marketplace.AppMarketPlaceWithID(String(item.id)),
           showChildren: isAdmin || isUser || isAppManager,
-          forceActive: categoryFromURL === item.id,
+          forceActive: categoryFromURL === String(item.id),
         };
       }),
     },
@@ -81,6 +89,11 @@ const Sidebar = () => {
         {
           label: 'Upload App',
           path: BaseUrl.Develop.UploadApps,
+          showChildren: isAdmin || isAppManager,
+        },
+        {
+          label: 'Upload Report',
+          path: BaseUrl.Develop.UploadReport,
           showChildren: isAdmin || isAppManager,
         },
         {
@@ -118,10 +131,26 @@ const Sidebar = () => {
       path: BaseUrl.CategoryManagement,
       show: isAdmin,
     },
+    {
+      id: uniqueId('side-bar'),
+      label: 'Report Apps',
+      icon: CommonIcons.ReportIcon,
+      path: BaseUrl.Report.Index,
+      show: isAdmin || isUser || isAppManager,
+    },
+    {
+      id: uniqueId('side-bar'),
+      label: 'CompanyManagement',
+      icon: CommonIcons.Company,
+      path: BaseUrl.Company.Index,
+      show: isAdmin,
+    },
   ];
 
   //! Function
-
+  if (isLoadingList) {
+    return <CommonStyles.Loading />;
+  }
   //! Render
   return (
     <CommonStyles.Box
@@ -130,7 +159,7 @@ const Sidebar = () => {
         position: 'fixed',
         height: `calc(100vh - ${theme.sizes?.heightNavbar}px)`,
         width: theme.sizes?.widthSidebar,
-        backgroundColor: theme.colors?.gray,
+        backgroundColor: theme.colors?.gray3,
         top: theme.sizes?.heightNavbar,
         left: 0,
       }}

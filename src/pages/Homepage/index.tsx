@@ -6,9 +6,10 @@ import useToggleDialog from 'hooks/useToggleDialog';
 import DialogOptionCreateApp from 'pages/Apps/Dialogs/DialogOptionCreateApp';
 import DialogCreateApp from 'pages/Apps/Dialogs/DialogCreateApp';
 import { useSettingsTheme } from 'providers/SettingsThemeProvider';
-import { useGetListInstalledApp } from 'hooks/app/useAppHooks';
+import { useGetListApp, useGetListInstalledApp } from 'hooks/app/useAppHooks';
 import EachApp from 'pages/Apps/AppsForUser/Components/EachApp';
 import { useTheme } from '@mui/material';
+import { useGetProfile } from 'hooks/users/useUsersHooks';
 
 // interface AppsProps {}
 
@@ -17,13 +18,11 @@ const Apps = () => {
   const theme = useTheme();
   const { isUser } = useAuth();
   const { settings } = useSettingsTheme();
-  const { data: resInstalled, isLoading } = useGetListInstalledApp({
-    filter: '',
-    skip: 0,
-    take: 4,
+  const { data: resInstalled, isLoading } = useGetListApp({
+    myApp: true,
   });
 
-  const installedApps = resInstalled?.data?.items || [];
+  const installedApps = resInstalled?.data?.data?.items || [];
 
   const {
     open: openOptionsCreateApp,

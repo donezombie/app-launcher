@@ -12,17 +12,19 @@ import TextField from 'components/CustomFields/TextField';
 import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
 import CellActions from './Cells/CellActions';
 import { useGetListRequestingApp } from 'hooks/app/useAppHooks';
+import { UserAccess } from 'interfaces/apps';
+import { useMemo } from 'react';
 
 interface Props extends DialogI<{ username: string }> {
   appId: string;
 }
 
 const initialValues = {
-  search: '',
+  textSearch: '',
   page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: NUMBER_DEFAULT_ROW_PER_PAGE + 5,
-  order: Order.desc,
-  orderBy: '',
+  perPage: NUMBER_DEFAULT_ROW_PER_PAGE,
+  sortOrder: Order.desc,
+  sortField: '',
 };
 
 const DialogListRequesting = (props: Props) => {
@@ -39,18 +41,46 @@ const DialogListRequesting = (props: Props) => {
     handleResetToInitial,
     handleCheckBox,
   } = useFiltersHandler(initialValues);
-  const { data: resList, isLoading: isLoadingList } = useGetListRequestingApp({
-    appId,
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
-  const data = resList?.data?.items || [];
-  const totalCount = resList?.data?.totalCount || 0;
+  const { data: resList, isLoading: isLoadingList } = useGetListRequestingApp(appId, filters);
+
+  const data =
+    useMemo(() => {
+      return resList?.data?.data?.items;
+    }, [resList]) || [];
+  const totalCount = resList?.data?.data?.totalItems || 0;
 
   //! Function
+
+  const headCells = [
+    {
+      label: 'Username',
+      id: 'username',
+      Cell: (row: UserAccess) => {
+        return <CommonStyles.Typography>{row?.user?.username}</CommonStyles.Typography>;
+      },
+    },
+    {
+      label: 'First name',
+      id: 'firstname',
+      Cell: (row: UserAccess) => {
+        return <CommonStyles.Typography>{row?.user?.firstName}</CommonStyles.Typography>;
+      },
+    },
+    {
+      label: 'Last name',
+      id: 'lastname',
+      Cell: (row: UserAccess) => {
+        return <CommonStyles.Typography>{row?.user?.lastName}</CommonStyles.Typography>;
+      },
+    },
+    {
+      label: 'Actions',
+      id: 'actions',
+      Cell: (row: UserAccess) => {
+        return <CellActions item={row} />;
+      },
+    },
+  ];
 
   return (
     <DialogMui open={isOpen} onClose={toggle} fullWidth maxWidth='xl'>
@@ -70,7 +100,7 @@ const DialogListRequesting = (props: Props) => {
           renderFilterFields={() => {
             return (
               <CommonStyles.Box sx={{ gap: 2, display: 'flex' }}>
-                <FastField component={TextField} name='search' placeholder='Search...' />
+                <FastField component={TextField} name='textSearch' placeholder='Search...' />
               </CommonStyles.Box>
             );
           }}
@@ -87,29 +117,9 @@ const DialogListRequesting = (props: Props) => {
             selected={selected}
             page={filters?.page || 0}
             rowsPerPage={filters?.rowsPerPage || 5}
-            headCells={[
-              {
-                label: 'Username',
-                id: 'username',
-              },
-              {
-                label: 'First name',
-                id: 'firstname',
-              },
-              {
-                label: 'Last name',
-                id: 'lastname',
-              },
-              {
-                label: 'Actions',
-                id: 'actions',
-                Cell: (row) => {
-                  return <CellActions item={row} />;
-                },
-              },
-            ]}
+            headCells={headCells}
             totalCount={totalCount}
-            rows={data}
+            rows={data || []}
             handleChangePage={handleChangePage}
             handleChangeRowsPerPage={handleChangeRowsPerPage}
             handleRequestSort={handleRequestSort}

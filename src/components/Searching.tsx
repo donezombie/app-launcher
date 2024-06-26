@@ -9,11 +9,13 @@ import TextField from './CustomFields/TextField';
 interface SearchingProps {
   nameField?: string;
   placeholder?: string;
+  fullWidth?: boolean;
 }
 
 const Searching = ({
   nameField = 'search',
   placeholder = 'Search something...',
+  fullWidth,
 }: SearchingProps) => {
   //! State
   const theme = useTheme();
@@ -26,6 +28,7 @@ const Searching = ({
       component={TextField}
       name={nameField}
       placeholder={placeholder}
+      fullWidth={fullWidth}
       InputProps={{
         startAdornment: (
           <InputAdornment position='start'>

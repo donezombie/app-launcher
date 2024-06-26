@@ -30,6 +30,9 @@ const DevelopPage = lazy(() => import('pages/NewDesigns/Apps/PageChild/Develop')
 const UploadApps = lazy(
   () => import('pages/NewDesigns/Apps/PageChild/Develop/PageChild/UploadApp')
 );
+const UploadReport = lazy(
+  () => import('pages/NewDesigns/Apps/PageChild/Develop/PageChild/UploadReport')
+);
 const ManageYourApps = lazy(
   () => import('pages/NewDesigns/Apps/PageChild/Develop/PageChild/ManageYourApps')
 );
@@ -54,6 +57,13 @@ const AppsManagement = lazy(() => import('pages/NewDesigns/AppsManagement'));
 const CategoryManagement = lazy(() => import('pages/NewDesigns/CategoryManagement'));
 //! Event Management Management
 const EventManagement = lazy(() => import('pages/NewDesigns/EventManagement'));
+const ReportManagement = lazy(() => import('pages/NewDesigns/ReportManagement'));
+const AccountSetting = lazy(() => import('pages/AccountSetting'));
+const DetailReport = lazy(
+  () => import('pages/NewDesigns/ReportManagement/Components/DetailReport')
+);
+const CompanyManagement = lazy(() => import('pages/NewDesigns/Company'));
+const AddCompany = lazy(() => import('pages/NewDesigns/Company/Components/AddEditCompany'));
 
 const routes: Route[] = [
   {
@@ -211,6 +221,14 @@ const routes: Route[] = [
         component: withCheckRole(UploadApps, [PERMISSION_ENUM.ADMIN, PERMISSION_ENUM.APP_MANAGER]),
       },
       {
+        name: 'Upload report',
+        path: BaseUrl.Develop.UploadReport,
+        component: withCheckRole(UploadReport, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+        ]),
+      },
+      {
         name: 'Manage your apps',
         path: BaseUrl.Develop.ManageYourApps,
         component: withCheckRole(ManageYourApps, [
@@ -249,6 +267,46 @@ const routes: Route[] = [
         name: 'Detail App',
         path: BaseUrl.EvenManagement.Index,
         component: withCheckRole(EventManagement, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Report Apps',
+        path: BaseUrl.Report.Index,
+        component: withCheckRole(ReportManagement, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Report Detail',
+        path: BaseUrl.Report.DetailReport,
+        component: withCheckRole(DetailReport, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Account Setting',
+        path: BaseUrl.AccountSetting,
+        component: withCheckRole(AccountSetting, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+          PERMISSION_ENUM.USER,
+        ]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Company Management',
+        path: BaseUrl.Company.Index,
+        component: withCheckRole(CompanyManagement, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Add Company',
+        path: BaseUrl.Company.AddCompany,
+        component: withCheckRole(AddCompany, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Edit Company',
+        path: BaseUrl.Company.Edit,
+        component: withCheckRole(AddCompany, [PERMISSION_ENUM.ADMIN]),
         isPrivateRoute: true,
       },
     ],

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import CommonIcons, { IconApplication1, IconApplication2 } from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
@@ -18,38 +18,24 @@ interface AllApplicationProps {
   onClickClose: () => void;
 }
 
-const initialValues = {
-  page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: 999,
-  search: '',
-};
+const initialValues = {};
 
 const AllApplicationDialog = (props: AllApplicationProps) => {
   const { onClickClose } = props;
   //! State
 
-  const { user } = useAuth();
-  const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
+  const { user, isAdmin, isUser } = useAuth();
 
   const { filters } = useFiltersHandler(initialValues);
-  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListInstalledApp({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
+  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListApp({
+    ...filters,
+    myApp: true,
   });
-  const { data: resListApp, isLoading } = useGetListApp({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
+  const { data: resListApp, isLoading } = useGetListApp(filters);
   const dataInstallApp =
-    role === PERMISSION_ENUM.ADMIN
-      ? resListApp?.data?.items || []
-      : resListInstalledApp?.data?.items || [];
+    useMemo(() => {
+      return isAdmin ? resListApp?.data?.data?.items : resListInstalledApp?.data?.data?.items;
+    }, [resListApp, resListInstalledApp]) || [];
 
   //! Function
 

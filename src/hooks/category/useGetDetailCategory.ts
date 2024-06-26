@@ -1,18 +1,20 @@
+import { useQuery } from '@tanstack/react-query';
 import { db } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { ICategory } from 'interfaces/category';
+import { Category, ICategory } from 'interfaces/category';
 import { useEffect, useState } from 'react';
+import { queryKeys } from 'consts';
+import appManagementService from 'services/appManagementService';
 
 export const useGetDetailCategory = (id: string) => {
-  const [categoryDetail, setCategoryDetail] = useState<ICategory>();
+  const [categoryDetail, setCategoryDetail] = useState<Category>();
   const [loading, setLoading] = useState(true);
 
   const getDetailCategory = async (id: string) => {
     setLoading(true);
-    const categoryRef = doc(db, 'categories', id);
 
-    const categorySnapshot = await getDoc(categoryRef);
-    const data = categorySnapshot.data() as ICategory;
+    const detailCategory = await appManagementService.getDetailCategory(id);
+    const data = detailCategory?.data?.data;
     if (data) {
       setCategoryDetail(data);
       setLoading(false);

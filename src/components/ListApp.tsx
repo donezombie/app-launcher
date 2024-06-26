@@ -1,13 +1,13 @@
 import React from 'react';
 import CommonStyles from 'components/CommonStyles';
 import EachApp from './EachApp';
-import { App } from 'interfaces/apps';
+import { App, NewApp } from 'interfaces/apps';
 import { useTheme } from '@mui/material';
 
 interface ListAppProps {
   isMyApps?: boolean;
   isYourApp?: boolean;
-  apps?: App[];
+  apps?: NewApp[];
 }
 
 const ListApp = ({ isMyApps = false, isYourApp = false, apps = [] }: ListAppProps) => {

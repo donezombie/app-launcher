@@ -61,7 +61,6 @@ const CellActions = ({ user }: CellActionsProps) => {
                 );
                 toggleAssignUser();
               } catch (error) {
-                console.log('dqoiwdjqwd', error);
                 showError(error);
                 setSubmitting(false);
               }

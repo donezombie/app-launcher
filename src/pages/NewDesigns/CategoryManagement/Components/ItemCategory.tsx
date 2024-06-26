@@ -5,10 +5,10 @@ import useToggleDialog from 'hooks/useToggleDialog';
 import React from 'react';
 import DialogAddNews from './DialogAddCategory';
 import DialogDeleteNew from './DialogDeleteCategory';
-import { ICategory } from 'interfaces/category';
+import { Category } from 'interfaces/category';
 
 interface ItemCategoryProps {
-  item: ICategory;
+  item: Category;
 }
 const ItemCategory = (props: ItemCategoryProps) => {
   const { item } = props;

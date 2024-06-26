@@ -1,13 +1,27 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import { createTheme } from '@mui/material/styles';
 import { useGetPlatformSettings } from 'hooks/platform/usePlatformHooks';
 import { Theme } from '@mui/material';
 import { Platform } from 'services/platformService';
 import { isEmpty, isEqual, isObject } from 'lodash';
+import { useAuth } from './AuthenticationProvider';
 
 export enum ModeThemeEnum {
   light = 'light',
   dark = 'dark',
+}
+
+interface ITheme {
+  header: string;
+  sideBar: string;
 }
 
 interface ToggleThemeContextI {
@@ -16,6 +30,8 @@ interface ToggleThemeContextI {
   toggleTheme: () => void;
   loadingTheme: boolean;
   settings?: Platform;
+  themeColor?: ITheme;
+  setThemeColor?: Dispatch<SetStateAction<ITheme>>;
 }
 
 const ToggleThemeContext = createContext<ToggleThemeContextI>({
@@ -24,6 +40,8 @@ const ToggleThemeContext = createContext<ToggleThemeContextI>({
   toggleTheme: () => {},
   loadingTheme: true,
   settings: {} as any,
+  themeColor: {} as any,
+  setThemeColor: () => {},
 });
 
 export const useSettingsTheme = () => useContext(ToggleThemeContext);
@@ -35,6 +53,10 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
   const { data: resPlatform, isLoading: loadingTheme } = useGetPlatformSettings();
   const theme = (localStorage.getItem(KEY_THEME) as ModeThemeEnum) || ModeThemeEnum.light;
   const [mode, setMode] = useState(theme);
+  const [themeColor, setThemeColor] = useState<ITheme>({
+    header: '',
+    sideBar: '',
+  });
 
   const settingsCached =
     localStorage.getItem(KEY_SETTINGS) !== 'undefined' &&
@@ -58,6 +80,8 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
   }, [settingsCached, resPlatform?.data]) as Platform;
 
   const mainColour = settings?.mainColour || '#000000';
+
+  const { user } = useAuth();
 
   //! Funtion
   const toggleTheme = useCallback(() => {
@@ -166,8 +190,9 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           blue: '#36c5f0',
           white: '#fff',
           black: 'rgb(18, 18, 18)',
-          gray: '#fafafb',
+          gray: themeColor.header ? themeColor.header : '#fafafb',
           gray2: '#ECEEEF',
+          gray3: themeColor.sideBar ? themeColor.sideBar : '#fafafb',
           grayLight: '#F2F2F2',
           grayText: '#17191999',
           grayActiveMenu: '#f1f1f2',
@@ -183,13 +208,13 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           text3: '#666C6E',
         },
       }),
-    [mainColour]
+    [mainColour, themeColor]
   );
 
   //! Render
   const value = useMemo(() => {
-    return { settings, themeOfApp, loadingTheme, mode, toggleTheme };
-  }, [themeOfApp, mode, toggleTheme, loadingTheme, settings]);
+    return { settings, themeOfApp, loadingTheme, mode, toggleTheme, themeColor, setThemeColor };
+  }, [themeOfApp, mode, toggleTheme, loadingTheme, settings, themeColor, setThemeColor]);
 
   return <ToggleThemeContext.Provider value={value}>{children}</ToggleThemeContext.Provider>;
 };

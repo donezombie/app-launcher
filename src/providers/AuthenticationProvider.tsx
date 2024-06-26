@@ -1,15 +1,23 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { PERMISSION_ENUM } from 'consts/index';
-import httpService from 'services/httpService';
-import { useGetUserInfo, useLogoutUser } from 'hooks/users/useUsersHooks';
-import { UserInfo } from 'interfaces/user';
 import { LOGOUT_REDIRECT_URI } from 'consts/configAWS';
-import { isEmpty } from 'lodash';
-import AuthService from 'services/authService';
-import { User } from 'oidc-client-ts';
+import { PERMISSION_ENUM } from 'consts/index';
 import { showError } from 'helpers/toast';
-import locationService from 'services/locationService';
+import { useGetProfile, useLogoutUser } from 'hooks/users/useUsersHooks';
+import { ICompany } from 'interfaces/company';
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import AuthService from 'services/authService';
 import cachedService from 'services/cachedService';
+import httpService from 'services/httpService';
+import locationService from 'services/locationService';
+import userService from 'services/userService';
 
 type ActionPostMessage = 'logout';
 export interface EventListenerI {
@@ -20,10 +28,29 @@ export interface EventListenerI {
   };
 }
 
+export interface IUser {
+  id: number;
+  username: string;
+  subId: string;
+  password: null;
+  isVerifyOtp: boolean;
+  lastName: null;
+  firstName: null;
+  phone: null;
+  email: null;
+  role: string;
+  avatar: null;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  companyId?: number;
+  Company: ICompany;
+}
+
 interface AuthenticationContextI {
   loading: boolean;
   isLogged: boolean;
-  user: UserInfo | null;
+  user: IUser | null;
   isAdmin: boolean;
   isAppManager: boolean;
   isUser: boolean;
@@ -34,7 +61,8 @@ interface AuthenticationContextI {
   loginPopupCallback: () => any;
   eventListener: (e: any) => void;
   loginRedirect: () => void;
-  loginRedirectCallback: () => Promise<UserInfo | unknown>;
+  loginRedirectCallback: () => Promise<IUser | unknown>;
+  setUserData: Dispatch<SetStateAction<IUser | null>>;
 }
 
 const AuthenticationContext = createContext<AuthenticationContextI>({
@@ -52,6 +80,7 @@ const AuthenticationContext = createContext<AuthenticationContextI>({
   loginRedirect: () => {},
   loginRedirectCallback: () => Promise.resolve({} as any),
   eventListener: () => {},
+  setUserData: () => {},
 });
 
 export const useAuth = () => useContext(AuthenticationContext);
@@ -62,46 +91,40 @@ cachedService.initialState();
 
 const AuthenticationProvider = ({ children }: { children: any }) => {
   //! State
-  const [isTokenAttached, setTokenAttached] = useState(false);
-  const [userData, setUserData] = useState<User | null>(null);
-  const [isCheckingAuth, setCheckingAuth] = useState(true);
+  const [userData, setUserData] = useState<IUser | null>(null);
+  const [isCheckingAuth, setCheckingAuth] = useState(false);
   const { mutateAsync: logoutUser } = useLogoutUser();
 
-  const accessToken = userData?.access_token || '';
-  const { data: resUser, isInitialLoading } = useGetUserInfo(!!accessToken && isTokenAttached);
-  const user = resUser?.data || null;
-
-  const onGetUserDataSuccess = useCallback((user: User | null) => {
-    setTokenAttached(false);
+  const isLogged = httpService.getTokenStorage();
+  const token = httpService.getTokenStorage();
+  const onGetUserDataSuccess = useCallback((user: IUser | null) => {
     if (user) {
-      const accessToken = user?.access_token;
       httpService.saveUserStorage(user);
-      httpService.saveTokenStorage(accessToken);
-      httpService.attachTokenToHeader(accessToken);
-      setTokenAttached(true);
       setUserData(user);
     }
   }, []);
 
   useEffect(() => {
+    if (!token) {
+      return;
+    }
+
     (async () => {
       try {
         setCheckingAuth(true);
-        const user = await authService.getUser();
+        httpService.attachTokenToHeader();
+        const response = await userService.profile();
+        const user = response?.data?.data;
         if (user) {
           onGetUserDataSuccess(user);
-        } else {
-          const userStorage = httpService.getUserStorage();
-          userStorage && onGetUserDataSuccess(userStorage);
         }
-
-        setCheckingAuth(false);
       } catch (error) {
         showError(error);
+      } finally {
         setCheckingAuth(false);
       }
     })();
-  }, [onGetUserDataSuccess]);
+  }, [token, onGetUserDataSuccess]);
 
   const loginPopup = useCallback(async () => {
     try {
@@ -121,7 +144,7 @@ const AuthenticationProvider = ({ children }: { children: any }) => {
         try {
           const user = await authService.loginRedirectCallback();
           if (user) {
-            onGetUserDataSuccess(user);
+            // onGetUserDataSuccess(user);
             resolve(user);
           }
         } catch (error) {
@@ -134,7 +157,7 @@ const AuthenticationProvider = ({ children }: { children: any }) => {
 
   const logout = useCallback(async () => {
     try {
-      await logoutUser(userData?.access_token || '');
+      await logoutUser(token || '');
       authService.removeUser();
       window.location.href = LOGOUT_REDIRECT_URI;
 
@@ -157,13 +180,13 @@ const AuthenticationProvider = ({ children }: { children: any }) => {
   //! Return
   const value = useMemo(() => {
     return {
-      accessToken,
-      loading: isCheckingAuth || isInitialLoading,
-      isLogged: !isEmpty(user),
-      user,
-      isAdmin: !!user?.roles?.includes(PERMISSION_ENUM.ADMIN),
-      isAppManager: !!user?.roles?.includes(PERMISSION_ENUM.APP_MANAGER),
-      isUser: !!user?.roles?.includes(PERMISSION_ENUM.USER),
+      accessToken: token,
+      loading: isCheckingAuth,
+      isLogged: !!isLogged,
+      user: userData,
+      isAdmin: userData?.role === PERMISSION_ENUM.ADMIN,
+      isAppManager: userData?.role === PERMISSION_ENUM.APP_MANAGER,
+      isUser: userData?.role === PERMISSION_ENUM.USER,
       initialPathName: locationService.initialPathname,
       loginRedirect: authService.loginRedirect.bind(authService),
       loginRedirectCallback,
@@ -171,17 +194,18 @@ const AuthenticationProvider = ({ children }: { children: any }) => {
       loginPopup,
       logout,
       eventListener,
+      setUserData,
     };
   }, [
-    user,
+    userData,
     isCheckingAuth,
-    isInitialLoading,
     authService,
-    accessToken,
+    token,
     loginPopup,
     loginRedirectCallback,
     eventListener,
     logout,
+    setUserData,
   ]);
 
   return <AuthenticationContext.Provider value={value}>{children}</AuthenticationContext.Provider>;

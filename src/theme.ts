@@ -55,6 +55,7 @@ type Colors = {
   black?: string;
   gray?: string;
   gray2?: string;
+  gray3?: string;
   grayLight?: string;
   grayText?: string;
   grayActiveMenu?: string;

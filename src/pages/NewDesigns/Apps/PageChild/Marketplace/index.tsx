@@ -4,13 +4,14 @@ import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
 import bannerImage from 'assets/banner.png';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import { useGetAppStore } from 'hooks/app/useAppHooks';
+import { useGetAppStore, useGetListApp } from 'hooks/app/useAppHooks';
 import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
+import { useMemo } from 'react';
 
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
   rowsPerPage: 999,
-  search: '',
+  textSeach: '',
 };
 
 const Marketplace = () => {
@@ -18,14 +19,12 @@ const Marketplace = () => {
   const theme = useTheme();
   const { filters, handleSearch } = useFiltersHandler(initialValues);
 
-  const { data: resList, isLoading: isLoadingList } = useGetAppStore({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
-  const data = resList?.data?.items || [];
+  const { data: resList, isLoading: isLoadingList } = useGetListApp(filters);
+
+  const data =
+    useMemo(() => {
+      return resList?.data?.data?.items;
+    }, [resList]) || [];
 
   //! Function
 

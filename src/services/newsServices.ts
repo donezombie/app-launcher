@@ -1,40 +1,39 @@
 import { LIST_NEW } from 'consts/apiUrl';
-import { PromiseResponseBase, RequestPagingCommon, ResponseCommonPaging } from 'interfaces/common';
+import {
+  PromiseResponseBase,
+  RequestPagingCommon,
+  ResponseCommonPaging,
+  ResponseGenerator,
+} from 'interfaces/common';
 import httpService from './httpService';
 import { get } from 'lodash';
 import { News } from 'interfaces/news';
+import queryString from 'query-string';
 
-type ResponseListNew = ResponseCommonPaging<News[]>;
+type ResponseListNew = ResponseGenerator<ResponseCommonPaging<News[]>>;
 
 export interface RequestCreateNews {
-  title: string;
-  body: string;
-  thumbnail: string;
-  isNew: boolean;
+  title?: string;
+  body?: string;
+  thumbUrl?: string;
+  directDetail?: string;
+  type?: string;
 }
 
 class NewsServices {
-  getListNews({ skip, take, filter }: RequestPagingCommon): PromiseResponseBase<ResponseListNew> {
-    return httpService.get(`${LIST_NEW}/list/?filter=${filter}&skip=${skip}&take=${take}`);
+  getListNews(filter: RequestPagingCommon): PromiseResponseBase<ResponseListNew> {
+    return httpService.get(`${LIST_NEW}?${queryString.stringify(filter)}`);
   }
 
   postCreateNews(body: RequestCreateNews) {
-    const formData = new FormData();
-    for (const key in body) {
-      formData.append(key, get(body, key));
-    }
-    return httpService.post(`${LIST_NEW}/create`, formData);
+    return httpService.post(`${LIST_NEW}`, body);
   }
 
   putEditNews(id: string, body: RequestCreateNews) {
-    const formData = new FormData();
-    for (const key in body) {
-      formData.append(key, get(body, key));
-    }
-    return httpService.put(`${LIST_NEW}/update?id=${id}`, formData);
+    return httpService.patch(`${LIST_NEW}/${id}`, body);
   }
   deleteNews(id?: string) {
-    return httpService.delete(`${LIST_NEW}/delete?id=${id}`);
+    return httpService.delete(`${LIST_NEW}/${id}`);
   }
 }
 

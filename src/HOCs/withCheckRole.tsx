@@ -2,6 +2,7 @@ import CommonStyles from 'components/CommonStyles';
 import React from 'react';
 import { PERMISSION_ENUM } from 'consts/index';
 import { useAuth } from 'providers/AuthenticationProvider';
+import httpService from 'services/httpService';
 
 const withCheckRole = (
   ComponentWrapped:
@@ -11,8 +12,8 @@ const withCheckRole = (
   permission?: (PERMISSION_ENUM | '' | string)[]
 ) => {
   return () => {
-    const { user } = useAuth();
-    const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
+    const user = httpService.getUserStorage();
+    const role = user?.role || PERMISSION_ENUM.USER;
     const havePermission =
       permission?.includes(role) || permission?.includes(PERMISSION_ENUM.PUBLIC);
 

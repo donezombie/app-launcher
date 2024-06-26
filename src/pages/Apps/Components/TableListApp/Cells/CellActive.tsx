@@ -1,6 +1,6 @@
 import React from 'react';
 import CommonStyles from 'components/CommonStyles';
-import { App } from 'interfaces/apps';
+import { NewApp } from 'interfaces/apps';
 import { Field, Form, Formik } from 'formik';
 import SwitchField from 'components/CustomFields/SwitchField';
 import { showError, showSuccess } from 'helpers/toast';
@@ -8,15 +8,16 @@ import { useSetLiveApp } from 'hooks/app/useAppHooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from 'consts';
 import { useAuth } from 'providers/AuthenticationProvider';
+import { AppStatus } from 'consts/enum';
 
 interface CellActiveProps {
-  item: App;
+  item: NewApp;
 }
 
 const CellActive = (props: CellActiveProps) => {
   //! State
   const { item } = props;
-  const isLive = !!item?.isLive;
+  const isAlive = !!item?.isLive;
   const { isAppManager } = useAuth();
   const queryClient = useQueryClient();
   const { mutateAsync: setLiveApp } = useSetLiveApp();
@@ -27,7 +28,7 @@ const CellActive = (props: CellActiveProps) => {
   return (
     <Formik
       initialValues={{
-        isLive: isLive,
+        isAlive: isAlive,
       }}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         (async () => {
@@ -35,15 +36,15 @@ const CellActive = (props: CellActiveProps) => {
             setSubmitting(true);
             await setLiveApp({
               appId: item?.id || '',
-              isLive: values.isLive,
+              isAlive: !item.isLive,
             });
 
             await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
 
-            if (values.isLive) {
-              showSuccess(`Turn [${item.name}] on successfully!`);
+            if (!values.isAlive) {
+              showSuccess(`Active [${item.name}] successfully!`);
             } else {
-              showSuccess(`Turn [${item.name}] off successfully!`);
+              showSuccess(`InActive [${item.name}] successfully!`);
             }
 
             if (isAppManager) {
@@ -59,16 +60,18 @@ const CellActive = (props: CellActiveProps) => {
         })();
       }}
     >
-      {({ handleSubmit }) => {
+      {({ handleSubmit, isSubmitting }) => {
         return (
           <Form>
             <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Field
                 component={SwitchField}
-                name='isLive'
+                name='isAlive'
                 afterOnChange={() => {
                   handleSubmit();
                 }}
+                loading={isSubmitting}
+                disabled={item.status !== AppStatus.APPROVED}
               />
             </CommonStyles.Box>
           </Form>

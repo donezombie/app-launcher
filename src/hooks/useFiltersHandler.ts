@@ -3,7 +3,7 @@ import { CommonFilters, Order } from 'interfaces/common';
 import { cloneDeep, get } from 'lodash';
 import React, { useCallback } from 'react';
 
-function useFiltersHandler<T>(initialFilters?: T & CommonFilters) {
+function useFiltersHandler<T>(initialFilters: T & CommonFilters) {
   //! State
   const [filters, setFilters] = React.useState(initialFilters);
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -24,7 +24,7 @@ function useFiltersHandler<T>(initialFilters?: T & CommonFilters) {
       return (
         prev && {
           ...prev,
-          page: newPage,
+          page: newPage + 1,
         }
       );
     });
@@ -78,7 +78,7 @@ function useFiltersHandler<T>(initialFilters?: T & CommonFilters) {
         return {
           ...prev,
           page: NUMBER_DEFAULT_PAGE,
-          search,
+          textSearch: search,
         };
       }
 

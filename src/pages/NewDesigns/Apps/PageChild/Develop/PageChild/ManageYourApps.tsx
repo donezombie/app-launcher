@@ -4,25 +4,23 @@ import ListApp from 'components/ListApp';
 import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import React from 'react';
+import { useMemo } from 'react';
 
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
   rowsPerPage: 999,
-  search: '',
+  textSearch: '',
+  canAccess: true,
 };
 
 const ManageYourApps = () => {
   //! State
   const { filters, handleSearch } = useFiltersHandler(initialValues);
-  const { data: resListCreatedApp, isLoading: isCreatedLoading } = useGetListApp({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
-  const dataInstallApp = resListCreatedApp?.data?.items || [];
+  const { data: resListApp, isLoading: isCreatedLoading } = useGetListApp(filters);
+  const dataInstallApp =
+    useMemo(() => {
+      return resListApp?.data?.data?.items;
+    }, [isCreatedLoading]) || [];
 
   //! Function
 

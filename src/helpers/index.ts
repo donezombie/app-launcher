@@ -1,6 +1,8 @@
 import { PERMISSION_ENUM } from 'consts/index';
 import { isString } from 'lodash';
 import moment from 'moment';
+import userService from 'services/userService';
+import { showError, showSuccess } from './toast';
 export function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -103,4 +105,18 @@ export const removeAppID = (appsDetailData: string[], appID: string) => {
     appsDetailData.splice(index, 1);
   }
   return appsDetailData;
+};
+
+export const handleUpload = async (
+  name: string,
+  event: any,
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
+) => {
+  try {
+    const resUpload = await userService.upload({ file: event.target.files?.[0] });
+    setFieldValue(name, resUpload.data.data.uri);
+    showSuccess('Upload success!');
+  } catch (error) {
+    showError(error);
+  }
 };

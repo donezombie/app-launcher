@@ -5,10 +5,12 @@ import { SIZE_ICON_DEFAULT } from 'consts';
 import { Link } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
 import Logo from 'assets/logo.svg';
+import { useGetCompanyDetail } from 'hooks/company/useCompanyHooks';
+import { useAuth } from 'providers/AuthenticationProvider';
 
 const LeftSide = () => {
   //! State
-
+  const { user } = useAuth();
   //! Function
 
   //! Render

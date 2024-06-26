@@ -2,7 +2,7 @@ import { Dialog } from '@mui/material';
 import CommonStyles from 'components/CommonStyles';
 import EachApplication from 'components/EachApplication';
 import AllApplicationDialog from 'pages/NewDesigns/AllApplication';
-import React from 'react';
+import React, { useMemo } from 'react';
 import ContentOfSection from './ContentOfSection';
 import HeaderOfSection from './HeaderOfSection';
 import useFiltersHandler from 'hooks/useFiltersHandler';
@@ -12,36 +12,26 @@ import { IconApplication1, IconApplication2 } from 'components/CommonIcons';
 import { useAuth } from 'providers/AuthenticationProvider';
 
 const initialValues = {
-  page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: 10,
-  search: '',
+  page: 1,
+  perPage: 10,
+  textSearch: '',
 };
 
 const ApplicationSection = () => {
   //! State
   const [open, setOpen] = React.useState(false);
-  const { user } = useAuth();
-  const role = user?.roles?.[0] || PERMISSION_ENUM.USER;
+  const { user, isAdmin } = useAuth();
 
   const { filters } = useFiltersHandler(initialValues);
-  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListInstalledApp({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
+  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListApp({
+    ...filters,
+    myApp: true,
   });
-  const { data: resListApp, isLoading } = useGetListApp({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
+  const { data: resListApp, isLoading } = useGetListApp(filters);
   const dataInstallApp =
-    role === PERMISSION_ENUM.ADMIN
-      ? resListApp?.data?.items || []
-      : resListInstalledApp?.data?.items || [];
+    useMemo(() => {
+      return isAdmin ? resListApp?.data?.data?.items : resListInstalledApp?.data?.data?.items;
+    }, [resListApp, resListInstalledApp]) || [];
 
   //! Function
   const handleClickOpen = () => {

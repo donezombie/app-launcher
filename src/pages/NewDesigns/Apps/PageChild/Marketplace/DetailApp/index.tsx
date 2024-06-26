@@ -2,16 +2,17 @@ import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import { useGetAppStore } from 'hooks/app/useAppHooks';
+import { useGetAppStore, useGetListApp } from 'hooks/app/useAppHooks';
 import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
 import { useLocation } from 'react-router-dom';
 import { useGetDetailCategory } from 'hooks/category/useGetDetailCategory';
 import { App } from 'interfaces/apps';
+import { useMemo } from 'react';
 
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
   rowsPerPage: 999,
-  search: '',
+  textSeach: '',
 };
 
 function useQuery() {
@@ -27,20 +28,28 @@ const DetailApp = () => {
 
   const { categoryDetail } = useGetDetailCategory(category || '');
 
-  const appIDCategory = categoryDetail?.apps || [''];
-  const { data: resList, isLoading: isLoadingList } = useGetAppStore({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
+  // const appIDCategory = categoryDetail?.id;
+  // const { data: resList, isLoading: isLoadingList } = useGetAppStore({
+  //   skip:
+  //     (filters?.page || NUMBER_DEFAULT_PAGE) *
+  //     (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
+  //   take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
+  //   filter: filters?.search,
+  // });
+  // const data = resList?.data?.items || [];
+  const { data: resListApp, isLoading } = useGetListApp({
+    categoryId: category ? +category : undefined,
   });
-  const data = resList?.data?.items || [];
-  const filterAppsByIds = (listApp: App[], AppIDs: string[]) => {
-    return listApp.filter((app) => AppIDs.includes(app.id));
-  };
+  const listAppFilter =
+    useMemo(() => {
+      return resListApp?.data?.data?.items;
+    }, [resListApp]) || [];
 
-  const dataFiltered = filterAppsByIds(data, appIDCategory);
+  // const filterAppsByIds = (listApp: App[], AppIDs: string[]) => {
+  //   return listApp.filter((app) => AppIDs.includes(app.id));
+  // };
+
+  // const dataFiltered = filterAppsByIds(data, appIDCategory);
 
   //! Function
 
@@ -52,14 +61,14 @@ const DetailApp = () => {
     >
       <CommonStyles.Box>
         <HeadWithSearching
-          title={`${categoryDetail?.name}`}
+          title={`${categoryDetail?.name || ''}`}
           onSubmitSearch={({ search }) => {
             handleSearch(search);
           }}
         />
       </CommonStyles.Box>
 
-      {isLoadingList ? <CommonStyles.Loading /> : <ListApp apps={dataFiltered} />}
+      {isLoading ? <CommonStyles.Loading /> : <ListApp apps={listAppFilter} />}
     </CommonStyles.Box>
   );
 };

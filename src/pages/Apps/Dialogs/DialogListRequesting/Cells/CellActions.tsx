@@ -6,24 +6,25 @@ import { showError, showSuccess } from 'helpers/toast';
 import { useRequestApproval } from 'hooks/app/useAppHooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from 'consts';
+import { UserAccess } from 'interfaces/apps';
 
 interface CellActionsProps {
-  item: UserRequestingApp;
+  item: UserAccess;
 }
 
 const CellActions = ({ item }: CellActionsProps) => {
   //! State
   const queryClient = useQueryClient();
   const { mutateAsync: approve, isLoading: isApproving } = useRequestApproval();
-  const { mutateAsync: deny, isLoading: isDenying } = useRequestApproval();
+  // const { mutateAsync: deny, isLoading: isDenying } = useRequestApproval();
 
   //! Function
   const onClickApproval = async () => {
     try {
-      await approve({ isApproved: true, requestId: item.id });
+      await approve({ id: item.appId, data: { userId: item.approvedUserId, isAccess: true } });
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppRequesting] });
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
-      showSuccess(`Approved [${item.username}] successfully!`);
+      showSuccess(`Approved [${item.user.username}] successfully!`);
     } catch (error) {
       showError(error);
     }
@@ -31,10 +32,10 @@ const CellActions = ({ item }: CellActionsProps) => {
 
   const onClickDenied = async () => {
     try {
-      await deny({ isApproved: false, requestId: item.id });
+      await approve({ id: item.appId, data: { userId: item.approvedUserId, isAccess: false } });
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppRequesting] });
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
-      showSuccess(`Deny [${item.username}] successfully!`);
+      showSuccess(`Deny [${item.user.username}] successfully!`);
     } catch (error) {
       showError(error);
     }
@@ -50,7 +51,7 @@ const CellActions = ({ item }: CellActionsProps) => {
       </CommonStyles.Tooltip>
 
       <CommonStyles.Tooltip title='Deny'>
-        <CommonStyles.Button loading={isDenying} isIconButton onClick={onClickDenied}>
+        <CommonStyles.Button loading={isApproving} isIconButton onClick={onClickDenied}>
           <CommonIcons.DenyAccess />
         </CommonStyles.Button>
       </CommonStyles.Tooltip>

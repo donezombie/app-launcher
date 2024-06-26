@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Outlet, Route, Routes } from 'react-router-dom';
 
 import Page404 from 'pages/Page404';
@@ -26,10 +26,17 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
 const App = () => {
   //! State
   const auth = useAuth();
-  const { themeOfApp } = useSettingsTheme();
-
+  const { themeOfApp, setThemeColor } = useSettingsTheme();
+  const colorHeader = auth?.user?.Company?.colorHeader || '';
+  const colorBackground = auth?.user?.Company?.colorBackground || '';
   //! Function
-
+  useEffect(() => {
+    const newTheme = {
+      header: colorHeader,
+      sideBar: colorBackground,
+    };
+    setThemeColor && setThemeColor(newTheme);
+  }, [auth?.user]);
   //! Render
   const renderContent = () => {
     if (auth.loading) {

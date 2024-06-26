@@ -1,3 +1,5 @@
+import { UserAccess } from './apps';
+
 export interface UserInfo {
   id: string;
   username: string;
@@ -12,9 +14,19 @@ export interface UserInfo {
 }
 
 export interface UserRequestingApp {
-  id: string;
+  id: number;
   userId: string;
   username: string;
   firstname: string;
   lastname: string;
+  appId: string;
+  approvedUserId: number;
+}
+
+export interface UserRequestData {
+  currentPage: number;
+  items: UserAccess[];
+  perPage: number;
+  totalItems: number;
+  totalPage: number;
 }

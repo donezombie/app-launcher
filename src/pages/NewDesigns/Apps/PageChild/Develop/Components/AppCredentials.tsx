@@ -9,13 +9,14 @@ import { useTheme } from '@mui/material';
 import { useGenerateAppCredentials } from 'hooks/app/useAppHooks';
 import { copyToClipboard } from 'helpers';
 import ButtonCopy from 'components/ButtonCopy';
+import { NewApp } from 'interfaces/apps';
 
 interface AppCredentialsProps {
-  idProps: string;
+  dataProps: NewApp | undefined;
 }
 
 const AppCredentials = (props: AppCredentialsProps) => {
-  const { idProps } = props;
+  const { dataProps } = props;
 
   //! State
   const theme = useTheme();
@@ -25,10 +26,10 @@ const AppCredentials = (props: AppCredentialsProps) => {
 
   //! Function
   const onGenerate = async () => {
-    const res = await generateAppCredentials({ appId: idProps });
-    setFieldValue('clientID', res?.data?.appClientId);
-    setFieldValue('clientSecret', res?.data?.appClientSecret);
-    setFieldValue('clientName', res?.data?.appClientName);
+    // const res = await generateAppCredentials({ appId: idProps });
+    setFieldValue('clientID', dataProps?.appClientId);
+    setFieldValue('clientSecret', dataProps?.appClientSecret);
+    setFieldValue('clientName', dataProps?.appClientName);
   };
   //! Render
   return (

@@ -28,15 +28,9 @@ const NewsTab = (props: NewsTabProps) => {
     data: resData,
     isLoading: isInstalledLoading,
     refetch: refetchListNews,
-  } = useGetNewsListHooks({
-    skip:
-      (filters?.page || NUMBER_DEFAULT_PAGE) *
-      (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-    take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-    filter: filters?.search,
-  });
+  } = useGetNewsListHooks(filters);
 
-  const data = resData?.data?.items || [];
+  const data = resData?.data?.data?.items || [];
 
   //! Function
   const falseItems = data.filter((item) => item?.isNew === true);
