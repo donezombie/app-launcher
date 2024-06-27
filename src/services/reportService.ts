@@ -24,12 +24,6 @@ class CategoryServices {
   createNewReport(body: CreateReport) {
     return httpService.post(`${BASE_URL}/report`, body);
   }
-  //   updateCategory(id: string, name: string) {
-  //     return httpService.patch(`${BASE_URL}/category/${id}`, { name });
-  //   }
-  //   deleteCategory(id: string) {
-  //     return httpService.delete(`${BASE_URL}/category/${id}`);
-  //   }
 }
 
 export default new CategoryServices();

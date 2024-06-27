@@ -1,17 +1,19 @@
 import { useTheme } from '@mui/material';
+import bannerImage from 'assets/banner.png';
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
-import bannerImage from 'assets/banner.png';
+import { NUMBER_DEFAULT_PAGE } from 'consts';
+import { AppStatus } from 'consts/enum';
+import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import { useGetAppStore, useGetListApp } from 'hooks/app/useAppHooks';
-import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
 import { useMemo } from 'react';
 
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
   rowsPerPage: 999,
   textSeach: '',
+  status: AppStatus.APPROVED,
 };
 
 const Marketplace = () => {

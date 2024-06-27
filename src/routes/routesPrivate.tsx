@@ -57,13 +57,16 @@ const AppsManagement = lazy(() => import('pages/NewDesigns/AppsManagement'));
 const CategoryManagement = lazy(() => import('pages/NewDesigns/CategoryManagement'));
 //! Event Management Management
 const EventManagement = lazy(() => import('pages/NewDesigns/EventManagement'));
-const ReportManagement = lazy(() => import('pages/NewDesigns/ReportManagement'));
+const ReportManagement = lazy(() => import('pages/NewDesigns/ReportManagement/index'));
 const AccountSetting = lazy(() => import('pages/AccountSetting'));
 const DetailReport = lazy(
   () => import('pages/NewDesigns/ReportManagement/Components/DetailReport')
 );
 const CompanyManagement = lazy(() => import('pages/NewDesigns/Company'));
 const AddCompany = lazy(() => import('pages/NewDesigns/Company/Components/AddEditCompany'));
+const Help = lazy(() => import('pages/NewDesigns/Help'));
+const AddHelp = lazy(() => import('pages/NewDesigns/Help/Components/AddEditHelp'));
+const DescriptionHelp = lazy(() => import('pages/NewDesigns/Help/Components/DescriptionHelp'));
 
 //! Recent Activity
 const RecentActivity = lazy(() => import('pages/NewDesigns/RecentActivity'));
@@ -316,6 +319,30 @@ const routes: Route[] = [
         name: 'Recent Activity',
         path: BaseUrl.RecentActivity.Index,
         component: withCheckRole(RecentActivity, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Help Management',
+        path: BaseUrl.Help.Index,
+        component: withCheckRole(Help, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Add Help',
+        path: BaseUrl.Help.AddHelp,
+        component: withCheckRole(AddHelp, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Edit Company',
+        path: BaseUrl.Help.Edit,
+        component: withCheckRole(AddHelp, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Description Static',
+        path: BaseUrl.Help.DescriptionHelp,
+        component: withCheckRole(DescriptionHelp, [PERMISSION_ENUM.ADMIN]),
         isPrivateRoute: true,
       },
     ],

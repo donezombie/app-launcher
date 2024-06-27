@@ -10,4 +10,5 @@ export interface ICompany {
   description: string;
   createdAt: Date;
   updatedAt: Date;
+  colorText: string;
 }

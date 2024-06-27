@@ -1,8 +1,8 @@
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
-import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
-import { useGetListApp, useGetListInstalledApp } from 'hooks/app/useAppHooks';
+import { AppStatus } from 'consts/enum';
+import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { useMemo } from 'react';
 
@@ -10,15 +10,14 @@ const initialValues = {
   page: 1,
   perPage: 999,
   textSearch: '',
+  canAccess: true,
+  status: AppStatus.APPROVED,
 };
 
 const MyApps = () => {
   //! State
   const { filters, handleSearch } = useFiltersHandler(initialValues);
-  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListApp({
-    ...filters,
-    myApp: true,
-  });
+  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListApp(filters);
   const dataInstallApp =
     useMemo(() => {
       return resListInstalledApp?.data?.data?.items;

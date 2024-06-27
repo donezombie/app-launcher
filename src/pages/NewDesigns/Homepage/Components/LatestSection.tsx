@@ -8,6 +8,7 @@ import HeaderOfSection from './HeaderOfSection';
 import { Order } from 'interfaces/common';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { useGetNewsListHooks } from 'hooks/news/useNewsHooks';
+import { NewsType } from 'consts/enum';
 
 const initialValues = {
   search: '',
@@ -15,6 +16,7 @@ const initialValues = {
   rowsPerPage: 15,
   order: Order.desc,
   orderBy: '',
+  type: NewsType.NEWS,
 };
 
 const LatestSection = () => {
@@ -26,15 +28,6 @@ const LatestSection = () => {
   const { data: resData, isLoading, refetch: refetchListNews } = useGetNewsListHooks(filters);
 
   const data = resData?.data?.data?.items || [];
-
-  const SectionMock = [
-    { title: 'Convey', subTitle: 'We have update Cases and the way we handle them', href: '/' },
-    { title: 'Atomic', subTitle: 'We have update Cases and the way we handle them', href: '/' },
-    { title: 'Quote', subTitle: 'We have update Cases and the way we handle them', href: '/' },
-    { title: 'Manage', subTitle: 'We have update Cases and the way we handle them', href: '/' },
-    { title: 'Reports', subTitle: 'We have update Cases and the way we handle them', href: '/' },
-    { title: 'Verify', subTitle: 'We have update Cases and the way we handle them', href: '/' },
-  ];
 
   //! Function
 

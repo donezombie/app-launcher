@@ -1,17 +1,15 @@
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
-import useFiltersHandler from 'hooks/useFiltersHandler';
-import { useGetAppStore, useGetListApp } from 'hooks/app/useAppHooks';
-import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
-import { useLocation } from 'react-router-dom';
+import { AppStatus } from 'consts/enum';
+import { useGetListApp } from 'hooks/app/useAppHooks';
 import { useGetDetailCategory } from 'hooks/category/useGetDetailCategory';
-import { App } from 'interfaces/apps';
+import useFiltersHandler from 'hooks/useFiltersHandler';
 import { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const initialValues = {
-  page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: 999,
+  status: AppStatus.APPROVED,
   textSeach: '',
 };
 
@@ -28,29 +26,14 @@ const DetailApp = () => {
 
   const { categoryDetail } = useGetDetailCategory(category || '');
 
-  // const appIDCategory = categoryDetail?.id;
-  // const { data: resList, isLoading: isLoadingList } = useGetAppStore({
-  //   skip:
-  //     (filters?.page || NUMBER_DEFAULT_PAGE) *
-  //     (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-  //   take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-  //   filter: filters?.search,
-  // });
-  // const data = resList?.data?.items || [];
   const { data: resListApp, isLoading } = useGetListApp({
+    ...filters,
     categoryId: category ? +category : undefined,
   });
   const listAppFilter =
     useMemo(() => {
       return resListApp?.data?.data?.items;
     }, [resListApp]) || [];
-
-  // const filterAppsByIds = (listApp: App[], AppIDs: string[]) => {
-  //   return listApp.filter((app) => AppIDs.includes(app.id));
-  // };
-
-  // const dataFiltered = filterAppsByIds(data, appIDCategory);
-
   //! Function
 
   //! Render

@@ -53,10 +53,10 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
   const { data: resPlatform, isLoading: loadingTheme } = useGetPlatformSettings();
   const theme = (localStorage.getItem(KEY_THEME) as ModeThemeEnum) || ModeThemeEnum.light;
   const [mode, setMode] = useState(theme);
-  const [themeColor, setThemeColor] = useState<ITheme>({
-    header: '',
-    sideBar: '',
-  });
+  const auth = useAuth();
+  const colorHeader = auth?.user?.Company?.colorHeader || '';
+  const colorBackground = auth?.user?.Company?.colorBackground || '';
+  const colorText = auth?.user?.Company?.colorText || '';
 
   const settingsCached =
     localStorage.getItem(KEY_SETTINGS) !== 'undefined' &&
@@ -81,8 +81,6 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
 
   const mainColour = settings?.mainColour || '#000000';
 
-  const { user } = useAuth();
-
   //! Funtion
   const toggleTheme = useCallback(() => {
     setMode((prevMode) => {
@@ -102,7 +100,7 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
         typography: {
           fontFamily: `"Lato", sans-serif`,
           allVariants: {
-            color: '#171919',
+            color: colorText ? colorText : '#171919',
           },
           h6Bold: {
             fontSize: '24px',
@@ -190,11 +188,11 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           blue: '#36c5f0',
           white: '#fff',
           black: 'rgb(18, 18, 18)',
-          gray: themeColor.header ? themeColor.header : '#fafafb',
+          gray: colorHeader ? colorHeader : '#fafafb',
           gray2: '#ECEEEF',
-          gray3: themeColor.sideBar ? themeColor.sideBar : '#fafafb',
+          gray3: colorHeader ? colorHeader : '#fafafb',
           grayLight: '#F2F2F2',
-          grayText: '#17191999',
+          grayText: colorText ? colorText : '#17191999',
           grayActiveMenu: '#f1f1f2',
           border: '#dde0e2',
           borderInput: '#e8ebeb',
@@ -203,18 +201,18 @@ const SettingsThemeProvider = ({ children }: { children: any }) => {
           textGray: '#666c6e',
           borderLine: '#dfe2e7',
           borderBaseAlpha: 'rgba(23, 25, 25, 0.08)',
-          text1: '#171919',
-          text2: '#17191999',
+          text1: colorText ? colorText : '#171919',
+          text2: colorText ? colorText : '#17191999',
           text3: '#666C6E',
         },
       }),
-    [mainColour, themeColor]
+    [mainColour, colorHeader, colorBackground, colorText]
   );
 
   //! Render
   const value = useMemo(() => {
-    return { settings, themeOfApp, loadingTheme, mode, toggleTheme, themeColor, setThemeColor };
-  }, [themeOfApp, mode, toggleTheme, loadingTheme, settings, themeColor, setThemeColor]);
+    return { settings, themeOfApp, loadingTheme, mode, toggleTheme };
+  }, [themeOfApp, mode, toggleTheme, loadingTheme, settings]);
 
   return <ToggleThemeContext.Provider value={value}>{children}</ToggleThemeContext.Provider>;
 };

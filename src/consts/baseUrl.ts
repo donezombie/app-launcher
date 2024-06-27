@@ -80,6 +80,14 @@ const BaseUrl = {
   RecentActivity: {
     Index: '/apps/recent-activity',
   },
+  Help: {
+    Index: 'app/help',
+    AddHelp: '/apps/apps/help/add-help',
+    Edit: '/apps/apps/help/edit/:id',
+    DetailWithID: (id: string | number) => `/apps/apps/help/edit/${id}`,
+    DescriptionHelp: '/apps/apps/help/description/:id',
+    DescriptionHelpWithID: (id: string | number) => `/apps/apps/help/description/${id}`,
+  },
 };
 
 export default BaseUrl;

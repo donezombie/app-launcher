@@ -10,7 +10,7 @@ const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
   rowsPerPage: 999,
   textSearch: '',
-  canAccess: true,
+  myApp: true,
 };
 
 const ManageYourApps = () => {

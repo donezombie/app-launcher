@@ -21,15 +21,6 @@ const ListInstalledApps = () => {
   //! State
   const theme = useTheme();
   const { filters, setFilters, handleResetToInitial } = useFiltersHandler(initialValues);
-  // const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListInstalledApp({
-  //   skip:
-  //     (filters?.page || NUMBER_DEFAULT_PAGE) *
-  //     (filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE),
-  //   take: filters?.rowsPerPage || NUMBER_DEFAULT_ROW_PER_PAGE,
-  //   filter: filters?.search,
-  // });
-
-  // list installed
   const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListApp(filters);
 
   const dataInstallApp =

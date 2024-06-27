@@ -23,6 +23,8 @@ export const queryKeys = {
   listCompany: 'listCompany',
   getCompanyDetail: 'getCompanyDetail',
   userInfo: 'userInfo',
+  listHelp: 'listHelp',
+  detailHelp: 'detailHelp',
 };
 
 export const LANG_ENUM = {
