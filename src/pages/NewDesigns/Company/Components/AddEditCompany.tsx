@@ -13,10 +13,8 @@ import {
   useGetCompanyDetail,
   useUpdateCompany,
 } from 'hooks/company/useCompanyHooks';
-import { useAuth } from 'providers/AuthenticationProvider';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import userService from 'services/userService';
 import * as Yup from 'yup';
 
 const validateCreateApp = Yup.object().shape({
@@ -24,6 +22,7 @@ const validateCreateApp = Yup.object().shape({
   logo: Yup.string().required('Logo is required field!'),
   colorBackground: Yup.string().required('Color Background is required field!'),
   colorHeader: Yup.string().required('Color Header is required field!'),
+  colorText: Yup.string().required('Color Text is required field!'),
 });
 
 const AddEditCompany = () => {
@@ -40,14 +39,15 @@ const AddEditCompany = () => {
 
   // //! Function
   const initialValues: BodyCreateCompany = {
-    name: appDetail ? appDetail.name : '',
-    address: appDetail ? appDetail.address : '',
-    hotline: appDetail ? appDetail.hotline : null,
-    website: appDetail ? appDetail.website : '',
-    description: appDetail ? appDetail.description : '',
-    logo: appDetail ? appDetail.logo : '',
-    colorBackground: appDetail ? appDetail.colorBackground : '',
-    colorHeader: appDetail ? appDetail.colorHeader : '',
+    name: appDetail ? appDetail?.name : '',
+    address: appDetail ? appDetail?.address : '',
+    hotline: appDetail ? appDetail?.hotline : null,
+    website: appDetail ? appDetail?.website : '',
+    description: appDetail ? appDetail?.description : '',
+    logo: appDetail ? appDetail?.logo : '',
+    colorBackground: appDetail ? appDetail?.colorBackground : '',
+    colorHeader: appDetail ? appDetail?.colorHeader : '',
+    colorText: appDetail ? appDetail?.colorText : '',
   };
 
   //! Render
@@ -131,7 +131,7 @@ const AddEditCompany = () => {
                     Theme Config
                   </CommonStyles.Typography>
                   <CommonStyles.Box
-                    sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4, mt: 1 }}
+                    sx={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 4, mt: 1 }}
                   >
                     <UploadField
                       name='logo'
@@ -154,6 +154,14 @@ const AddEditCompany = () => {
                       component={TextField}
                       name='colorHeader'
                       label='Color Header'
+                      fullWidth
+                      type='color'
+                      required
+                    />
+                    <FastField
+                      component={TextField}
+                      name='colorText'
+                      label='Color Text'
                       fullWidth
                       type='color'
                       required

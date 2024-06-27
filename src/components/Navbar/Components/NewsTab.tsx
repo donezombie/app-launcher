@@ -1,22 +1,19 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import CommonIcons from 'components/CommonIcons';
-import CommonStyles from 'components/CommonStyles';
-import useFiltersHandler from 'hooks/useFiltersHandler';
-import { useGetNewsListHooks } from 'hooks/news/useNewsHooks';
-import { NUMBER_DEFAULT_PAGE, NUMBER_DEFAULT_ROW_PER_PAGE } from 'consts';
-import { Order } from 'interfaces/common';
-import { News } from 'interfaces/news';
-import ItemNew from './ItemNew';
 import { useTheme } from '@mui/material';
+import CommonStyles from 'components/CommonStyles';
+import { NewsType } from 'consts/enum';
+import { useGetNewsListHooks } from 'hooks/news/useNewsHooks';
+import useFiltersHandler from 'hooks/useFiltersHandler';
+import { Order } from 'interfaces/common';
+import ItemNew from './ItemNew';
 
 interface NewsTabProps {}
 const initialValues = {
-  search: '',
-  page: 0,
+  textSearch: '',
+  page: 1,
   rowsPerPage: 15,
   order: Order.desc,
   orderBy: '',
+  type: NewsType.NEWS,
 };
 const NewsTab = (props: NewsTabProps) => {
   //! State
@@ -24,11 +21,7 @@ const NewsTab = (props: NewsTabProps) => {
 
   const { filters, setFilters, handleResetToInitial } = useFiltersHandler(initialValues);
 
-  const {
-    data: resData,
-    isLoading: isInstalledLoading,
-    refetch: refetchListNews,
-  } = useGetNewsListHooks(filters);
+  const { data: resData, isLoading: isInstalledLoading } = useGetNewsListHooks(filters);
 
   const data = resData?.data?.data?.items || [];
 
@@ -38,6 +31,10 @@ const NewsTab = (props: NewsTabProps) => {
     item.title = 'new';
   });
   //! Render
+  if (isInstalledLoading) {
+    return <CommonStyles.Loading />;
+  }
+
   return (
     <CommonStyles.Box className='component:NewsTab'>
       <CommonStyles.Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>

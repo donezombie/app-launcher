@@ -140,9 +140,16 @@ const Sidebar = () => {
     },
     {
       id: uniqueId('side-bar'),
-      label: 'CompanyManagement',
+      label: 'Company Management',
       icon: CommonIcons.Company,
       path: BaseUrl.Company.Index,
+      show: isAdmin,
+    },
+    {
+      id: uniqueId('side-bar'),
+      label: 'Static Content Management',
+      icon: CommonIcons.HelpIcon,
+      path: BaseUrl.Help.Index,
       show: isAdmin,
     },
     {

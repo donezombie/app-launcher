@@ -39,9 +39,11 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
   const navigate = useNavigate();
   // const { addNewTab } = useTabHandler();
   const { mutateAsync: setLiveApp } = useSetLiveApp();
-  const { user, isAdmin } = useAuth();
+  const { user, isUser, isAdmin } = useAuth();
   const isAccess = item.typeAccessApp === UserAppStatus.ACCESS || item.ownerUserId === user?.id;
   const isRequesing = item.typeAccessApp === UserAppStatus.REQUEST;
+  const isApproved = item.status === AppStatus.APPROVED;
+  console.log(item.status, 'isMyApps');
 
   //! Function
   const onClickUninstall = async () => {
@@ -195,32 +197,6 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
         </CommonStyles.Button>
       </CommonStyles.Box>
     );
-
-    // if (isApproved) {
-    //   return (
-    //     <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-    //       <CommonStyles.Button loading={loading} onClick={onClickInstall}>
-    //         Install
-    //       </CommonStyles.Button>
-
-    //       <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
-    //         <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
-    //       </Link>
-    //     </CommonStyles.Box>
-    //   );
-    // }
-
-    // return (
-    //   <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-    //     <CommonStyles.Button loading={loading} onClick={onClickInstall}>
-    //       Install
-    //     </CommonStyles.Button>
-
-    //     <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
-    //       <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
-    //     </Link>
-    //   </CommonStyles.Box>
-    // );
   };
 
   const handleSubmit = async (
@@ -311,14 +287,14 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
                 sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
               >
                 <CommonStyles.Typography variant='h5'>{item.name}</CommonStyles.Typography>
-                {(isAccess || isAdmin) && (
+                {!isUser && (
                   <Field
                     component={SwitchField}
                     name='isAlive'
                     afterOnChange={() => {
                       handleSubmit(values, setSubmitting);
                     }}
-                    disabled={item.status !== AppStatus.APPROVED}
+                    disabled={!(isApproved && isYourApp)}
                     loading={isSubmitting}
                   />
                 )}

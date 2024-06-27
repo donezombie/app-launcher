@@ -91,11 +91,11 @@ const CellActions = ({ item }: CellActionsProps) => {
         </Link>
       </CommonStyles.Tooltip>
 
-      <CommonStyles.Tooltip title='Assign'>
+      {/* <CommonStyles.Tooltip title='Assign'>
         <CommonStyles.Button isIconButton onClick={toggleAssign}>
           <CommonIcons.AssignIcon />
         </CommonStyles.Button>
-      </CommonStyles.Tooltip>
+      </CommonStyles.Tooltip> */}
 
       <CommonStyles.Tooltip title='Requesting App'>
         <CommonStyles.Button isIconButton onClick={toggleRequesting}>

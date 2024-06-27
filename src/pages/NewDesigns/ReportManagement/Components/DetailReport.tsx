@@ -1,5 +1,4 @@
 import HeadWithSearching from 'components/HeadWithSearching';
-import React from 'react';
 
 const DetailReport = () => {
   return (

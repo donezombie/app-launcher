@@ -10,6 +10,7 @@ export interface BodyCreateCompany {
   logo: string;
   colorBackground: string;
   colorHeader: string;
+  colorText: string;
   address?: string;
   hotline?: string | null;
   website?: string;

@@ -1,69 +1,75 @@
+import React from 'react';
+import { useTheme } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
-import HeadWithSearching from 'components/HeadWithSearching';
 import Searching from 'components/Searching';
+import BaseUrl from 'consts/baseUrl';
+import { SortOrder } from 'consts/enum';
 import { Form, Formik } from 'formik';
-import ContentOfSectionHorizontal from 'pages/NewDesigns/Homepage/Components/ContentOfSectionHorizontal';
-import React from 'react';
+import { useGetListHelp } from 'hooks/staticPage/useStaticPageHook';
+import useFiltersHandler from 'hooks/useFiltersHandler';
+import { IStaticPage } from 'interfaces/staticPage';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { isEmpty } from 'lodash';
 
-const data = [
-  {
-    label: 'Update 1.5.3',
-    value: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-  },
-  {
-    label: 'Local Authority Update',
-    value:
-      'It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
-  },
-  {
-    label: 'SDLT Update',
-    value:
-      'Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC.',
-  },
-  {
-    label: 'Land Registry',
-    value:
-      'The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
-  },
-  {
-    label: 'Update 1.5.3',
-    value:
-      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.',
-  },
-];
+interface HelpDrawerProps {
+  handleClose: (value: React.SetStateAction<boolean>) => void;
+}
 
-const listTopic = [
-  'Create a case',
-  'Add product',
-  'Create a quote',
-  'Find out my case progress',
-  'Other feature topic',
-];
+const initialValues = {
+  page: 1,
+  textSearch: '',
+  sortOrder: SortOrder.ASC,
+  sortField: 'createdAt',
+  topic: '',
+  category: '',
+};
 
-const listCategories = ['Getting started', 'Using tmgroup platform'];
+const HelpDrawer: React.FC<HelpDrawerProps> = ({ handleClose }) => {
+  const { filters, handleSearch } = useFiltersHandler(initialValues);
+  const { data: resListHelp, isLoading } = useGetListHelp(filters);
+  const data = useMemo(() => resListHelp?.data?.data?.items || [], [resListHelp]);
+  const theme = useTheme();
+  const navigate = useNavigate();
 
-const HelpDrawer = () => {
-  const EachSection = (application: any) => {
-    return (
-      <CommonStyles.Box
-        className='each-application'
-        sx={{
-          boxShadow:
-            'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
-          padding: 2,
-          minWidth: '20rem',
-          marginY: 2,
-          borderRadius: '10px',
-        }}
-      >
-        <CommonStyles.Typography fontWeight={'bold'}>
-          {application.application.label}
-        </CommonStyles.Typography>
-        <CommonStyles.Typography>{application.application.value}</CommonStyles.Typography>
-      </CommonStyles.Box>
-    );
+  const topics = useMemo(() => {
+    return data.reduce<{ [key: string]: IStaticPage[] }>((acc, item) => {
+      if (!acc[item.topic]) acc[item.topic] = [];
+      acc[item.topic].push(item);
+      return acc;
+    }, {});
+  }, [data]);
+
+  const handleClick = (item: IStaticPage) => {
+    if (item.url) {
+      window.open(item.url, '_blank');
+    } else if (item.description) {
+      handleClose(false);
+      navigate(BaseUrl.Help.DescriptionHelpWithID(item.id));
+    }
   };
+
+  const renderHelp = (el: IStaticPage) => (
+    <CommonStyles.Box
+      key={el.id}
+      sx={{ display: 'flex', color: theme.palette.primary.main, gap: 1 }}
+    >
+      <CommonStyles.Typography
+        sx={{ color: theme.palette.primary.main, cursor: 'pointer' }}
+        onClick={() => handleClick(el)}
+      >
+        {el.description}
+      </CommonStyles.Typography>
+      <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <CommonIcons.BookmarkAddOutlinedIcon fontSize='small' />
+      </CommonStyles.Box>
+    </CommonStyles.Box>
+  );
+
+  if (isLoading) {
+    return <CommonStyles.Loading />;
+  }
 
   return (
     <CommonStyles.Box role='presentation' sx={{ width: '40vw', paddingTop: '76px' }}>
@@ -74,8 +80,8 @@ const HelpDrawer = () => {
           width: '100%',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderLeft: '1px solid #ccc',
-          borderBottom: '1px solid #ccc',
+          borderLeft: `1px solid ${theme.colors?.textGray}`,
+          borderBottom: `1px solid ${theme.colors?.textGray}`,
         }}
       >
         <CommonStyles.Typography fontWeight={'bold'}>Help</CommonStyles.Typography>
@@ -83,95 +89,98 @@ const HelpDrawer = () => {
       </CommonStyles.Box>
       <CommonStyles.Box sx={{ margin: '1rem 1.5rem' }}>
         <CommonStyles.Typography mb={1}>Find answers quickly</CommonStyles.Typography>
-        <Formik initialValues={{ search: '' }} onSubmit={function () {}}>
-          {() => {
-            return (
-              <CommonStyles.Box className='component:HeadWithSearching' sx={{}}>
-                <Form>
-                  <Searching nameField='search' placeholder={'How can we help?'} fullWidth />
-                </Form>
-              </CommonStyles.Box>
-            );
-          }}
+        <Formik initialValues={{ search: '' }} onSubmit={(values) => handleSearch(values.search)}>
+          <Form>
+            <Searching nameField='search' placeholder='How can we help?' fullWidth />
+          </Form>
         </Formik>
       </CommonStyles.Box>
-      <CommonStyles.Box mt={2}>
-        <CommonStyles.Typography fontWeight={'bold'} sx={{ marginLeft: '1.5rem' }}>
-          Discover more
-        </CommonStyles.Typography>
-        <CommonStyles.Box
-          sx={{
-            p: 1,
-            display: 'flex',
-            gap: 2,
-            ml: 1,
-            flexWrap: 'nowrap',
-            overflowX: 'auto',
-            '&::-webkit-scrollbar': {
-              display: 'none',
-            },
-            position: 'relative',
-          }}
-        >
-          {data.map((el, ind) => {
-            return <EachSection application={el} key={ind} />;
-          })}
-        </CommonStyles.Box>
-      </CommonStyles.Box>
-      <CommonStyles.Box sx={{ marginLeft: '1.5rem' }}>
-        <CommonStyles.Typography fontWeight={'bold'}>Explore help topics</CommonStyles.Typography>
-        <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
-          {listTopic.map((el) => {
-            return (
-              <CommonStyles.Box key={el} sx={{ display: 'flex', color: '#298784', gap: 1 }}>
-                <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CommonIcons.Brightness1OutlinedIcon sx={{ width: '1rem', height: '1rem' }} />
-                </CommonStyles.Box>
-                <CommonStyles.Typography sx={{ color: '#298784', cursor: 'pointer' }}>
-                  {el}
-                </CommonStyles.Typography>
+      {!isEmpty(topics[Object.keys(topics)[0]]) && (
+        <CommonStyles.Box mt={2}>
+          <CommonStyles.Typography fontWeight={'bold'} sx={{ marginLeft: '1.5rem' }}>
+            Discover more
+          </CommonStyles.Typography>
+          <CommonStyles.Box
+            sx={{
+              p: 1,
+              display: 'flex',
+              gap: 2,
+              ml: 1,
+              flexWrap: 'nowrap',
+              overflowX: 'auto',
+              '&::-webkit-scrollbar': { display: 'none' },
+            }}
+          >
+            {topics[Object.keys(topics)[0]]?.map((el) => (
+              <CommonStyles.Box
+                key={el.id}
+                sx={{
+                  boxShadow:
+                    'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+                  padding: 2,
+                  minWidth: '20rem',
+                  marginY: 2,
+                  borderRadius: '10px',
+                }}
+              >
+                <CommonStyles.Typography fontWeight={'bold'}>{el.title}</CommonStyles.Typography>
+                <CommonStyles.Typography>{el.body}</CommonStyles.Typography>
               </CommonStyles.Box>
-            );
-          })}
-        </CommonStyles.Box>
-        <CommonStyles.Box>
-          <CommonStyles.Typography fontWeight={'bold'}>Help categories</CommonStyles.Typography>
-          <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
-            {listCategories.map((el) => {
-              return (
-                <CommonStyles.Box key={el} sx={{ display: 'flex', color: '#298784', gap: 1 }}>
-                  <CommonStyles.Typography sx={{ color: '#298784', cursor: 'pointer' }}>
-                    {el}
-                  </CommonStyles.Typography>
-                  <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <CommonIcons.BookmarkAddOutlinedIcon fontSize='small' />
-                  </CommonStyles.Box>
-                </CommonStyles.Box>
-              );
-            })}
+            ))}
           </CommonStyles.Box>
         </CommonStyles.Box>
+      )}
+      <CommonStyles.Box sx={{ marginLeft: '1.5rem' }}>
+        {!isEmpty(topics[Object.keys(topics)[1]]) && (
+          <>
+            <CommonStyles.Typography fontWeight={'bold'}>
+              Explore help topics
+            </CommonStyles.Typography>
+            <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
+              {topics[Object.keys(topics)[1]]?.map(renderHelp)}
+            </CommonStyles.Box>
+          </>
+        )}
+        {!isEmpty(topics[Object.keys(topics)[2]]) && (
+          <CommonStyles.Box>
+            <CommonStyles.Typography fontWeight={'bold'}>Help categories</CommonStyles.Typography>
+            <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
+              {topics[Object.keys(topics)[2]]?.map(renderHelp)}
+            </CommonStyles.Box>
+          </CommonStyles.Box>
+        )}
+        {Object.keys(topics)
+          .slice(3)
+          ?.map((topicKey) => (
+            <CommonStyles.Box key={topicKey}>
+              <CommonStyles.Typography fontWeight={'bold'}>{topicKey}</CommonStyles.Typography>
+              <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
+                {topics[topicKey]?.map(renderHelp)}
+              </CommonStyles.Box>
+            </CommonStyles.Box>
+          ))}
       </CommonStyles.Box>
       <CommonStyles.Box
         sx={{
           display: 'flex',
           paddingY: 4,
           paddingX: '1.5rem',
-          borderTop: '1px solid #ccc',
+          borderTop: `1px solid ${theme.colors?.textGray}`,
           justifyContent: 'space-between',
+          mt: 1,
         }}
       >
-        <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', color: '#298784', gap: 1 }}>
-          <CommonStyles.Typography sx={{ color: '#298784', cursor: 'pointer' }}>
+        <CommonStyles.Box
+          sx={{ display: 'flex', alignItems: 'center', color: theme.palette.primary.main, gap: 1 }}
+        >
+          <CommonStyles.Typography sx={{ color: theme.palette.primary.main, cursor: 'pointer' }}>
             Help requests
           </CommonStyles.Typography>
           <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CommonIcons.BookmarkAddOutlinedIcon fontSize='small' />
           </CommonStyles.Box>
         </CommonStyles.Box>
-        <CommonStyles.Box>
-          <CommonStyles.Button variant='outlined'>Live chat</CommonStyles.Button>
-        </CommonStyles.Box>
+        <CommonStyles.Button variant='outlined'>Live chat</CommonStyles.Button>
       </CommonStyles.Box>
     </CommonStyles.Box>
   );

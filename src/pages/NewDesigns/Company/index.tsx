@@ -132,6 +132,26 @@ const Company = () => {
               );
             },
           },
+          {
+            label: 'Color Text',
+            id: 'colorText',
+            Cell: (row) => {
+              const { colorText } = row;
+              return (
+                <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <CommonStyles.Box
+                    sx={{
+                      width: 100,
+                      height: 10,
+                      backgroundColor: colorText,
+                      borderRadius: 999,
+                      border: '1px solid #ccc',
+                    }}
+                  />
+                </CommonStyles.Box>
+              );
+            },
+          },
 
           {
             label: '',

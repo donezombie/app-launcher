@@ -26,17 +26,10 @@ const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
 const App = () => {
   //! State
   const auth = useAuth();
-  const { themeOfApp, setThemeColor } = useSettingsTheme();
-  const colorHeader = auth?.user?.Company?.colorHeader || '';
-  const colorBackground = auth?.user?.Company?.colorBackground || '';
+  const { themeOfApp } = useSettingsTheme();
+
   //! Function
-  useEffect(() => {
-    const newTheme = {
-      header: colorHeader,
-      sideBar: colorBackground,
-    };
-    setThemeColor && setThemeColor(newTheme);
-  }, [auth?.user]);
+
   //! Render
   const renderContent = () => {
     if (auth.loading) {

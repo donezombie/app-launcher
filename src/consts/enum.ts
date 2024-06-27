@@ -106,3 +106,7 @@ export enum CategoryType {
   DEFAULT = 'DEFAULT',
   REPORT = 'REPORT',
 }
+
+export enum StaticPageType {
+  HELP = 'HELP',
+}

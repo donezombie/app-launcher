@@ -141,7 +141,7 @@ const RightSide = () => {
         <SettingCard handleClose={handleClose} />
       </Popover>
       <Drawer anchor='right' open={openDrawer} onClose={() => setOpenDrawer(false)}>
-        <HelpDrawer />
+        <HelpDrawer handleClose={() => setOpenDrawer(false)} />
       </Drawer>
     </CommonStyles.Box>
   );

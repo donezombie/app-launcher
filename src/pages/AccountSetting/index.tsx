@@ -1,21 +1,26 @@
-import React, { Fragment, useMemo } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
-import { Formik, Form, FastField } from 'formik';
-import { Tab, Tabs } from '@mui/material';
-import { a11yProps } from 'helpers';
-import { showError, showSuccess } from 'helpers/toast';
-import { useAuth } from 'providers/AuthenticationProvider';
-import { useUpdateUser, useUpdateUserInfo } from 'hooks/users/useUsersHooks';
-import { useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from 'consts';
+import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
-import SelectField from 'components/CustomFields/SelectField';
+import { FastField, Form, Formik } from 'formik';
+import { showError, showSuccess } from 'helpers/toast';
 import { useGetCompanyList } from 'hooks/company/useCompanyHooks';
-import userService, { RequestUpdateUserInfo } from 'services/userService';
-import httpService from 'services/httpService';
+import { useUpdateUserInfo } from 'hooks/users/useUsersHooks';
+import { useAuth } from 'providers/AuthenticationProvider';
+import React, { Fragment, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import httpService from 'services/httpService';
+import userService, { RequestUpdateUserInfo } from 'services/userService';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+  phone: Yup.string().required('Phone is required field!'),
+  email: Yup.string().required('Email is required field!'),
+  firstName: Yup.string().required('First Name Background is required field!'),
+  lastName: Yup.string().required('Last Name is required field!'),
+});
 
 const AccountSetting = () => {
   //! State
@@ -34,9 +39,8 @@ const AccountSetting = () => {
     }, [resListCompany]) || [];
 
   const initialValues: RequestUpdateUserInfo = {
-    password: user ? user.password : '',
+    // password: user ? user.password : '',
     phone: user ? user.phone : '',
-    phoneCode: '',
     email: user ? user.email : '',
     firstName: user ? user.firstName : '',
     lastName: user ? user.lastName : '',
@@ -53,6 +57,7 @@ const AccountSetting = () => {
     <Fragment>
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           (async () => {
             try {
@@ -117,20 +122,20 @@ const AccountSetting = () => {
                   <CommonStyles.Box
                     sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, mt: 2 }}
                   >
-                    <FastField
+                    {/* <FastField
                       component={TextField}
                       name='password'
                       label='Password'
                       fullWidth
                       required
-                    />
+                    /> */}
                     <CommonStyles.Box>
                       <CommonStyles.Typography
                         component='p'
                         variant='captionLMedium'
                         sx={{ mb: '12px' }}
                       >
-                        Company <span style={{ color: 'red' }}>*</span>
+                        Company
                       </CommonStyles.Typography>
                       <FastField
                         name='companyId'

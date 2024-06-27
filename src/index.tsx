@@ -29,21 +29,21 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <CachedProvider>
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n}>
-        <ToggleThemeProvider>
-          <GlobalStyles
-            styles={{
-              a: {
-                textDecoration: 'none',
-              },
-            }}
-          />
-          <AuthenticationProvider>
+        <AuthenticationProvider>
+          <ToggleThemeProvider>
+            <GlobalStyles
+              styles={{
+                a: {
+                  textDecoration: 'none',
+                },
+              }}
+            />
             <TabHandlerProvider>
               <App />
             </TabHandlerProvider>
-          </AuthenticationProvider>
-          <ToastContainer theme='light' />
-        </ToggleThemeProvider>
+            <ToastContainer theme='light' />
+          </ToggleThemeProvider>
+        </AuthenticationProvider>
       </I18nextProvider>
     </QueryClientProvider>
   </CachedProvider>

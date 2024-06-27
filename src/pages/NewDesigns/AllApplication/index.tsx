@@ -1,24 +1,23 @@
-import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 import CommonIcons, { IconApplication1, IconApplication2 } from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
-import ContentOfSection from './Components/ContentOfSection';
 import EachApplication from 'components/EachApplication';
-import {
-  NUMBER_DEFAULT_PAGE,
-  NUMBER_DEFAULT_ROW_PER_PAGE,
-  PERMISSION_ENUM,
-  SIZE_ICON_DEFAULT,
-} from 'consts';
-import { useAuth } from 'providers/AuthenticationProvider';
+import { SIZE_ICON_DEFAULT } from 'consts';
+import { AppStatus } from 'consts/enum';
+import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import { useGetListApp, useGetListInstalledApp } from 'hooks/app/useAppHooks';
+import { useAuth } from 'providers/AuthenticationProvider';
+import { useMemo } from 'react';
+import ContentOfSection from './Components/ContentOfSection';
 
 interface AllApplicationProps {
   onClickClose: () => void;
 }
 
-const initialValues = {};
+const initialValues = {
+  canAccess: true,
+  isLive: true,
+  status: AppStatus.APPROVED,
+};
 
 const AllApplicationDialog = (props: AllApplicationProps) => {
   const { onClickClose } = props;
@@ -27,15 +26,11 @@ const AllApplicationDialog = (props: AllApplicationProps) => {
   const { user, isAdmin, isUser } = useAuth();
 
   const { filters } = useFiltersHandler(initialValues);
-  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListApp({
-    ...filters,
-    myApp: true,
-  });
   const { data: resListApp, isLoading } = useGetListApp(filters);
   const dataInstallApp =
     useMemo(() => {
-      return isAdmin ? resListApp?.data?.data?.items : resListInstalledApp?.data?.data?.items;
-    }, [resListApp, resListInstalledApp]) || [];
+      return resListApp?.data?.data?.items;
+    }, [resListApp]) || [];
 
   //! Function
 
@@ -53,7 +48,7 @@ const AllApplicationDialog = (props: AllApplicationProps) => {
         />
       </CommonStyles.Box>
       <ContentOfSection>
-        {isInstalledLoading || isLoading ? (
+        {isLoading ? (
           <CommonStyles.Loading />
         ) : (
           dataInstallApp

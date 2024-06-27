@@ -66,6 +66,7 @@ export interface RequestPagingCommon {
   categoryId?: number;
   isLive?: boolean;
   myApp?: boolean;
+  canAccess?: boolean | null;
 }
 
 export interface ResponsePagingCommon<T> {
