@@ -4,21 +4,26 @@ import DialogContent from '@mui/material/DialogContent';
 import { useQueryClient } from '@tanstack/react-query';
 import CommonStyles from 'components/CommonStyles';
 import UploadField from 'components/CommonStyles/UploadField';
+import AutoCompleteField from 'components/CustomFields/AutoCompleteField';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
 import { queryKeys } from 'consts';
 import { AppType, NewsType } from 'consts/enum';
 import { FastField, Form, Formik, FormikValues } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
+import { useGetListApp } from 'hooks/app/useAppHooks';
 import { useCreateNews, useUpdateNew } from 'hooks/news/useNewsHooks';
 import { DialogI } from 'interfaces/common';
 import { News } from 'interfaces/news';
+import { isEmpty } from 'lodash';
+import { useMemo } from 'react';
 import { RequestCreateNews } from 'services/newsServices';
 import userService from 'services/userService';
 import * as Yup from 'yup';
 
 interface Props extends DialogI<RequestCreateNews> {
   item?: News;
+  isRecent?: boolean;
 }
 
 const validateAddNew = Yup.object().shape({
@@ -32,10 +37,21 @@ const validateAddNew = Yup.object().shape({
 
 const DialogAddNews = (props: Props) => {
   //! State
-  const { isOpen, toggle, item } = props;
+  const { isOpen, toggle, item, isRecent } = props;
   const { mutateAsync: createNew } = useCreateNews();
   const { mutateAsync: updateNew } = useUpdateNew();
   const queryClient = useQueryClient();
+
+  const { data: resListApp, isLoading } = useGetListApp({});
+  const data =
+    useMemo(() => {
+      return resListApp?.data?.data?.items;
+    }, [resListApp]) || [];
+
+  const setTitle = () => {
+    if (isEdit) return isRecent ? 'Edit Recent Activity' : 'Edit News';
+    return isRecent ? 'Add Recent Activity' : 'Add News';
+  };
 
   const initialValues = {
     title: item ? item?.title : '',
@@ -43,14 +59,37 @@ const DialogAddNews = (props: Props) => {
     thumbUrl: item ? item?.thumbUrl : '',
     type: item ? item.type : NewsType.NEWS,
     directDetail: item ? item.directDetail : '',
+    appId: item
+      ? isRecent
+        ? item?.SpecificNews.map((el) => {
+            return {
+              key: el.appId,
+              label: data?.find((app) => app.id === el.appId)?.name,
+              value: el.appId,
+            };
+          })
+        : item?.appId
+      : undefined,
   };
 
   const isEdit = !!item?.id;
 
-  const optionTypes = Object.values(NewsType).map((el) => ({
-    key: el,
-    label: el,
-    value: el,
+  const optionTypes = Object.values(NewsType)
+    .filter(
+      isRecent
+        ? (el) => el === NewsType.ACTIVITY
+        : (el) => el === NewsType.NEWS || el === NewsType.DIRECT
+    )
+    .map((el) => ({
+      key: el,
+      label: el,
+      value: el,
+    }));
+
+  const optionApps = data?.map((el) => ({
+    key: el.id,
+    label: el.name,
+    value: el.id,
   }));
 
   const handleUpload = async (
@@ -77,7 +116,12 @@ const DialogAddNews = (props: Props) => {
         (async () => {
           try {
             setSubmitting(true);
-            isEdit ? await updateNew({ id: item?.id, body: values }) : await createNew(values);
+            const objBody = {
+              ...values,
+              appId: values.appId?.map((el: any) => el.value).join(','),
+            };
+            if (!isRecent) delete objBody.appId;
+            isEdit ? await updateNew({ id: item?.id, body: objBody }) : await createNew(objBody);
             toggle();
             showSuccess(isEdit ? 'Edit news successfully!' : 'Add news successfully!');
             setSubmitting(false);
@@ -96,7 +140,7 @@ const DialogAddNews = (props: Props) => {
               <Form>
                 <CommonStyles.Box>
                   <CommonStyles.Typography variant='h5' sx={{ mb: 3 }}>
-                    Add News
+                    {setTitle()}
                   </CommonStyles.Typography>
                   <CommonStyles.Box
                     sx={{
@@ -138,6 +182,32 @@ const DialogAddNews = (props: Props) => {
                       fullWidth
                       sx={{ height: '42px' }}
                     />
+                    {isRecent && (
+                      <>
+                        <CommonStyles.Typography
+                          component='p'
+                          variant='captionLMedium'
+                          sx={{ mb: 1.5, mt: 1 }}
+                        >
+                          App
+                        </CommonStyles.Typography>
+                        <FastField
+                          component={AutoCompleteField}
+                          name='appId'
+                          loading={isLoading}
+                          label='Choose App'
+                          optionsArg={optionApps || []}
+                          fullWidth
+                          multiple
+                          sx={{ height: '42px' }}
+                          loadOptions={(text: string, setOptions: any, setLoading: any) => {
+                            setLoading(true);
+                            setOptions(optionApps);
+                            setLoading(false);
+                          }}
+                        />
+                      </>
+                    )}
                     <FastField
                       component={TextField}
                       name='directDetail'

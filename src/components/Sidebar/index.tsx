@@ -145,6 +145,13 @@ const Sidebar = () => {
       path: BaseUrl.Company.Index,
       show: isAdmin,
     },
+    {
+      id: uniqueId('side-bar'),
+      label: 'Recent Activity',
+      icon: CommonIcons.Company,
+      path: BaseUrl.RecentActivity.Index,
+      show: isAdmin,
+    },
   ];
 
   //! Function

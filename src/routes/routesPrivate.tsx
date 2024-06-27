@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import React, { lazy } from 'react';
 import BaseUrl from 'consts/baseUrl';
 import withCheckRole from 'HOCs/withCheckRole';
 import { PERMISSION_ENUM } from 'consts/index';
@@ -64,6 +64,9 @@ const DetailReport = lazy(
 );
 const CompanyManagement = lazy(() => import('pages/NewDesigns/Company'));
 const AddCompany = lazy(() => import('pages/NewDesigns/Company/Components/AddEditCompany'));
+
+//! Recent Activity
+const RecentActivity = lazy(() => import('pages/NewDesigns/RecentActivity'));
 
 const routes: Route[] = [
   {
@@ -307,6 +310,12 @@ const routes: Route[] = [
         name: 'Edit Company',
         path: BaseUrl.Company.Edit,
         component: withCheckRole(AddCompany, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Recent Activity',
+        path: BaseUrl.RecentActivity.Index,
+        component: withCheckRole(RecentActivity, [PERMISSION_ENUM.ADMIN]),
         isPrivateRoute: true,
       },
     ],

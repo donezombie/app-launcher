@@ -58,7 +58,7 @@ function AutoCompleteField(props: Props) {
   const value = field?.value || restProps?.value;
   const onBlur = field?.onBlur || restProps?.onBlur;
   //   const { errors, touched } = form || {};
-
+  console.log('lplp', value);
   //! Function
   React.useEffect(() => {
     let active = true;
