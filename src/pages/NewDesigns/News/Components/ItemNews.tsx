@@ -9,11 +9,12 @@ import DialogDeleteNew from './DialogDeleteNew';
 
 interface ItemNewsProps {
   item: any;
+  isRecent?: boolean;
 }
 
 const sizeAva = 36;
 const ItemNews = (props: ItemNewsProps) => {
-  const { item } = props;
+  const { item, isRecent } = props;
   //! State
   const theme = useTheme();
   const {
@@ -71,7 +72,12 @@ const ItemNews = (props: ItemNewsProps) => {
       </CommonStyles.Box>
 
       {shouldRenderDialogEdit && (
-        <DialogAddNews isOpen={openDialogEdit} toggle={toggleDialogEdit} item={item} />
+        <DialogAddNews
+          isOpen={openDialogEdit}
+          toggle={toggleDialogEdit}
+          item={item}
+          isRecent={isRecent}
+        />
       )}
       {shouldRenderDialogDelete && (
         <DialogDeleteNew isOpen={openDialogDelete} toggle={toggleDialogDelete} item={item} />

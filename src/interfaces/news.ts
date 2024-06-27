@@ -8,4 +8,14 @@ export interface News {
   isNew?: boolean;
   type: AppType;
   directDetail: string;
+  SpecificNews: SpecificNews[];
+  appId: string[];
+}
+
+export interface SpecificNews {
+  id: number;
+  newsId: number;
+  appId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

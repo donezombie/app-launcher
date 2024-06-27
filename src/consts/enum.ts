@@ -95,6 +95,7 @@ export enum ServiceStatus {
 export enum NewsType {
   NEWS = 'NEWS',
   DIRECT = 'DIRECT',
+  ACTIVITY = 'ACTIVITY',
 }
 
 export enum ReportType {

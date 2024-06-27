@@ -76,6 +76,10 @@ const BaseUrl = {
     DetailWithID: (id: string | number) => `/apps/apps/company/edit/${id}`,
   },
   AccountSetting: '/apps/account-setting',
+
+  RecentActivity: {
+    Index: '/apps/recent-activity',
+  },
 };
 
 export default BaseUrl;
