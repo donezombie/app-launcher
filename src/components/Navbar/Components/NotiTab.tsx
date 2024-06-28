@@ -5,13 +5,11 @@ import useFiltersHandler from 'hooks/useFiltersHandler';
 import { News } from 'interfaces/news';
 import ItemNews from 'pages/NewDesigns/News/Components/ItemNews';
 
-interface NotiTabProps {}
-
 const initialValues = {
   type: NewsType.DIRECT,
 };
 
-const NotiTab = (props: NotiTabProps) => {
+const NotiTab = () => {
   //! State
   const { filters } = useFiltersHandler(initialValues);
 

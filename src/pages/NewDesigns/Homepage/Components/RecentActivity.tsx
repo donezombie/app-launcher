@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import TextField from 'components/CustomFields/TextField';
@@ -22,8 +21,6 @@ const initialValues = {
 
 const RecentActivity = () => {
   //! State
-  const theme = useTheme();
-
   const {
     filters,
     selected,
@@ -79,10 +76,6 @@ const RecentActivity = () => {
 
   //! Render
 
-  if (isLoading) {
-    return <CommonStyles.Loading />;
-  }
-
   const renderSearch = useMemo(() => {
     return (
       <Formik initialValues={{ search: '' }} onSubmit={() => {}}>
@@ -107,21 +100,25 @@ const RecentActivity = () => {
     <CommonStyles.Box className='component:RecentActivity'>
       <HeadEachSection title='Recent Activity' subTitle={renderSearch} />
       <CommonStyles.Box sx={{ mt: 5 }}>
-        <CommonStyles.Table
-          order={filters?.order || Order.desc}
-          orderBy={filters?.orderBy}
-          selected={selected}
-          page={filters?.page || 0}
-          rowsPerPage={filters?.rowsPerPage || 5}
-          headCells={headCells}
-          totalCount={10}
-          rows={data || []}
-          handleChangePage={handleChangePage}
-          handleChangeRowsPerPage={handleChangeRowsPerPage}
-          handleRequestSort={handleRequestSort}
-          handleSelectAllClick={handleSelectAllClick}
-          noPagination
-        />
+        {isLoading ? (
+          <CommonStyles.Loading />
+        ) : (
+          <CommonStyles.Table
+            order={filters?.order || Order.desc}
+            orderBy={filters?.orderBy}
+            selected={selected}
+            page={filters?.page || 0}
+            rowsPerPage={filters?.rowsPerPage || 5}
+            headCells={headCells}
+            totalCount={10}
+            rows={data || []}
+            handleChangePage={handleChangePage}
+            handleChangeRowsPerPage={handleChangeRowsPerPage}
+            handleRequestSort={handleRequestSort}
+            handleSelectAllClick={handleSelectAllClick}
+            noPagination
+          />
+        )}
       </CommonStyles.Box>
     </CommonStyles.Box>
   );
