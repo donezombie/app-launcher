@@ -123,6 +123,7 @@ interface TableCommonProps<T> {
   isLoading?: boolean;
   // index row
   invisibleCheckBox?: number[];
+  noPagination?: boolean;
 }
 
 function TableCommon<T>({
@@ -143,6 +144,7 @@ function TableCommon<T>({
   handleSelectAllClick,
   handleRequestSort,
   handleChangeRowsPerPage,
+  noPagination,
 }: TableCommonProps<T>) {
   const theme = useTheme();
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
@@ -279,16 +281,17 @@ function TableCommon<T>({
             </TableBody>
           </Table>
         </TableContainer>
-
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component='div'
-          count={totalCount}
-          rowsPerPage={rowsPerPage}
-          page={page - 1}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {!noPagination && (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component='div'
+            count={totalCount}
+            rowsPerPage={rowsPerPage}
+            page={page - 1}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
       </Paper>
     </Box>
   );

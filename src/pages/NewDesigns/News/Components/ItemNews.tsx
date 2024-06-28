@@ -10,11 +10,12 @@ import DialogDeleteNew from './DialogDeleteNew';
 interface ItemNewsProps {
   item: any;
   isRecent?: boolean;
+  noStatusIcon?: boolean;
 }
 
 const sizeAva = 36;
 const ItemNews = (props: ItemNewsProps) => {
-  const { item, isRecent } = props;
+  const { item, isRecent, noStatusIcon } = props;
   //! State
   const theme = useTheme();
   const {
@@ -55,20 +56,22 @@ const ItemNews = (props: ItemNewsProps) => {
             {item?.body}
           </CommonStyles.Typography>
         </CommonStyles.Box>
-        <CommonStyles.Box
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
-        >
-          <CommonIcons.RiEditLine
-            size={SIZE_ICON_DEFAULT - 4}
-            style={{ marginRight: 12, cursor: 'pointer' }}
-            onClick={toggleDialogEdit}
-          />
-          <CommonIcons.RiDeleteBin7Line
-            size={SIZE_ICON_DEFAULT - 4}
-            style={{ cursor: 'pointer' }}
-            onClick={toggleDialogDelete}
-          />
-        </CommonStyles.Box>
+        {!noStatusIcon && (
+          <CommonStyles.Box
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+          >
+            <CommonIcons.RiEditLine
+              size={SIZE_ICON_DEFAULT - 4}
+              style={{ marginRight: 12, cursor: 'pointer' }}
+              onClick={toggleDialogEdit}
+            />
+            <CommonIcons.RiDeleteBin7Line
+              size={SIZE_ICON_DEFAULT - 4}
+              style={{ cursor: 'pointer' }}
+              onClick={toggleDialogDelete}
+            />
+          </CommonStyles.Box>
+        )}
       </CommonStyles.Box>
 
       {shouldRenderDialogEdit && (
