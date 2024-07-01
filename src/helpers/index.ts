@@ -3,6 +3,7 @@ import { isString } from 'lodash';
 import moment from 'moment';
 import userService from 'services/userService';
 import { showError, showSuccess } from './toast';
+import { AppType } from 'consts/enum';
 export function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -120,3 +121,7 @@ export const handleUpload = async (
     showError(error);
   }
 };
+
+export const filterAppType = Object.values(AppType)
+  .filter((el) => el !== AppType.REPORT)
+  .join(',');

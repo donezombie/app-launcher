@@ -13,6 +13,7 @@ const BaseUrl = {
   AppDetail: '/apps/detail/:id',
   AppDetailWithID: (id: string) => `/apps/detail/${id}`,
   AppsManagement: 'apps/apps-management',
+  ReportManagement: 'apps/report-management',
   CategoryManagement: 'apps/category-management',
 
   CreateApp: '/create-app',
@@ -23,14 +24,25 @@ const BaseUrl = {
 
   Apps: '/apps',
   Marketplace: {
-    Index: '/apps/marketplace',
+    Index: `/apps/marketplace/`,
     Products: '/apps/marketplace/products',
     Quote: '/apps/marketplace/quote',
     Info: '/apps/marketplace/app/:id',
     InfoWithID: (id: string | number) => `/apps/marketplace/app/${id}`,
 
     AppMarketPlace: '/apps/marketplace/list',
-    AppMarketPlaceWithID: (id: string) => `/apps/marketplace/list?category=${id}`,
+    AppMarketPlaceWithID: (id: string, type?: string) =>
+      `/apps/marketplace/list?category=${id}&type=${type}`,
+  },
+  ReportApp: {
+    Index: `/apps/report/`,
+    Products: '/apps/report/products',
+    Quote: '/apps/report/quote',
+    Info: '/apps/report/app/:id',
+    InfoWithID: (id: string | number) => `/apps/report/app/${id}`,
+
+    AppReport: '/apps/report/list',
+    AppReportWithId: (id: string, type?: string) => `/apps/report/list?category=${id}&type=${type}`,
   },
 
   Setting: {
@@ -43,11 +55,19 @@ const BaseUrl = {
     DetailWithID: (id: string | number) => `/apps/my-apps/${id}`,
   },
 
+  MyReport: {
+    Index: '/apps/my-reports',
+    Detail: '/apps/my-reports/:id',
+    DetailWithID: (id: string | number) => `/apps/my-reports/${id}`,
+  },
+
   Develop: {
     Index: '/apps/develop',
     UploadApps: '/apps/develop/upload-apps',
     ManageYourApps: '/apps/develop/manage-apps',
+    ManageYourReport: '/apps/develop/manage-report',
     UploadReport: '/apps/develop/upload-report',
+    EditReport: `/apps/develop/edit-report/:id`,
   },
   Notification: {
     Index: '/apps/notification',

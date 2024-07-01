@@ -1,9 +1,8 @@
 import CommonStyles from 'components/CommonStyles';
 import TextField from 'components/CustomFields/TextField';
 import SearchAndFilters from 'components/SearchAndFilters';
-import { SortOrder } from 'consts/enum';
+import { AppType, SortOrder } from 'consts/enum';
 import { FastField } from 'formik';
-import { filterAppType } from 'helpers';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { Order } from 'interfaces/common';
@@ -18,9 +17,10 @@ const initialValues = {
   textSearch: '',
   sortOrder: SortOrder.ASC,
   sortField: 'createdAt',
+  type: AppType.REPORT,
 };
 
-const AppsManagement = () => {
+const ReportsManagement = () => {
   //! State
   const {
     filters,
@@ -34,7 +34,7 @@ const AppsManagement = () => {
   } = useFiltersHandler(initialValues);
 
   //! Function
-  const { data: resListApp, isLoading } = useGetListApp({ ...filters, type: filterAppType });
+  const { data: resListApp, isLoading } = useGetListApp(filters);
   const data =
     useMemo(() => {
       return resListApp?.data?.data?.items;
@@ -44,7 +44,7 @@ const AppsManagement = () => {
   //! Render
   return (
     <CommonStyles.Box
-      className='component:AppsManagement'
+      className='component:ReportManagement'
       sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
     >
       <SearchAndFilters
@@ -128,4 +128,4 @@ const AppsManagement = () => {
   );
 };
 
-export default AppsManagement;
+export default ReportsManagement;

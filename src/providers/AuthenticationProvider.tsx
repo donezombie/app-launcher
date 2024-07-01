@@ -157,7 +157,7 @@ const AuthenticationProvider = ({ children }: { children: any }) => {
 
   const logout = useCallback(async () => {
     try {
-      await logoutUser(token || '');
+      // await logoutUser(token || '');
       authService.removeUser();
       window.location.href = LOGOUT_REDIRECT_URI;
 

@@ -1,30 +1,23 @@
-import CommonStyles from 'components/CommonStyles';
-import ButtonBack from 'components/ButtonBack';
 import { Rating, useTheme } from '@mui/material';
-import HeadWithSearching from 'components/HeadWithSearching';
+import ButtonBack from 'components/ButtonBack';
+import CommonStyles from 'components/CommonStyles';
 import EachReview from 'components/EachReview';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useGetAppIntegrationDetail, useInstallApp } from 'hooks/app/useAppHooks';
-import { useMemo, useState } from 'react';
-import { showError, showSuccess } from 'helpers/toast';
-import Launcher from 'pages/Launcher';
+import HeadWithSearching from 'components/HeadWithSearching';
 import BaseUrl from 'consts/baseUrl';
-import { useTabHandler } from 'providers/TabHandlerProvider';
 import { convertStringToArrayWithComma } from 'helpers';
+import { useGetAppIntegrationDetail } from 'hooks/app/useAppHooks';
+import Launcher from 'pages/Launcher';
+import { useTabHandler } from 'providers/TabHandlerProvider';
+import { useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const InfoApp = () => {
+const InfoAppReport = () => {
   //! State
-  const [loading, setLoading] = useState(false);
-  const { mutateAsync: installApp } = useInstallApp();
   const theme = useTheme();
   const { id } = useParams();
   const navigate = useNavigate();
   const { addNewTab } = useTabHandler();
-  const {
-    data: resDetailApp,
-    isLoading: isLoadingApp,
-    refetch,
-  } = useGetAppIntegrationDetail(id || '');
+  const { data: resDetailApp, isLoading: isLoadingApp } = useGetAppIntegrationDetail(id || '');
 
   const detailData = useMemo(() => {
     return resDetailApp?.data?.data;
@@ -32,18 +25,6 @@ const InfoApp = () => {
   const tagsData = convertStringToArrayWithComma(detailData?.tags || '');
   const reviewsData = detailData?.reviews || [];
   //! Function
-  const onClickInstall = async () => {
-    try {
-      setLoading(true);
-      await installApp({ id: id || '' });
-      refetch();
-      showSuccess('Install app successfully!');
-      setLoading(false);
-    } catch (error) {
-      showError(error);
-      setLoading(false);
-    }
-  };
 
   const onClickLaunch = () => {
     navigate(BaseUrl.Launcher.AppWithdDetail(detailData.launchUri, detailData.id));
@@ -67,15 +48,6 @@ const InfoApp = () => {
         <CommonStyles.Button onClick={onClickLaunch}>Launch</CommonStyles.Button>
       </CommonStyles.Box>
     );
-    // if (detailData?.isInstalled) {
-    // }
-    // return (
-    //   <CommonStyles.Box>
-    //     <CommonStyles.Button onClick={onClickInstall} loading={loading}>
-    //       Install
-    //     </CommonStyles.Button>
-    //   </CommonStyles.Box>
-    // );
   };
 
   const renderImage = () => {
@@ -141,7 +113,6 @@ const InfoApp = () => {
           />
         </CommonStyles.Box>
 
-        {/* Action */}
         {renderAction()}
 
         <CommonStyles.Box
@@ -162,7 +133,7 @@ const InfoApp = () => {
 
   return (
     <CommonStyles.Box
-      className='component:InfoApp'
+      className='component:InfoAppReport'
       sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
     >
       <ButtonBack />
@@ -213,4 +184,4 @@ const InfoApp = () => {
   );
 };
 
-export default InfoApp;
+export default InfoAppReport;

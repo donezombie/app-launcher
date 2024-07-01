@@ -1,8 +1,7 @@
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
-import { AppStatus } from 'consts/enum';
-import { filterAppType } from 'helpers';
+import { AppStatus, AppType } from 'consts/enum';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import { useGetDetailCategory } from 'hooks/category/useGetDetailCategory';
 import useFiltersHandler from 'hooks/useFiltersHandler';
@@ -18,7 +17,7 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-const DetailApp = () => {
+const DetailAppReport = () => {
   //! State
   const query = useQuery();
   const category = query.get('category');
@@ -30,7 +29,7 @@ const DetailApp = () => {
   const { data: resListApp, isLoading } = useGetListApp({
     ...filters,
     categoryId: category ? +category : undefined,
-    type: filterAppType,
+    type: AppType.REPORT,
   });
   const listAppFilter =
     useMemo(() => {
@@ -41,7 +40,7 @@ const DetailApp = () => {
   //! Render
   return (
     <CommonStyles.Box
-      className='component:DetailApp'
+      className='component:DetailAppReport'
       sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
     >
       <CommonStyles.Box>
@@ -53,9 +52,9 @@ const DetailApp = () => {
         />
       </CommonStyles.Box>
 
-      {isLoading ? <CommonStyles.Loading /> : <ListApp apps={listAppFilter} />}
+      {isLoading ? <CommonStyles.Loading /> : <ListApp apps={listAppFilter} isReport />}
     </CommonStyles.Box>
   );
 };
 
-export default DetailApp;
+export default DetailAppReport;

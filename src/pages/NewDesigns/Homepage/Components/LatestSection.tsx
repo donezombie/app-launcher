@@ -13,7 +13,7 @@ import { NewsType } from 'consts/enum';
 const initialValues = {
   search: '',
   page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: 15,
+  perPage: 15,
   order: Order.desc,
   orderBy: '',
   type: NewsType.NEWS,
@@ -22,10 +22,9 @@ const initialValues = {
 const LatestSection = () => {
   //! State
 
-  const { filters, setFilters, handleResetToInitial, handleSearch } =
-    useFiltersHandler(initialValues);
+  const { filters } = useFiltersHandler(initialValues);
 
-  const { data: resData, isLoading, refetch: refetchListNews } = useGetNewsListHooks(filters);
+  const { data: resData, isLoading } = useGetNewsListHooks(filters);
 
   const data = resData?.data?.data?.items || [];
 

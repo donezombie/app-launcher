@@ -63,7 +63,7 @@ function useFiltersHandler<T>(initialFilters: T & CommonFilters) {
       if (prev) {
         return {
           ...prev,
-          rowsPerPage: parseInt(event.target.value, 10),
+          perPage: parseInt(event.target.value, 10),
           page: 0,
         };
       }

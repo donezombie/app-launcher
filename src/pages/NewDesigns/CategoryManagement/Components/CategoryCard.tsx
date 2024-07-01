@@ -14,7 +14,7 @@ interface CategoryCardProps {
     SetStateAction<
       {
         page: number;
-        perPage: number;
+        perPage?: number;
         textSearch: string;
         sortOrder: SortOrder;
         sortField: string;

@@ -1,15 +1,14 @@
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
-import CategoryCard from './Components/CategoryCard';
-import { useGetCategoryList } from 'hooks/category/useGetListCategory';
-import { useMemo } from 'react';
 import { CategoryType, SortOrder } from 'consts/enum';
+import { useGetCategoryList } from 'hooks/category/useGetListCategory';
 import useFiltersHandler from 'hooks/useFiltersHandler';
-import { cloneDeep } from 'lodash';
+import { useMemo } from 'react';
+import CategoryCard from './Components/CategoryCard';
 
 const initialValues = {
   page: 1,
-  perPage: 999,
+  // perPage: 999,
   textSearch: '',
   sortOrder: SortOrder.ASC,
   sortField: 'createdAt',

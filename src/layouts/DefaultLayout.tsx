@@ -197,6 +197,7 @@ const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
             margin: 'auto',
             paddingTop: `${(theme.sizes?.heightNavbar || 0) + 8 * 3}px`,
             px: 2,
+            overflowX: 'hidden',
           }}
         >
           {children}

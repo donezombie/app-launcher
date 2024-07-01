@@ -1,15 +1,15 @@
-import { CircularProgress, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import BaseUrl from 'consts/baseUrl';
+import { AppType, CategoryType } from 'consts/enum';
 import { useGetCategoryList } from 'hooks/category/useGetListCategory';
+import useFiltersHandler from 'hooks/useFiltersHandler';
 import { Category } from 'interfaces/category';
 import { uniqueId } from 'lodash';
 import { useAuth } from 'providers/AuthenticationProvider';
 import { useSearchParams } from 'react-router-dom';
 import EachItemSidebar from './EachItemSidebar';
-import { CategoryType } from 'consts/enum';
-import useFiltersHandler from 'hooks/useFiltersHandler';
 
 const initialValues = {
   categoryType: CategoryType.DEFAULT,
@@ -21,7 +21,11 @@ const Sidebar = () => {
   const { isAdmin, isUser, isAppManager } = useAuth();
   const { filters, handleSearch } = useFiltersHandler(initialValues);
   const { data: category, isLoading: isLoadingList } = useGetCategoryList(filters);
+  const { data: categoryReport, isLoading: isLoadingListReport } = useGetCategoryList({
+    categoryType: CategoryType.REPORT,
+  });
   const data = category?.data?.data?.items;
+  const dataReport = categoryReport?.data?.data?.items;
   const [searchParams] = useSearchParams({ category: '' });
   const childrenCategory = data || ([] as Category[]);
   const categoryFromURL = searchParams.get('category');
@@ -59,7 +63,23 @@ const Sidebar = () => {
         return {
           key: item.id,
           label: item.name,
-          path: BaseUrl.Marketplace.AppMarketPlaceWithID(String(item.id)),
+          path: BaseUrl.Marketplace.AppMarketPlaceWithID(String(item.id), AppType.WEB_HOOK),
+          showChildren: isAdmin || isUser || isAppManager,
+          forceActive: categoryFromURL === String(item.id),
+        };
+      }),
+    },
+    {
+      id: uniqueId('side-bar'),
+      label: 'Report Apps',
+      icon: CommonIcons.ReportIcon,
+      path: BaseUrl.ReportApp.Index,
+      show: isAdmin || isAppManager || isUser,
+      children: dataReport?.map((item: Category) => {
+        return {
+          key: item.id,
+          label: item.name,
+          path: BaseUrl.ReportApp.AppReportWithId(String(item.id), AppType.REPORT),
           showChildren: isAdmin || isUser || isAppManager,
           forceActive: categoryFromURL === String(item.id),
         };
@@ -70,6 +90,13 @@ const Sidebar = () => {
       label: 'My Apps',
       icon: CommonIcons.SparkesIcon,
       path: BaseUrl.MyApps.Index,
+      show: isAdmin || isUser || isAppManager,
+    },
+    {
+      id: uniqueId('side-bar'),
+      label: 'My Reports',
+      icon: CommonIcons.SparkesIcon,
+      path: BaseUrl.MyReport.Index,
       show: isAdmin || isUser || isAppManager,
     },
     {
@@ -101,6 +128,11 @@ const Sidebar = () => {
           path: BaseUrl.Develop.ManageYourApps,
           showChildren: isAdmin || isAppManager,
         },
+        {
+          label: 'Manage Your Report',
+          path: BaseUrl.Develop.ManageYourReport,
+          showChildren: isAdmin || isAppManager,
+        },
       ],
     },
     {
@@ -126,18 +158,19 @@ const Sidebar = () => {
     },
     {
       id: uniqueId('side-bar'),
+      label: 'Report Management',
+      icon: CommonIcons.BagHandleIcon,
+      path: BaseUrl.ReportManagement,
+      show: isAdmin,
+    },
+    {
+      id: uniqueId('side-bar'),
       label: 'Category Management',
       icon: CommonIcons.IoListOutline,
       path: BaseUrl.CategoryManagement,
       show: isAdmin,
     },
-    {
-      id: uniqueId('side-bar'),
-      label: 'Report Apps',
-      icon: CommonIcons.ReportIcon,
-      path: BaseUrl.Report.Index,
-      show: isAdmin || isUser || isAppManager,
-    },
+
     {
       id: uniqueId('side-bar'),
       label: 'Company Management',
@@ -162,7 +195,7 @@ const Sidebar = () => {
   ];
 
   //! Function
-  if (isLoadingList) {
+  if (isLoadingList || isLoadingListReport) {
     return <CommonStyles.Loading />;
   }
   //! Render

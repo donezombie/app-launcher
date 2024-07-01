@@ -1,51 +1,52 @@
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
-import { NUMBER_DEFAULT_PAGE } from 'consts';
-import { filterAppType } from 'helpers';
+import { AppStatus, AppType } from 'consts/enum';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { useMemo } from 'react';
 
 const initialValues = {
-  page: NUMBER_DEFAULT_PAGE,
-  // rowsPerPage: 999,
+  page: 1,
+  // perPage: 999,
   textSearch: '',
-  myApp: true,
+  canAccess: true,
+  status: AppStatus.APPROVED,
+  type: AppType.REPORT,
 };
 
-const ManageYourApps = () => {
+const MyReports = () => {
   //! State
   const { filters, handleSearch } = useFiltersHandler(initialValues);
-
-  const { data: resListApp, isLoading: isCreatedLoading } = useGetListApp({
-    ...filters,
-    type: filterAppType,
-  });
+  const { data: resListInstalledApp, isLoading: isInstalledLoading } = useGetListApp(filters);
   const dataInstallApp =
     useMemo(() => {
-      return resListApp?.data?.data?.items;
-    }, [isCreatedLoading]) || [];
+      return resListInstalledApp?.data?.data?.items;
+    }, [isInstalledLoading]) || [];
 
   //! Function
 
   //! Render
   return (
     <CommonStyles.Box
-      className='component:ManageYourApps'
-      sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
+      className='component:Quote'
+      sx={{ display: 'flex', gap: 3, flexDirection: 'column' }}
     >
       <HeadWithSearching
-        title='Manage Your Apps'
+        title='My Apps'
         onSubmitSearch={({ search }) => {
           handleSearch(search);
         }}
         placeholder='Search App...'
       />
 
-      {isCreatedLoading ? <CommonStyles.Loading /> : <ListApp apps={dataInstallApp} isYourApp />}
+      {isInstalledLoading ? (
+        <CommonStyles.Loading />
+      ) : (
+        <ListApp apps={dataInstallApp} isMyApps isReport />
+      )}
     </CommonStyles.Box>
   );
 };
 
-export default ManageYourApps;
+export default MyReports;

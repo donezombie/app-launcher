@@ -13,7 +13,7 @@ import HeadEachSection from './HeaderOfSection';
 const initialValues = {
   search: '',
   page: 0,
-  rowsPerPage: 5,
+  perPage: 5,
   order: Order.asc,
   orderBy: 'CreatedDate',
   type: NewsType.ACTIVITY,

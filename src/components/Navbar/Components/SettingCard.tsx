@@ -41,12 +41,12 @@ const SettingCard = ({ handleClose }: { handleClose: () => void }) => {
     //   icon: <CommonIcons.SettingsIcon />,
     //   onClick: () => {},
     // },
-    {
-      id: 4,
-      label: 'Logout',
-      icon: <CommonIcons.LogoutIcon sx={{ width: 20, height: 20 }} />,
-      onClick: () => auth.logout(),
-    },
+    // {
+    //   id: 4,
+    //   label: 'Logout',
+    //   icon: <CommonIcons.LogoutIcon sx={{ width: 20, height: 20 }} />,
+    //   onClick: () => auth.logout(),
+    // },
   ];
   return (
     <CommonStyles.Box>
