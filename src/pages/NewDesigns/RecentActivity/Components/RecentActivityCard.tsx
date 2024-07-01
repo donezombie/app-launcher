@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
-import { Order } from 'interfaces/common';
-import { NewsType } from 'consts/enum';
-import { upperFirst } from 'lodash';
-import useToggleDialog from 'hooks/useToggleDialog';
-import useFiltersHandler from 'hooks/useFiltersHandler';
 import HeadWithSearching from 'components/HeadWithSearching';
+import { NewsType } from 'consts/enum';
 import { useGetNewsListHooks } from 'hooks/news/useNewsHooks';
-import ItemNews from 'pages/NewDesigns/News/Components/ItemNews';
-import DialogAddNews from 'pages/NewDesigns/News/Components/DialogAddNews';
+import useFiltersHandler from 'hooks/useFiltersHandler';
+import useToggleDialog from 'hooks/useToggleDialog';
+import { Order } from 'interfaces/common';
 import { News } from 'interfaces/news';
+import { upperFirst } from 'lodash';
+import DialogAddNews from 'pages/NewDesigns/News/Components/DialogAddNews';
+import ItemNews from 'pages/NewDesigns/News/Components/ItemNews';
 
 interface RecentActivityCardProps {}
 
