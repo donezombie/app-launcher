@@ -8,42 +8,49 @@ import BaseUrl from 'consts/baseUrl';
 import { AppStatus, UserAppStatus } from 'consts/enum';
 import { Field, Formik, FormikValues } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
-import {
-  useCreateApproval,
-  useInstallApp,
-  useSetLiveApp,
-  useUninstallApp,
-} from 'hooks/app/useAppHooks';
+import { useCreateApproval, useSetLiveApp, useUninstallApp } from 'hooks/app/useAppHooks';
 import useToggleDialog from 'hooks/useToggleDialog';
 import { NewApp } from 'interfaces/apps';
 import DialogListRequesting from 'pages/Apps/Dialogs/DialogListRequesting';
+import Launcher from 'pages/Launcher';
 import { useAuth } from 'providers/AuthenticationProvider';
+import { useTabHandler } from 'providers/TabHandlerProvider';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface EachAppProps {
   item: NewApp;
   isMyApps?: boolean;
   isYourApp?: boolean;
   ind: number;
+  isReport?: boolean;
 }
 
-const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProps) => {
+const EachApp = ({
+  item,
+  isMyApps = false,
+  isYourApp = false,
+  ind,
+  isReport = false,
+}: EachAppProps) => {
   //! State
   const theme = useTheme();
   const [loading, setLoading] = useState(false);
   const { mutateAsync: uninstallApp } = useUninstallApp();
-  const { mutateAsync: installApp } = useInstallApp();
   const { mutateAsync: createRequest } = useCreateApproval();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   // const { addNewTab } = useTabHandler();
   const { mutateAsync: setLiveApp } = useSetLiveApp();
-  const { user, isUser, isAdmin } = useAuth();
-  const isAccess = item.typeAccessApp === UserAppStatus.ACCESS || item.ownerUserId === user?.id;
+  const { user, isUser } = useAuth();
+  const isAccess =
+    item.typeAccessApp === UserAppStatus.ACCESS ||
+    item.ownerUserId === user?.id ||
+    (!isUser && isReport);
   const isRequesing = item.typeAccessApp === UserAppStatus.REQUEST;
   const isApproved = item.status === AppStatus.APPROVED;
-  console.log(item.status, 'isMyApps');
+  const { addNewTab } = useTabHandler();
+  const location = useLocation();
 
   //! Function
   const onClickUninstall = async () => {
@@ -62,36 +69,19 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
     }
   };
 
-  const onClickInstall = async () => {
-    try {
-      setLoading(true);
-      await installApp({ id: item?.id });
-      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppInstalledList] });
-      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
-      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppStore] });
-
-      showSuccess('Install app successfully!');
-      setLoading(false);
-    } catch (error) {
-      showError(error);
-      setLoading(false);
-    }
-  };
-
   const onClickLaunch = () => {
-    window.open('http://192.168.1.10:3000/');
+    const url = encodeURIComponent(item.launchUri);
+    navigate(BaseUrl.Launcher.AppWithdDetail(url, item.id));
+    addNewTab({
+      label: item.name,
+      value: item.id,
+      content: <Launcher idApp={item.id} launchUri={item.launchUri} />,
+      openNewTab: true,
+    });
 
-    // navigate(BaseUrl.Launcher.AppWithdDetail(item.launchUri, item.id));
-    // addNewTab({
-    //   label: item.name,
-    //   value: item.id,
-    //   content: <Launcher idApp={item.id} launchUri={item.launchUri} />,
-    //   openNewTab: true,
-    // });
-
-    // if (!location.pathname.includes(BaseUrl.AppManagement)) {
-    //   navigate(BaseUrl.AppManagement);
-    // }
+    if (!location.pathname.includes(BaseUrl.AppManagement)) {
+      navigate(BaseUrl.AppManagement);
+    }
   };
 
   const onClickRequestAccess = async () => {
@@ -124,7 +114,13 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
       } = useToggleDialog();
       return (
         <CommonStyles.Box sx={{ display: 'flex', gap: 1 }}>
-          <Link to={BaseUrl.MyApps.DetailWithID(item.id || '')}>
+          <Link
+            to={
+              isReport
+                ? BaseUrl.MyReport.DetailWithID(item.id || '')
+                : BaseUrl.MyApps.DetailWithID(item.id || '')
+            }
+          >
             <CommonStyles.Button>Edit</CommonStyles.Button>
           </Link>
           <CommonStyles.Button variant='outlined' loading={loading} onClick={toggleRequesting}>
@@ -149,7 +145,13 @@ const EachApp = ({ item, isMyApps = false, isYourApp = false, ind }: EachAppProp
             Launch
           </CommonStyles.Button>
 
-          <Link to={BaseUrl.Marketplace.InfoWithID(item.id || '')}>
+          <Link
+            to={
+              isReport
+                ? BaseUrl.ReportApp.InfoWithID(item.id || '')
+                : BaseUrl.Marketplace.InfoWithID(item.id || '')
+            }
+          >
             <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
           </Link>
         </CommonStyles.Box>

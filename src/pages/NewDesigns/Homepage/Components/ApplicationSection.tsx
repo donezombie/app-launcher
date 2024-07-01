@@ -3,6 +3,7 @@ import { IconApplication1, IconApplication2 } from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import EachApplication from 'components/EachApplication';
 import { AppStatus } from 'consts/enum';
+import { filterAppType } from 'helpers';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import AllApplicationDialog from 'pages/NewDesigns/AllApplication';
@@ -22,12 +23,13 @@ const initialValues = {
 const ApplicationSection = () => {
   //! State
   const [open, setOpen] = React.useState(false);
-  const { user, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
 
   const { filters } = useFiltersHandler(initialValues);
   const { data: resListApp, isLoading } = useGetListApp({
     ...filters,
     canAccess: isAdmin ? null : true,
+    type: filterAppType,
   });
   const dataInstallApp =
     useMemo(() => {

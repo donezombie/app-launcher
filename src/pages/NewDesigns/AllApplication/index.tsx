@@ -8,25 +8,27 @@ import useFiltersHandler from 'hooks/useFiltersHandler';
 import { useAuth } from 'providers/AuthenticationProvider';
 import { useMemo } from 'react';
 import ContentOfSection from './Components/ContentOfSection';
+import { filterAppType } from 'helpers';
 
 interface AllApplicationProps {
   onClickClose: () => void;
 }
 
 const initialValues = {
-  canAccess: true,
   isLive: true,
   status: AppStatus.APPROVED,
+  type: filterAppType,
 };
 
 const AllApplicationDialog = (props: AllApplicationProps) => {
   const { onClickClose } = props;
   //! State
-
-  const { user, isAdmin, isUser } = useAuth();
-
+  const { isAdmin } = useAuth();
   const { filters } = useFiltersHandler(initialValues);
-  const { data: resListApp, isLoading } = useGetListApp(filters);
+  const { data: resListApp, isLoading } = useGetListApp({
+    ...filters,
+    canAccess: isAdmin ? null : true,
+  });
   const dataInstallApp =
     useMemo(() => {
       return resListApp?.data?.data?.items;

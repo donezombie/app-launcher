@@ -4,8 +4,7 @@ import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import ListApp from 'components/ListApp';
 import { NUMBER_DEFAULT_PAGE } from 'consts';
-import { AppStatus } from 'consts/enum';
-import { filterAppType } from 'helpers';
+import { AppStatus, AppType } from 'consts/enum';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { useMemo } from 'react';
@@ -15,18 +14,16 @@ const initialValues = {
   // rowsPerPage: 999,
   textSeach: '',
   status: AppStatus.APPROVED,
+  type: AppType.REPORT,
 };
 
-const Marketplace = () => {
+const Report = () => {
   //! State
   const theme = useTheme();
 
   const { filters, handleSearch } = useFiltersHandler(initialValues);
 
-  const { data: resList, isLoading: isLoadingList } = useGetListApp({
-    ...filters,
-    type: filterAppType,
-  });
+  const { data: resList, isLoading: isLoadingList } = useGetListApp(filters);
 
   const data =
     useMemo(() => {
@@ -86,23 +83,23 @@ const Marketplace = () => {
   };
   return (
     <CommonStyles.Box
-      className='component:Marketplace'
+      className='component:Report'
       sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
     >
       {renderHeader()}
 
       <CommonStyles.Box>
         <HeadWithSearching
-          title='Market place'
+          title='Report Apps'
           onSubmitSearch={({ search }) => {
             handleSearch(search);
           }}
         />
       </CommonStyles.Box>
 
-      {isLoadingList ? <CommonStyles.Loading /> : <ListApp apps={data} />}
+      {isLoadingList ? <CommonStyles.Loading /> : <ListApp apps={data} isReport />}
     </CommonStyles.Box>
   );
 };
 
-export default Marketplace;
+export default Report;

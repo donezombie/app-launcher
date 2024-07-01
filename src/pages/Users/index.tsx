@@ -14,7 +14,7 @@ import { NUMBER_DEFAULT_ROW_PER_PAGE, NUMBER_DEFAULT_PAGE } from 'consts';
 const initialValues = {
   search: '',
   page: 0,
-  rowsPerPage: 5,
+  perPage: 5,
   order: Order.desc,
   orderBy: '',
 };

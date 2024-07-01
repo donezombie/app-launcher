@@ -12,7 +12,7 @@ import { cloneDeep } from 'lodash';
 
 const initialValues = {
   page: 1,
-  perPage: 999,
+  // perPage: 999,
   textSearch: '',
   myApp: true,
 };

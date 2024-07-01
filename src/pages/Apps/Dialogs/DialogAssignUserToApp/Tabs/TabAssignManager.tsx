@@ -21,7 +21,7 @@ import CellActions from '../Cells/CellActions';
 const initialValues = {
   username: '',
   page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: NUMBER_DEFAULT_ROW_PER_PAGE,
+  perPage: NUMBER_DEFAULT_ROW_PER_PAGE,
   order: Order.desc,
   orderBy: '',
 };

@@ -1,9 +1,8 @@
-import React from 'react';
-import { Navigate, useSearchParams } from 'react-router-dom';
+import { useTheme } from '@mui/material';
 import CommonStyles from 'components/CommonStyles';
 import BaseUrl from 'consts/baseUrl';
 import { useAuth } from 'providers/AuthenticationProvider';
-import { useTheme } from '@mui/material';
+import { Navigate, useSearchParams } from 'react-router-dom';
 
 const Launcher = () => {
   //! State
@@ -34,7 +33,7 @@ const Launcher = () => {
       }}
     >
       <iframe
-        src={`${uri}?embedded=true&token=${auth.accessToken}&id=${id}` || ''}
+        src={`${decodeURIComponent(uri)}?embedded=true&token=${auth.accessToken}&id=${id}` || ''}
         // src={`http://localhost:3001?token=${auth.accessToken}&id=${idApp}` || ''}
         frameBorder={0}
         sandbox='allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts allow-downloads allow-pointer-lock'

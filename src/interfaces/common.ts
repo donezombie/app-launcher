@@ -60,13 +60,15 @@ export interface RequestPagingCommon {
   filter?: string;
   order?: Order;
   page?: number;
-  rowsPerPage?: number;
+  perPage?: number;
   orderBy?: string | number | symbol;
   search?: string;
   categoryId?: number;
   isLive?: boolean;
   myApp?: boolean;
   canAccess?: boolean | null;
+  categoryType?: string;
+  type?: string;
 }
 
 export interface ResponsePagingCommon<T> {

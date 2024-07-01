@@ -15,7 +15,7 @@ import CellApproval from './Cells/CellApproval';
 const initialValues = {
   textSearch: '',
   page: 1,
-  rowsPerPage: 5,
+  perPage: 5,
   order: Order.asc,
   orderBy: 'CreatedDate',
 };

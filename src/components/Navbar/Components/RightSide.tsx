@@ -100,9 +100,9 @@ const RightSide = () => {
         <Avatar sx={{ width: 35, height: 35 }} src='https://mui.com/static/images/avatar/1.jpg' />
       </StyledBadge>
 
-      {/* <CommonStyles.Typography className='is-hover' isLink onClick={() => auth.logout()}>
+      <CommonStyles.Typography className='is-hover' isLink onClick={() => auth.logout()}>
         Logout
-      </CommonStyles.Typography> */}
+      </CommonStyles.Typography>
 
       <Popover
         sx={{ mt: 2 }}

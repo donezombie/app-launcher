@@ -8,9 +8,15 @@ interface ListAppProps {
   isMyApps?: boolean;
   isYourApp?: boolean;
   apps?: NewApp[];
+  isReport?: boolean;
 }
 
-const ListApp = ({ isMyApps = false, isYourApp = false, apps = [] }: ListAppProps) => {
+const ListApp = ({
+  isMyApps = false,
+  isYourApp = false,
+  apps = [],
+  isReport = false,
+}: ListAppProps) => {
   //! State
   const theme = useTheme();
   //! Function
@@ -35,7 +41,14 @@ const ListApp = ({ isMyApps = false, isYourApp = false, apps = [] }: ListAppProp
     >
       {apps.map((el, ind) => {
         return (
-          <EachApp key={el.id} item={el} isMyApps={isMyApps} isYourApp={isYourApp} ind={ind} />
+          <EachApp
+            key={el.id}
+            item={el}
+            isMyApps={isMyApps}
+            isYourApp={isYourApp}
+            ind={ind}
+            isReport={isReport}
+          />
         );
       })}
     </CommonStyles.Box>

@@ -1,11 +1,10 @@
-import { useQueryClient } from '@tanstack/react-query';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
-import { queryKeys } from 'consts';
-import { AppType, CategoryType, ReportType } from 'consts/enum';
+import BaseUrl from 'consts/baseUrl';
+import { AppType, CategoryType } from 'consts/enum';
 import { FastField, Form, Formik, FormikProps } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
 import {
@@ -13,13 +12,11 @@ import {
   useGetAppIntegrationDetail,
   useUpdateAppIntegration,
 } from 'hooks/app/useAppHooks';
-import { useDeleteAppIDCategory } from 'hooks/category/useCategoryHooks';
 import { useGetCategoryList } from 'hooks/category/useGetListCategory';
-import { useCreateReport } from 'hooks/report/useReportHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { Category } from 'interfaces/category';
 import { isEmpty, isNull } from 'lodash';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
@@ -50,7 +47,6 @@ const UploadReport = (props: Iprops) => {
   const { mutateAsync: createApp } = useCreateAppIntegration();
   const { mutateAsync: updateAppIntegration } = useUpdateAppIntegration();
   // const { mutateAsync: updateAppIDCategory } = useUpdateAppIDCategory();
-  const { mutateAsync: deleteAppIDCategory } = useDeleteAppIDCategory();
   const navigate = useNavigate();
   const formikRef = useRef<FormikProps<any>>(null);
   const { filters } = useFiltersHandler({ categoryType: CategoryType.REPORT });
@@ -67,10 +63,10 @@ const UploadReport = (props: Iprops) => {
   }, [category, loadingCategory]);
   // //! Function
   const initialValues = {
-    name: '',
-    launchUri: '',
-    description: '',
-    categoryId: null,
+    name: appDetail ? appDetail.name : '',
+    launchUri: appDetail ? appDetail.launchUri : '',
+    description: appDetail ? appDetail.description : '',
+    categoryId: appDetail ? appDetail.categoryId : null,
   };
 
   //! Render
@@ -101,12 +97,13 @@ const UploadReport = (props: Iprops) => {
                 ...values,
                 appType: AppType.REPORT,
               };
-              const res = isEdit
+              isEdit
                 ? await updateAppIntegration({ id: String(id), body: body })
                 : await createApp(body);
 
               setSubmitting(true);
               showSuccess(isEdit ? 'Edit successfully!' : 'Create successfully!');
+              navigate(BaseUrl.MyReport.Index);
               setSubmitting(false);
             } catch (error) {
               setSubmitting(false);

@@ -1,18 +1,18 @@
-import React, { Fragment } from 'react';
-import CommonStyles from 'components/CommonStyles';
-import useFiltersHandler from 'hooks/useFiltersHandler';
-import { useGetAppStore, useGetListApp } from 'hooks/app/useAppHooks';
-import { NUMBER_DEFAULT_ROW_PER_PAGE, NUMBER_DEFAULT_PAGE } from 'consts';
 import { useTheme } from '@mui/material';
-import EachApp from '../../pages/Apps/AppsForUser/Components/EachApp';
-import SearchAndFilters from 'components/SearchAndFilters';
-import { FastField } from 'formik';
+import CommonStyles from 'components/CommonStyles';
 import TextField from 'components/CustomFields/TextField';
+import SearchAndFilters from 'components/SearchAndFilters';
+import { NUMBER_DEFAULT_PAGE } from 'consts';
+import { FastField } from 'formik';
+import { useGetListApp } from 'hooks/app/useAppHooks';
+import useFiltersHandler from 'hooks/useFiltersHandler';
 import { cloneDeep } from 'lodash';
+import React, { Fragment } from 'react';
+import EachApp from '../../pages/Apps/AppsForUser/Components/EachApp';
 
 const initialValues = {
   page: NUMBER_DEFAULT_PAGE,
-  rowsPerPage: 999,
+  // rowsPerPage: 999,
   textSearch: '',
 };
 
