@@ -296,7 +296,7 @@ const EachApp = ({
                     afterOnChange={() => {
                       handleSubmit(values, setSubmitting);
                     }}
-                    disabled={!(isApproved && isYourApp)}
+                    disabled={!(isApproved && item?.ownerUserId === user?.id)}
                     loading={isSubmitting}
                   />
                 )}

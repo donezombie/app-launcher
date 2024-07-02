@@ -99,13 +99,7 @@ const Sidebar = () => {
       path: BaseUrl.MyReport.Index,
       show: isAdmin || isUser || isAppManager,
     },
-    {
-      id: uniqueId('side-bar'),
-      label: 'Settings',
-      icon: CommonIcons.SettingsIcon,
-      path: BaseUrl.Setting.Index,
-      show: isAdmin,
-    },
+
     {
       id: uniqueId('side-bar'),
       label: 'Develop',
@@ -140,6 +134,13 @@ const Sidebar = () => {
       label: 'News',
       icon: CommonIcons.PiNewspaperLight,
       path: BaseUrl.News.Index,
+      show: isAdmin,
+    },
+    {
+      id: uniqueId('side-bar'),
+      label: 'Recent Activity',
+      icon: CommonIcons.PiNewspaperLight,
+      path: BaseUrl.RecentActivity.Index,
       show: isAdmin,
     },
     {
@@ -185,11 +186,12 @@ const Sidebar = () => {
       path: BaseUrl.Help.Index,
       show: isAdmin,
     },
+
     {
       id: uniqueId('side-bar'),
-      label: 'Recent Activity',
-      icon: CommonIcons.Company,
-      path: BaseUrl.RecentActivity.Index,
+      label: 'Settings',
+      icon: CommonIcons.SettingsIcon,
+      path: BaseUrl.Setting.Index,
       show: isAdmin,
     },
   ];

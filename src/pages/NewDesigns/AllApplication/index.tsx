@@ -9,9 +9,11 @@ import { useAuth } from 'providers/AuthenticationProvider';
 import { useMemo } from 'react';
 import ContentOfSection from './Components/ContentOfSection';
 import { filterAppType } from 'helpers';
+import HeadWithSearching from 'components/HeadWithSearching';
 
 interface AllApplicationProps {
   onClickClose: () => void;
+  textSearch?: string;
 }
 
 const initialValues = {
@@ -21,13 +23,15 @@ const initialValues = {
 };
 
 const AllApplicationDialog = (props: AllApplicationProps) => {
-  const { onClickClose } = props;
+  const { onClickClose, textSearch } = props;
+
   //! State
   const { isAdmin } = useAuth();
-  const { filters } = useFiltersHandler(initialValues);
+  const { filters, setFilters } = useFiltersHandler(initialValues);
   const { data: resListApp, isLoading } = useGetListApp({
     ...filters,
     canAccess: isAdmin ? null : true,
+    textSearch: textSearch || '',
   });
   const dataInstallApp =
     useMemo(() => {
@@ -49,6 +53,16 @@ const AllApplicationDialog = (props: AllApplicationProps) => {
           onClick={onClickClose}
         />
       </CommonStyles.Box>
+      <CommonStyles.Box mt={2}>
+        <HeadWithSearching
+          onSubmitSearch={({ search }) => {
+            setFilters((prev) => ({
+              ...prev,
+              textSearch: search,
+            }));
+          }}
+        />
+      </CommonStyles.Box>
       <ContentOfSection>
         {isLoading ? (
           <CommonStyles.Loading />
@@ -61,7 +75,9 @@ const AllApplicationDialog = (props: AllApplicationProps) => {
               icon: index % 2 === 0 ? IconApplication1 : IconApplication2,
             }))
             .map((el) => {
-              return <EachApplication key={el.label} application={el} />;
+              return (
+                <EachApplication key={el.label} application={el} onClickClose={onClickClose} />
+              );
             })
         )}
       </ContentOfSection>

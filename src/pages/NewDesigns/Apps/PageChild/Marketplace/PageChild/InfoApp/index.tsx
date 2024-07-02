@@ -46,7 +46,8 @@ const InfoApp = () => {
   };
 
   const onClickLaunch = () => {
-    navigate(BaseUrl.Launcher.AppWithdDetail(detailData.launchUri, detailData.id));
+    const url = encodeURIComponent(detailData.launchUri);
+    navigate(BaseUrl.Launcher.AppWithdDetail(url, detailData.id));
 
     addNewTab({
       label: detailData?.name || '',

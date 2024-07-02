@@ -4,7 +4,7 @@ import { Form, Formik } from 'formik';
 import Searching from './Searching';
 
 interface HeadWithSearchingProps {
-  title: React.ReactNode;
+  title?: React.ReactNode;
   onSubmitSearch?: ({ search }: { search: string }) => void;
   placeholder?: string;
   renderLeftContent?: React.ReactNode;
