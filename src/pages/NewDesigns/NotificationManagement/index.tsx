@@ -8,6 +8,11 @@ import { Order } from 'interfaces/common';
 import { Notification } from 'interfaces/notification';
 import CellActions from './Components/CellActions';
 import DialogAddNotification from './Components/DialogAddNotification';
+import { useTheme } from '@mui/material';
+import SearchAndFilters from 'components/SearchAndFilters';
+import TextField from 'components/CustomFields/TextField';
+import { FastField, Field } from 'formik';
+import { cloneDeep } from 'lodash';
 
 const tabs = [
   {
@@ -32,6 +37,7 @@ const NotificationManagement = () => {
     toggle: toggleDialog,
     shouldRender: shouldRenderDialog,
   } = useToggleDialog();
+  const theme = useTheme();
 
   const {
     filters,
@@ -46,31 +52,9 @@ const NotificationManagement = () => {
   } = useFiltersHandler(initialValues);
 
   const { data: resData, isLoading } = useGetNotificationListHooks(filters);
-  console.log('resData', resData);
-
   const data = resData?.data?.data?.items || [];
 
   //! Function
-  const renderTab = () => {
-    return (
-      <CommonStyles.Box sx={{ display: 'flex', mb: 2 }}>
-        <CommonStyles.Box
-          key={tabs[0].value}
-          sx={{
-            padding: 1,
-            marginRight: 2,
-            borderBottom: '2px solid',
-            cursor: 'pointer',
-          }}
-        >
-          <CommonStyles.Typography sx={{ fontWeight: 'bold' }}>
-            {tabs[0].label}
-          </CommonStyles.Typography>
-        </CommonStyles.Box>
-      </CommonStyles.Box>
-    );
-  };
-
   const headCells = [
     {
       label: 'Title',
@@ -133,22 +117,66 @@ const NotificationManagement = () => {
       <CommonStyles.Button sx={{ mb: 2 }} onClick={toggleDialog}>
         Add New Notification
       </CommonStyles.Button>
-      {renderTab()}
-      <CommonStyles.Table
-        headCells={headCells}
-        order={filters?.order || Order.desc}
-        orderBy={filters?.orderBy}
-        selected={selected}
-        page={filters?.page || 1}
-        rowsPerPage={filters?.perPage || 10}
-        totalCount={resData?.data?.data?.totalItems || 0}
-        rows={data || []}
-        handleChangePage={handleChangePage}
-        handleChangeRowsPerPage={handleChangeRowsPerPage}
-        handleRequestSort={handleRequestSort}
-        handleSelectAllClick={handleSelectAllClick}
-        isLoading={isLoading}
-      />
+      <CommonStyles.Box
+        sx={{
+          boxShadow: 'rgba(0, 0, 0, 0.35) 0px 0.3rem 1rem',
+          borderRadius: '4px',
+          padding: '1rem',
+        }}
+      >
+        <CommonStyles.Box sx={{ borderBottom: `1px solid ${theme.colors?.gray3}` }} pl={2} mb={2}>
+          <CommonStyles.Typography
+            pb={1}
+            sx={{
+              width: 'fit-content',
+              borderBottom: '2px solid blue',
+              cursor: 'default',
+            }}
+          >
+            Notification
+          </CommonStyles.Typography>
+        </CommonStyles.Box>
+        <SearchAndFilters
+          initialValues={initialValues}
+          onSubmit={(values) => {
+            setFilters(cloneDeep(values));
+          }}
+          sxContainer={{ marginBottom: '2rem' }}
+          enableReinitialize
+          onReset={() => {
+            handleResetToInitial();
+          }}
+          renderFilterFields={() => (
+            <CommonStyles.Box
+              id='search-n-filters'
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '1fr',
+                width: '85%',
+                gap: '4px',
+              }}
+            >
+              <FastField fullWidth component={TextField} name='extSearch' placeholder={'Search'} />
+            </CommonStyles.Box>
+          )}
+        />
+        <CommonStyles.Table
+          headCells={headCells}
+          order={filters?.order || Order.desc}
+          orderBy={filters?.orderBy}
+          selected={selected}
+          page={filters?.page || 1}
+          rowsPerPage={filters?.perPage || 10}
+          totalCount={resData?.data?.data?.totalItems || 0}
+          rows={data || []}
+          handleChangePage={handleChangePage}
+          handleChangeRowsPerPage={handleChangeRowsPerPage}
+          handleRequestSort={handleRequestSort}
+          handleSelectAllClick={handleSelectAllClick}
+          isLoading={isLoading}
+        />
+      </CommonStyles.Box>
+
       {shouldRenderDialog && <DialogAddNotification isOpen={openDialog} toggle={toggleDialog} />}
     </CommonStyles.Box>
   );

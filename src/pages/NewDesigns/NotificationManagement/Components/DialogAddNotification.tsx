@@ -7,7 +7,6 @@ import AutoCompleteField from 'components/CustomFields/AutoCompleteField';
 import RadioField from 'components/CustomFields/RadioField';
 import TextField from 'components/CustomFields/TextField';
 import { queryKeys } from 'consts';
-import { UPLOAD_URL } from 'consts/apiUrl';
 import { CategoryType, NotiDataType } from 'consts/enum';
 import { FastField, Form, Formik } from 'formik';
 import { handleUpload } from 'helpers';
@@ -23,7 +22,6 @@ import { Notification } from 'interfaces/notification';
 import { isArray } from 'lodash';
 import { useMemo } from 'react';
 import { RequestCreateNotification } from 'services/notificationService';
-import userService from 'services/userService';
 import * as Yup from 'yup';
 
 interface Props extends DialogI<RequestCreateNotification> {
