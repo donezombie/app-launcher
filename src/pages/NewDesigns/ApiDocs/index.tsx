@@ -1,9 +1,13 @@
 import CommonStyles from 'components/CommonStyles';
-import HeadWithSearching from 'components/HeadWithSearching';
-import { AppType, SortOrder } from 'consts/enum';
+import TextField from 'components/CustomFields/TextField';
+import SearchAndFilters from 'components/SearchAndFilters';
+import { SortOrder } from 'consts/enum';
+import { FastField } from 'formik';
+import { filterAppType } from 'helpers';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { Order } from 'interfaces/common';
+import { cloneDeep } from 'lodash';
 import { useMemo } from 'react';
 import CellActions from './Components/CellActions';
 
@@ -13,10 +17,9 @@ const initialValues = {
   textSearch: '',
   sortOrder: SortOrder.ASC,
   sortField: 'createdAt',
-  type: AppType.REPORT,
 };
 
-const ReportManagement = () => {
+const ApiDocs = () => {
   //! State
   const {
     filters,
@@ -27,11 +30,10 @@ const ReportManagement = () => {
     handleRequestSort,
     handleSelectAllClick,
     handleResetToInitial,
-    handleSearch,
   } = useFiltersHandler(initialValues);
 
   //! Function
-  const { data: resListApp, isLoading } = useGetListApp(filters);
+  const { data: resListApp, isLoading } = useGetListApp({ ...filters, type: filterAppType });
   const data =
     useMemo(() => {
       return resListApp?.data?.data?.items;
@@ -41,15 +43,20 @@ const ReportManagement = () => {
   //! Render
   return (
     <CommonStyles.Box
-      className='component:AppsReport'
+      className='component:AppsManagement'
       sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
     >
-      <HeadWithSearching
-        title='Report Apps'
-        onSubmitSearch={({ search }) => {
-          handleSearch(search);
+      <SearchAndFilters
+        initialValues={initialValues}
+        onSubmit={(values) => {
+          setFilters(cloneDeep(values));
         }}
-        placeholder='Search Report...'
+        onReset={() => {
+          handleResetToInitial();
+        }}
+        renderFilterFields={() => {
+          return <FastField component={TextField} name='textSearch' placeholder='Search...' />;
+        }}
       />
       <CommonStyles.Table
         order={filters?.order || Order.desc}
@@ -63,13 +70,13 @@ const ReportManagement = () => {
             id: 'name',
           },
           {
-            label: 'Description',
-            id: 'description',
+            label: 'Api Doc Uri',
+            id: 'apiDoc',
           },
+
           {
             label: '',
             id: 'actions',
-            disableSort: true,
             Cell: (row) => {
               return <CellActions item={row} />;
             },
@@ -87,4 +94,4 @@ const ReportManagement = () => {
   );
 };
 
-export default ReportManagement;
+export default ApiDocs;

@@ -57,8 +57,8 @@ class UserService {
     return httpService.post(`${USER_URL}/update-user?username=${username}`, body);
   }
 
-  signOut(accessToken: string) {
-    return httpService.post(`${USER_URL}/signout-global`, { accessToken });
+  signOut() {
+    return httpService.get(`${AUTH_URL}/logout`);
   }
 
   loginWithCognito(tokenCognito: string, refreshTokenCognito?: string) {
@@ -79,6 +79,10 @@ class UserService {
     const URL = new Blob(binaryData, { type: 'image/png' });
     bodyUpload.append('file', URL);
     return httpService.post(`${UPLOAD}`, bodyUpload);
+  }
+
+  pushTokenFcm(token: string) {
+    return httpService.post(`${AUTH_URL}/push-token-fcm`, { fcm: token });
   }
 }
 

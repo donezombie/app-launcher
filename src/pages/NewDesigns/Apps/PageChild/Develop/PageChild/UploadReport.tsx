@@ -3,6 +3,7 @@ import CommonStyles from 'components/CommonStyles';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
+import { URL_REGEX } from 'consts';
 import BaseUrl from 'consts/baseUrl';
 import { AppType, CategoryType } from 'consts/enum';
 import { FastField, Form, Formik, FormikProps } from 'formik';
@@ -22,13 +23,9 @@ import * as Yup from 'yup';
 
 const validateCreateApp = Yup.object().shape({
   name: Yup.string().required('Name is required field!'),
-  launchUri: Yup.string().required('Launch Uri is required field!'),
-  //   type: Yup.string()
-  //     .required('Type is required field!')
-  //     .test('type', 'Invalid Type', function (value) {
-  //       if (value && !Object.values(ReportType).includes(value as ReportType)) return false;
-  //       return true;
-  //     }),
+  launchUri: Yup.string()
+    .required('Launch Uri is required field!')
+    .matches(URL_REGEX, 'Invalid Url!'),
   categoryId: Yup.number()
     .typeError('Category is required field!')
     .required('Category is required field!'),
@@ -46,7 +43,6 @@ const UploadReport = (props: Iprops) => {
 
   const { mutateAsync: createApp } = useCreateAppIntegration();
   const { mutateAsync: updateAppIntegration } = useUpdateAppIntegration();
-  // const { mutateAsync: updateAppIDCategory } = useUpdateAppIDCategory();
   const navigate = useNavigate();
   const formikRef = useRef<FormikProps<any>>(null);
   const { filters } = useFiltersHandler({ categoryType: CategoryType.REPORT });

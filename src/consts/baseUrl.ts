@@ -83,11 +83,6 @@ const BaseUrl = {
   EvenManagement: {
     Index: 'apps/event-management',
   },
-  Report: {
-    Index: 'apps/report',
-    DetailReport: 'apps/report/:id',
-    DetailReportWithId: (id: string | number) => `/apps/apps/report/${id}`,
-  },
 
   Company: {
     Index: 'apps/company',
@@ -107,6 +102,12 @@ const BaseUrl = {
     DetailWithID: (id: string | number) => `/apps/apps/help/edit/${id}`,
     DescriptionHelp: '/apps/apps/help/description/:id',
     DescriptionHelpWithID: (id: string | number) => `/apps/apps/help/description/${id}`,
+  },
+
+  ApiDocs: {
+    Index: 'app/api-docs',
+    Detail: 'apps/api-docs/:id',
+    DetailReportWithId: (id: string | number) => `/apps/apps/api-docs/${id}`,
   },
 };
 

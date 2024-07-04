@@ -18,6 +18,10 @@ import cachedService from 'services/cachedService';
 import httpService from 'services/httpService';
 import locationService from 'services/locationService';
 import userService from 'services/userService';
+import { generateToken } from '../firebase';
+import { isEmpty } from 'lodash';
+import { deleteToken } from 'firebase/messaging';
+import { messaging } from '../firebase';
 
 type ActionPostMessage = 'logout';
 export interface EventListenerI {
@@ -97,10 +101,14 @@ const AuthenticationProvider = ({ children }: { children: any }) => {
 
   const isLogged = httpService.getTokenStorage();
   const token = httpService.getTokenStorage();
-  const onGetUserDataSuccess = useCallback((user: IUser | null) => {
+  const onGetUserDataSuccess = useCallback(async (user: IUser | null) => {
     if (user) {
       httpService.saveUserStorage(user);
       setUserData(user);
+      const fcmToken = await generateToken();
+      if (!isEmpty(fcmToken)) {
+        await userService.pushTokenFcm(fcmToken);
+      }
     }
   }, []);
 
@@ -157,7 +165,8 @@ const AuthenticationProvider = ({ children }: { children: any }) => {
 
   const logout = useCallback(async () => {
     try {
-      // await logoutUser(token || '');
+      await deleteToken(messaging);
+      await logoutUser();
       authService.removeUser();
       window.location.href = LOGOUT_REDIRECT_URI;
 
