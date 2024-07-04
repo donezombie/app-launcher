@@ -12,6 +12,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 import CommonStyles from 'components/CommonStyles';
 import routesPublic from 'routes/routesPublic';
 import { useAuth } from 'providers/AuthenticationProvider';
+import { getMessaging, onMessage } from 'firebase/messaging';
+import { showSuccess } from 'helpers/toast';
+import { upperFirst } from 'lodash';
 
 const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
   return (
@@ -29,7 +32,15 @@ const App = () => {
   const { themeOfApp } = useSettingsTheme();
 
   //! Function
-
+  useEffect(() => {
+    const messaging = getMessaging();
+    onMessage(messaging, (payload) => {
+      if (payload.notification) {
+        showSuccess(upperFirst(payload.notification.title));
+      }
+      console.log('Message received. ', payload);
+    });
+  }, []);
   //! Render
   const renderContent = () => {
     if (auth.loading) {

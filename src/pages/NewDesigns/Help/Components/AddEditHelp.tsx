@@ -89,7 +89,7 @@ const AddEditHelp = () => {
             <Form>
               <CommonStyles.Box>
                 <ButtonBack />
-                <HeadWithSearching title='Create Help' />
+                <HeadWithSearching title='Create Static Page' />
                 <CommonStyles.Box
                   sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, mt: 1, mb: 1 }}
                 >

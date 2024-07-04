@@ -1,8 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LOGOUT_REDIRECT_URI } from 'consts/configAWS';
-import { User } from 'oidc-client-ts';
-import AuthService from './authService';
 import { IUser } from 'providers/AuthenticationProvider';
+import AuthService from './authService';
 // import AuthService from './authService';
 
 export const TOKEN_KEY = 'token';
@@ -30,7 +29,10 @@ class Services {
       function (config) {
         return config;
       },
-      function (error) {
+      async (error) => {
+        if (error.response.data?.statusCode === 401) {
+          this.clearAuthStorage();
+        }
         return Promise.reject(error);
       }
     );
