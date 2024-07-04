@@ -3,7 +3,7 @@ import { isDevelopment } from 'consts/index';
 const ROOT_URL = `${isDevelopment ? 'http://103.104.122.210:10000' : window.location.origin}/api`;
 // export const BASE_URL = 'https://marketplace-mvp.twenty-tech.com/api/v1';
 // export const UPLOAD_URL = 'https://marketplace-mvp.twenty-tech.com';
-export const BASE_URL = 'http://103.143.142.245:9035/api/v1';
+export const BASE_URL = 'http://192.168.1.5:8687/api/v1';
 export const UPLOAD_URL = 'http://103.143.142.245:9035';
 
 // Dont remove this command

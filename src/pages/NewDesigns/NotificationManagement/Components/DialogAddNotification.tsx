@@ -7,8 +7,10 @@ import AutoCompleteField from 'components/CustomFields/AutoCompleteField';
 import RadioField from 'components/CustomFields/RadioField';
 import TextField from 'components/CustomFields/TextField';
 import { queryKeys } from 'consts';
-import { CategoryType } from 'consts/enum';
+import { UPLOAD_URL } from 'consts/apiUrl';
+import { CategoryType, NotiDataType } from 'consts/enum';
 import { FastField, Form, Formik } from 'formik';
+import { handleUpload } from 'helpers';
 import { showError, showSuccess } from 'helpers/toast';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import {
@@ -19,7 +21,7 @@ import {
 import { DialogI } from 'interfaces/common';
 import { Notification } from 'interfaces/notification';
 import { isArray } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { RequestCreateNotification } from 'services/notificationService';
 import userService from 'services/userService';
 import * as Yup from 'yup';
@@ -32,18 +34,23 @@ interface NotificationCreate {
   title: string;
   body: string;
   imageUrl: string;
-  topicId?: string;
+  topicId?: string | undefined;
   type: string;
   select?: string;
   appId?: string | string[];
-  userId?: string;
+  userId?: string | undefined;
   subTitle: string;
   data?: string;
 }
 
-const validateAddNotification = Yup.object().shape({});
+const validateAddNotification = Yup.object().shape({
+  title: Yup.string().required('This field is required'),
+  body: Yup.string().required('This field is required'),
+  subTitle: Yup.string().required('This field is required'),
+});
 
 const DialogAddNotification = (props: Props) => {
+  //! State
   const { isOpen, toggle, item } = props;
   const { mutateAsync: createNotification } = useCreateNotification();
   const { mutateAsync: updateNotification } = useUpdateNotification();
@@ -55,42 +62,39 @@ const DialogAddNotification = (props: Props) => {
     label: el.name,
     value: el.id,
   }));
+
   const { data: resListUser, isLoading: isLoadingUser } = useGetUserReceiveNotification({});
+
   const optionUsers = resListUser?.data?.data?.map((el) => ({
     key: el.id,
     label: el.username,
     value: el.id,
   }));
+
   const optionRadioSelect = [
     { value: 'topic', label: 'Topic' },
     { value: 'user', label: 'User' },
   ];
+
   const parseData = JSON.parse(item?.data || '{}');
   const initialValues: NotificationCreate = {
-    title: item?.title || '',
-    body: item?.body || '',
-    imageUrl: item?.imageUrl || '',
-    type: item?.type || '',
+    title: item ? item?.title : '',
+    body: item ? item?.body : '',
+    imageUrl: item ? item?.imageUrl : '',
+    type: item ? item.type : '',
     select: 'topic',
-    appId: parseData?.appId || '',
-    userId: parseData?.userId || '',
-    subTitle: item?.subTitle || '',
-  };
-  const dataObject = { type: 'application' };
-
-  const handleUpload = async (
-    event: any,
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
-  ) => {
-    try {
-      const resUpload = await userService.upload({ file: event.target.files?.[0] });
-      setFieldValue('imageUrl', resUpload.data.data.uri);
-      showSuccess('Upload success!');
-    } catch (error) {
-      showError(error);
-    }
+    appId: item ? parseData?.appId : '',
+    userId: item ? parseData?.userId : '',
+    subTitle: item ? item?.subTitle : '',
   };
 
+  const dataObject = {
+    type: NotiDataType.DETAIL_APPLICATION,
+  };
+
+  //! Function
+
+  //! Render
   return (
     <Formik
       initialValues={initialValues}
@@ -98,133 +102,156 @@ const DialogAddNotification = (props: Props) => {
       validateOnChange={false}
       validateOnBlur={false}
       enableReinitialize
-      onSubmit={async (values, { setSubmitting }) => {
-        try {
-          setSubmitting(true);
-          const objBody: NotificationCreate = {
-            title: values.title,
-            body: values.body,
-            imageUrl: values.imageUrl,
-            subTitle: values.subTitle,
-            type: CategoryType.DEFAULT,
-            data: JSON.stringify(dataObject),
-          };
-          if (isArray(values.appId) && values.select === 'topic') {
-            objBody.topicId = values.appId.map((el: any) => el.value).join(',');
-          } else if (isArray(values.userId) && values.select === 'user') {
-            objBody.userId = values.userId.map((el: any) => el.value).join(',');
+      onSubmit={(values, { setSubmitting }) => {
+        (async () => {
+          try {
+            setSubmitting(true);
+            const objBody: NotificationCreate = {
+              title: values.title,
+              body: values.body,
+              imageUrl: values.imageUrl,
+              subTitle: values.subTitle,
+              type: CategoryType.DEFAULT,
+              data: JSON.stringify(dataObject),
+            };
+            if (isArray(values.appId) && values.select === 'topic') {
+              objBody.topicId = values.appId?.map((el: any) => el.value).join(',');
+            } else if (isArray(values.userId) && values.select === 'user') {
+              objBody.userId = values.userId?.map((el: any) => el.value).join(',');
+            }
+            await createNotification(objBody);
+            toggle();
+            showSuccess('Add Notification successfully!');
+            setSubmitting(false);
+            queryClient.refetchQueries([queryKeys.getListNotification]);
+          } catch (error) {
+            showError(error);
+            setSubmitting(false);
           }
-          await createNotification(objBody);
-          toggle();
-          showSuccess('Add Notification successfully!');
-          queryClient.refetchQueries([queryKeys.getListNotification]);
-        } catch (error) {
-          showError(error);
-        } finally {
-          setSubmitting(false);
-        }
+        })();
       }}
     >
-      {({ isSubmitting, setFieldValue, values, handleSubmit }) => (
-        <DialogMui scroll='paper' open={isOpen} onClose={toggle} fullWidth maxWidth='sm'>
-          <DialogContent>
-            <Form>
-              <CommonStyles.Box>
-                <CommonStyles.Typography variant='h5' sx={{ mb: 3 }}>
-                  Add Notification
-                </CommonStyles.Typography>
-                <CommonStyles.Box sx={{ '& > div': { mb: 2 } }}>
-                  <FastField
-                    component={TextField}
-                    name='title'
-                    label='Title'
-                    required
-                    autoFocus
-                    fullWidth
-                  />
-                  <FastField
-                    component={TextField}
-                    name='subTitle'
-                    label='Sub Title'
-                    required
-                    fullWidth
-                  />
-                  <FastField component={TextField} name='body' label='Body' required fullWidth />
-                  <UploadField
-                    name='imageUrl'
-                    placeholder='Upload your new thumbnail...'
-                    label='Thumbnail'
-                    helperText='Helper text'
-                    fullWidth
-                    required
-                    onChange={(e) => handleUpload(e, setFieldValue)}
-                  />
-                  <FastField
-                    component={RadioField}
-                    name='select'
-                    values={optionRadioSelect}
-                    fullWidth
-                  />
-                  {values.select === 'topic' && (
-                    <>
-                      <CommonStyles.Typography
-                        component='p'
-                        variant='captionLMedium'
-                        sx={{ mb: 1.5, mt: 1 }}
-                      >
-                        App
-                      </CommonStyles.Typography>
-                      <FastField
-                        component={AutoCompleteField}
-                        name='appId'
-                        loading={isLoading}
-                        label='Choose App'
-                        optionsArg={optionApps}
-                        fullWidth
-                        multiple
-                        sx={{ height: '42px' }}
-                      />
-                    </>
-                  )}
-                  {values.select === 'user' && (
-                    <>
-                      <CommonStyles.Typography
-                        component='p'
-                        variant='captionLMedium'
-                        sx={{ mb: 1.5, mt: 1 }}
-                      >
-                        User
-                      </CommonStyles.Typography>
-                      <FastField
-                        component={AutoCompleteField}
-                        name='userId'
-                        loading={isLoadingUser}
-                        label='Choose User'
-                        optionsArg={optionUsers}
-                        fullWidth
-                        multiple
-                        sx={{ height: '42px' }}
-                      />
-                    </>
-                  )}
+      {({ isSubmitting, setFieldValue, values, handleSubmit }) => {
+        return (
+          <DialogMui scroll='paper' open={isOpen} onClose={toggle} fullWidth maxWidth='sm'>
+            <DialogContent>
+              <Form>
+                <CommonStyles.Box>
+                  <CommonStyles.Typography variant='h5' sx={{ mb: 3 }}>
+                    {'Add Notification'}
+                  </CommonStyles.Typography>
+                  <CommonStyles.Box
+                    sx={{
+                      '& > div': {
+                        mb: 2,
+                      },
+                    }}
+                  >
+                    <FastField
+                      component={TextField}
+                      name='title'
+                      label='Title'
+                      required
+                      autoFocus
+                      fullWidth
+                    />
+                    <FastField
+                      component={TextField}
+                      name='subTitle'
+                      label='Sub Title'
+                      required
+                      autoFocus
+                      fullWidth
+                    />
+                    <FastField component={TextField} name='body' label='Body ' required fullWidth />
+                    <UploadField
+                      name='imageUrl'
+                      placeholder='Upload your new thumbnail...'
+                      label='Thumbnail'
+                      helperText='Helper text'
+                      fullWidth
+                      required
+                      onChange={(e) => handleUpload('imageUrl', e, setFieldValue)}
+                    />
+                    <FastField
+                      component={RadioField}
+                      name='select'
+                      values={optionRadioSelect}
+                      fullWidth
+                    />
+
+                    {values.select === 'topic' && (
+                      <>
+                        <CommonStyles.Typography
+                          component='p'
+                          variant='captionLMedium'
+                          sx={{ mb: 1.5, mt: 1 }}
+                        >
+                          App
+                        </CommonStyles.Typography>
+                        <FastField
+                          component={AutoCompleteField}
+                          name='appId'
+                          loading={isLoading}
+                          label='Choose App'
+                          optionsArg={optionApps || []}
+                          fullWidth
+                          multiple
+                          sx={{ height: '42px' }}
+                          loadOptions={(text: string, setOptions: any, setLoading: any) => {
+                            setLoading(true);
+                            setOptions(optionApps);
+                            setLoading(false);
+                          }}
+                        />
+                      </>
+                    )}
+
+                    {values.select === 'user' && (
+                      <>
+                        <CommonStyles.Typography
+                          component='p'
+                          variant='captionLMedium'
+                          sx={{ mb: 1.5, mt: 1 }}
+                        >
+                          User
+                        </CommonStyles.Typography>
+                        <FastField
+                          component={AutoCompleteField}
+                          name='userId'
+                          loading={isLoadingUser}
+                          label='Choose User'
+                          optionsArg={optionUsers || []}
+                          fullWidth
+                          multiple
+                          sx={{ height: '42px' }}
+                          loadOptions={(text: string, setOptions: any, setLoading: any) => {
+                            setLoading(true);
+                            setOptions(optionUsers);
+                            setLoading(false);
+                          }}
+                        />
+                      </>
+                    )}
+                  </CommonStyles.Box>
                 </CommonStyles.Box>
-              </CommonStyles.Box>
-            </Form>
-          </DialogContent>
-          <DialogActions>
-            <CommonStyles.Button variant='text' onClick={toggle}>
-              Cancel
-            </CommonStyles.Button>
-            <CommonStyles.Button
-              loading={isSubmitting}
-              type='submit'
-              onClick={() => handleSubmit()}
-            >
-              Submit
-            </CommonStyles.Button>
-          </DialogActions>
-        </DialogMui>
-      )}
+              </Form>
+            </DialogContent>
+            <DialogActions>
+              <CommonStyles.Button variant='text' onClick={toggle}>
+                Cancel
+              </CommonStyles.Button>
+              <CommonStyles.Button
+                loading={isSubmitting}
+                type='submit'
+                onClick={() => handleSubmit()}
+              >
+                Submit
+              </CommonStyles.Button>
+            </DialogActions>
+          </DialogMui>
+        );
+      }}
     </Formik>
   );
 };

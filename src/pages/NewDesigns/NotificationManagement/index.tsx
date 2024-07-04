@@ -49,7 +49,6 @@ const NotificationManagement = () => {
   console.log('resData', resData);
 
   const data = resData?.data?.data?.items || [];
-  const totalCount = resData?.data?.data?.totalCount || 0;
 
   //! Function
   const renderTab = () => {
@@ -140,10 +139,10 @@ const NotificationManagement = () => {
         order={filters?.order || Order.desc}
         orderBy={filters?.orderBy}
         selected={selected}
-        page={filters?.page || 0}
-        rowsPerPage={filters?.rowsPerPage || 5}
-        totalCount={totalCount}
-        rows={data}
+        page={filters?.page || 1}
+        rowsPerPage={filters?.perPage || 10}
+        totalCount={resData?.data?.data?.totalItems || 0}
+        rows={data || []}
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         handleRequestSort={handleRequestSort}

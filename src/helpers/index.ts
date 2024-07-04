@@ -4,6 +4,7 @@ import moment from 'moment';
 import userService from 'services/userService';
 import { showError, showSuccess } from './toast';
 import { AccessAppType, AppType } from 'consts/enum';
+import { UPLOAD, UPLOAD_URL } from 'consts/apiUrl';
 export function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -115,7 +116,7 @@ export const handleUpload = async (
 ) => {
   try {
     const resUpload = await userService.upload({ file: event.target.files?.[0] });
-    setFieldValue(name, resUpload.data.data.uri);
+    setFieldValue(name, `${UPLOAD_URL}/${resUpload.data.data.uri}`);
     showSuccess('Upload success!');
   } catch (error) {
     showError(error);
