@@ -74,11 +74,8 @@ const ReportsManagement = lazy(() => import('pages/NewDesigns/ReportsManagement'
 const CategoryManagement = lazy(() => import('pages/NewDesigns/CategoryManagement'));
 //! Event Management Management
 const EventManagement = lazy(() => import('pages/NewDesigns/EventManagement'));
-const ReportManagement = lazy(() => import('pages/NewDesigns/ReportManagement/index'));
 const AccountSetting = lazy(() => import('pages/AccountSetting'));
-const DetailReport = lazy(
-  () => import('pages/NewDesigns/ReportManagement/Components/DetailReport')
-);
+
 const CompanyManagement = lazy(() => import('pages/NewDesigns/Company'));
 const AddCompany = lazy(() => import('pages/NewDesigns/Company/Components/AddEditCompany'));
 const Help = lazy(() => import('pages/NewDesigns/Help'));
@@ -87,6 +84,9 @@ const DescriptionHelp = lazy(() => import('pages/NewDesigns/Help/Components/Desc
 
 //! Recent Activity
 const RecentActivity = lazy(() => import('pages/NewDesigns/RecentActivity'));
+
+const ApiDocs = lazy(() => import('pages/NewDesigns/ApiDocs'));
+const ApiDocsDetail = lazy(() => import('pages/NewDesigns/ApiDocs/Components/DetailApiDoc'));
 
 const routes: Route[] = [
   {
@@ -376,21 +376,6 @@ const routes: Route[] = [
         isPrivateRoute: true,
       },
       {
-        name: 'Report Apps',
-        path: BaseUrl.Report.Index,
-        component: withCheckRole(ReportManagement, [
-          PERMISSION_ENUM.ADMIN,
-          PERMISSION_ENUM.APP_MANAGER,
-        ]),
-        isPrivateRoute: true,
-      },
-      {
-        name: 'Report Detail',
-        path: BaseUrl.Report.DetailReport,
-        component: withCheckRole(DetailReport, [PERMISSION_ENUM.ADMIN]),
-        isPrivateRoute: true,
-      },
-      {
         name: 'Account Setting',
         path: BaseUrl.AccountSetting,
         component: withCheckRole(AccountSetting, [
@@ -446,6 +431,21 @@ const routes: Route[] = [
         name: 'Description Static',
         path: BaseUrl.Help.DescriptionHelp,
         component: withCheckRole(DescriptionHelp, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Api Docs',
+        path: BaseUrl.ApiDocs.Index,
+        component: withCheckRole(ApiDocs, [PERMISSION_ENUM.ADMIN, PERMISSION_ENUM.APP_MANAGER]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Api Docs Detail',
+        path: BaseUrl.ApiDocs.Detail,
+        component: withCheckRole(ApiDocsDetail, [
+          PERMISSION_ENUM.ADMIN,
+          PERMISSION_ENUM.APP_MANAGER,
+        ]),
         isPrivateRoute: true,
       },
     ],

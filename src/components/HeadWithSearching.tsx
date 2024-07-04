@@ -8,17 +8,22 @@ interface HeadWithSearchingProps {
   onSubmitSearch?: ({ search }: { search: string }) => void;
   placeholder?: string;
   renderLeftContent?: React.ReactNode;
+  initSearch?: string;
 }
 
 const HeadWithSearching = (props: HeadWithSearchingProps) => {
   //! State
-  const { title, onSubmitSearch, placeholder = 'Search...', renderLeftContent } = props;
+  const { title, onSubmitSearch, placeholder = 'Search...', renderLeftContent, initSearch } = props;
 
   //! Function
 
   //! Render
   return (
-    <Formik initialValues={{ search: '' }} onSubmit={onSubmitSearch || function () {}}>
+    <Formik
+      initialValues={{ search: initSearch || '' }}
+      onSubmit={onSubmitSearch || function () {}}
+      enableReinitialize
+    >
       {() => {
         return (
           <CommonStyles.Box

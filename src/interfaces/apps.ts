@@ -110,6 +110,7 @@ export interface NewApp {
   isLive: boolean;
   accessApp: UserAccess[];
   typeAccessApp: string;
+  apiDoc: string;
 }
 
 export interface UserAccess {

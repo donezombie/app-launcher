@@ -6,10 +6,11 @@ import { AppStatus } from 'consts/enum';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { useAuth } from 'providers/AuthenticationProvider';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import ContentOfSection from './Components/ContentOfSection';
 import { filterAppType } from 'helpers';
 import HeadWithSearching from 'components/HeadWithSearching';
+import { isEmpty } from 'lodash';
 
 interface AllApplicationProps {
   onClickClose: () => void;
@@ -24,10 +25,9 @@ const initialValues = {
 
 const AllApplicationDialog = (props: AllApplicationProps) => {
   const { onClickClose, textSearch } = props;
-
   //! State
   const { isAdmin } = useAuth();
-  const { filters, setFilters } = useFiltersHandler(initialValues);
+  const { filters, handleSearch } = useFiltersHandler(initialValues);
   const { data: resListApp, isLoading } = useGetListApp({
     ...filters,
     canAccess: isAdmin ? null : true,
@@ -39,7 +39,9 @@ const AllApplicationDialog = (props: AllApplicationProps) => {
     }, [resListApp]) || [];
 
   //! Function
-
+  useEffect(() => {
+    textSearch && !isEmpty(textSearch) && handleSearch(textSearch);
+  }, [textSearch]);
   //! Render
   return (
     <CommonStyles.Box sx={{ mx: 10, mt: 4 }}>
@@ -55,17 +57,17 @@ const AllApplicationDialog = (props: AllApplicationProps) => {
       </CommonStyles.Box>
       <CommonStyles.Box mt={2}>
         <HeadWithSearching
+          initSearch={textSearch}
           onSubmitSearch={({ search }) => {
-            setFilters((prev) => ({
-              ...prev,
-              textSearch: search,
-            }));
+            handleSearch(search);
           }}
         />
       </CommonStyles.Box>
       <ContentOfSection>
         {isLoading ? (
           <CommonStyles.Loading />
+        ) : isEmpty(dataInstallApp) ? (
+          <CommonStyles.Typography>No data!</CommonStyles.Typography>
         ) : (
           dataInstallApp
             .map((el, index) => ({

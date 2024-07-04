@@ -24,6 +24,7 @@ const CenterSide = () => {
                 placeholder='Search for reference...'
                 sx={{ minWidth: 500 }}
               />
+
               <Dialog fullScreen open={open} onClose={() => setOpen(false)}>
                 <AllApplicationDialog
                   onClickClose={() => setOpen(false)}

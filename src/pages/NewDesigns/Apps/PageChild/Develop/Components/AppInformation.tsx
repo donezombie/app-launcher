@@ -56,8 +56,9 @@ const AppInformation = () => {
           <FastField component={TextField} name='supportEmail' label='Support Email' fullWidth />
           <FastField component={TextField} name='phone' label='Phone' fullWidth />
         </CommonStyles.Box>
-        <CommonStyles.Box sx={{ mt: 1 }}>
+        <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, mt: 1 }}>
           <FastField component={TextField} required name='launchUri' label='Launch Uri' fullWidth />
+          <FastField component={TextField} name='apiDoc' label='Api Doc Uri' fullWidth />
         </CommonStyles.Box>
         <CommonStyles.Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, mt: 1 }}>
           <FastField
