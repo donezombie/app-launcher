@@ -59,3 +59,6 @@ export const NUMBER_DEFAULT_PAGE = 1;
 export const API_KEY_TINY_EDITOR = 'pyfe4ygo4uskbsupyjwkvj16peu92u1qlp1liqki0rnv1zct';
 
 export const SIZE_ICON_DEFAULT = 24;
+
+export const URL_REGEX =
+  /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;

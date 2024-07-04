@@ -199,6 +199,13 @@ const Sidebar = () => {
       path: BaseUrl.NotificationManagement.Index,
       show: isAdmin,
     },
+    {
+      id: uniqueId('side-bar'),
+      label: 'API Docs',
+      icon: CommonIcons.PiNewspaperLight,
+      path: BaseUrl.ApiDocs.Index,
+      show: isAdmin || isAppManager,
+    },
   ];
 
   //! Function
@@ -216,6 +223,7 @@ const Sidebar = () => {
         backgroundColor: theme.colors?.gray3,
         top: theme.sizes?.heightNavbar,
         left: 0,
+        overflow: 'auto',
       }}
     >
       <CommonStyles.Box className='sidebar__container' sx={{ py: 2, px: 1 }}>

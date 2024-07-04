@@ -1,9 +1,9 @@
 import { PERMISSION_ENUM } from 'consts/index';
-import { isString } from 'lodash';
+import { isString, upperFirst } from 'lodash';
 import moment from 'moment';
 import userService from 'services/userService';
 import { showError, showSuccess } from './toast';
-import { AppType } from 'consts/enum';
+import { AccessAppType, AppType } from 'consts/enum';
 export function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -125,3 +125,28 @@ export const handleUpload = async (
 export const filterAppType = Object.values(AppType)
   .filter((el) => el !== AppType.REPORT)
   .join(',');
+
+// export interface NotiFirebase {
+//   from: string;
+//   messageId: string;
+//   notification: Notification;
+//   data: Data;
+// }
+
+// export interface Data {
+//   fromUser: string;
+//   accessType: string;
+//   appId: string;
+// }
+
+// export interface Notification {
+//   title: string;
+// }
+
+// export const generateNoti = (data: NotiFirebase) => {
+//   let notiText = data.notification.title;
+//   if (data.data.accessType === AccessAppType.NONE) {
+//     notiText = 'deny';
+//   }
+//   return upperFirst(notiText);
+// };

@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import SwitchField from 'components/CustomFields/SwitchField';
-import { queryKeys } from 'consts';
+import { URL_REGEX, queryKeys } from 'consts';
 import BaseUrl from 'consts/baseUrl';
 import { AppType } from 'consts/enum';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -12,7 +12,6 @@ import {
   useGetAppIntegrationDetail,
   useUpdateAppIntegration,
 } from 'hooks/app/useAppHooks';
-import { useDeleteAppIDCategory } from 'hooks/category/useCategoryHooks';
 import { NewApp } from 'interfaces/apps';
 import { isEmpty } from 'lodash';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -28,7 +27,9 @@ const validateCreateApp = Yup.object().shape({
   // summary: Yup.string().required('Summary is required field!'),
   // description: Yup.string().required('Description is required field!'),
   // icon: Yup.string().required('Icon is required field!'),
-  launchUri: Yup.string().required('Launch uri is required field!'),
+  launchUri: Yup.string()
+    .required('Launch uri is required field!')
+    .matches(URL_REGEX, 'Invalid Url!'),
   appType: Yup.string()
     .required('App type is required field!')
     .test('appType', 'Invalid App type', function (value) {
@@ -39,6 +40,7 @@ const validateCreateApp = Yup.object().shape({
   categoryId: Yup.number()
     .typeError('Category is required field!')
     .required('Category is required field!'),
+  apiDoc: Yup.string().matches(URL_REGEX, 'Invalid Url!'),
 });
 interface Iprops {
   isEdit: boolean;
@@ -53,8 +55,6 @@ const UploadApp = (props: Iprops) => {
 
   const { mutateAsync: createApp } = useCreateAppIntegration();
   const { mutateAsync: updateAppIntegration } = useUpdateAppIntegration();
-  // const { mutateAsync: updateAppIDCategory } = useUpdateAppIDCategory();
-  const { mutateAsync: deleteAppIDCategory } = useDeleteAppIDCategory();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [dataProps, setDataProps] = useState<NewApp | undefined>(undefined);
@@ -79,6 +79,7 @@ const UploadApp = (props: Iprops) => {
     description: appDetail?.description || '',
     developerName: appDetail?.developerName || '',
     categoryId: appDetail?.categoryId || null,
+    apiDoc: appDetail?.apiDoc || '',
   };
 
   useEffect(() => {
@@ -213,8 +214,7 @@ const UploadApp = (props: Iprops) => {
                 </CommonStyles.Box>
               ) : null}
               {step === 2 ? (
-                <CommonStyles.Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-                  <CommonStyles.Button onClick={() => setStep(step - 1)}>Back</CommonStyles.Button>
+                <CommonStyles.Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                   <CommonStyles.Button
                     onClick={() => navigate(BaseUrl.MyApps.Index)}
                     disabled={
