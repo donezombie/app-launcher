@@ -108,6 +108,9 @@ const BaseUrl = {
     DescriptionHelp: '/apps/apps/help/description/:id',
     DescriptionHelpWithID: (id: string | number) => `/apps/apps/help/description/${id}`,
   },
+  NotificationManagement: {
+    Index: '/apps/notification-management',
+  },
 };
 
 export default BaseUrl;

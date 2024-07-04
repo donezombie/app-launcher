@@ -88,6 +88,9 @@ const DescriptionHelp = lazy(() => import('pages/NewDesigns/Help/Components/Desc
 //! Recent Activity
 const RecentActivity = lazy(() => import('pages/NewDesigns/RecentActivity'));
 
+//! Notification Management
+const NotificationManagement = lazy(() => import('pages/NewDesigns/NotificationManagement'));
+
 const routes: Route[] = [
   {
     name: 'Home Layout',
@@ -446,6 +449,12 @@ const routes: Route[] = [
         name: 'Description Static',
         path: BaseUrl.Help.DescriptionHelp,
         component: withCheckRole(DescriptionHelp, [PERMISSION_ENUM.ADMIN]),
+        isPrivateRoute: true,
+      },
+      {
+        name: 'Notification Management',
+        path: BaseUrl.NotificationManagement.Index,
+        component: withCheckRole(NotificationManagement, [PERMISSION_ENUM.ADMIN]),
         isPrivateRoute: true,
       },
     ],

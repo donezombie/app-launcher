@@ -192,6 +192,13 @@ const Sidebar = () => {
       path: BaseUrl.RecentActivity.Index,
       show: isAdmin,
     },
+    {
+      id: uniqueId('side-bar'),
+      label: 'Notification Management',
+      icon: CommonIcons.NotificationIcon,
+      path: BaseUrl.NotificationManagement.Index,
+      show: isAdmin,
+    },
   ];
 
   //! Function
