@@ -110,3 +110,7 @@ export enum CategoryType {
 export enum StaticPageType {
   HELP = 'HELP',
 }
+
+export enum NotiDataType {
+  DETAIL_APPLICATION = 'DETAIL_APPLICATION',
+}

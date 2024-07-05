@@ -196,6 +196,13 @@ const Sidebar = () => {
     },
     {
       id: uniqueId('side-bar'),
+      label: 'Notification Management',
+      icon: CommonIcons.NotificationIcon,
+      path: BaseUrl.NotificationManagement.Index,
+      show: isAdmin,
+    },
+    {
+      id: uniqueId('side-bar'),
       label: 'API Docs',
       icon: CommonIcons.PiNewspaperLight,
       path: BaseUrl.ApiDocs.Index,

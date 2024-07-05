@@ -85,6 +85,8 @@ const DescriptionHelp = lazy(() => import('pages/NewDesigns/Help/Components/Desc
 //! Recent Activity
 const RecentActivity = lazy(() => import('pages/NewDesigns/RecentActivity'));
 
+//! Notification Management
+const NotificationManagement = lazy(() => import('pages/NewDesigns/NotificationManagement'));
 const ApiDocs = lazy(() => import('pages/NewDesigns/ApiDocs'));
 const ApiDocsDetail = lazy(() => import('pages/NewDesigns/ApiDocs/Components/DetailApiDoc'));
 
@@ -432,6 +434,11 @@ const routes: Route[] = [
         path: BaseUrl.Help.DescriptionHelp,
         component: withCheckRole(DescriptionHelp, [PERMISSION_ENUM.ADMIN]),
         isPrivateRoute: true,
+      },
+      {
+        name: 'Notification Management',
+        path: BaseUrl.NotificationManagement.Index,
+        component: withCheckRole(NotificationManagement, [PERMISSION_ENUM.ADMIN]),
       },
       {
         name: 'Api Docs',
