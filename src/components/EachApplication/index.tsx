@@ -12,9 +12,10 @@ interface EachApplicationProps {
     idApp?: string;
     icon?: any;
   };
+  onClickClose?: () => void;
 }
 
-const EachApplication = ({ application }: EachApplicationProps) => {
+const EachApplication = ({ application, onClickClose }: EachApplicationProps) => {
   //! State
   const theme = useTheme();
 
@@ -22,7 +23,10 @@ const EachApplication = ({ application }: EachApplicationProps) => {
 
   //! Render
   return (
-    <Link to={BaseUrl.Launcher.AppWithdDetail(application.href, application.idApp)}>
+    <Link
+      to={BaseUrl.Launcher.AppWithdDetail(application.href, application.idApp)}
+      onClick={onClickClose}
+    >
       <CommonStyles.Box
         className='each-application'
         sx={{

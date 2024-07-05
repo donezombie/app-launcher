@@ -31,6 +31,7 @@ const AllApplicationDialog = (props: AllApplicationProps) => {
   const { data: resListApp, isLoading } = useGetListApp({
     ...filters,
     canAccess: isAdmin ? null : true,
+    textSearch: textSearch || '',
   });
   const dataInstallApp =
     useMemo(() => {
@@ -76,7 +77,9 @@ const AllApplicationDialog = (props: AllApplicationProps) => {
               icon: index % 2 === 0 ? IconApplication1 : IconApplication2,
             }))
             .map((el) => {
-              return <EachApplication key={el.label} application={el} />;
+              return (
+                <EachApplication key={el.label} application={el} onClickClose={onClickClose} />
+              );
             })
         )}
       </ContentOfSection>

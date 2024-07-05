@@ -10,8 +10,6 @@ import { upperFirst } from 'lodash';
 import DialogAddNews from 'pages/NewDesigns/News/Components/DialogAddNews';
 import ItemNews from 'pages/NewDesigns/News/Components/ItemNews';
 
-interface RecentActivityCardProps {}
-
 const initialValues = {
   extSearch: '',
   page: 0,
@@ -28,11 +26,10 @@ const tabs = [
   },
 ];
 
-const RecentActivityCard = (props: RecentActivityCardProps) => {
-  const { filters, setFilters, handleResetToInitial, handleSearch } =
-    useFiltersHandler(initialValues);
+const RecentActivityCard = () => {
+  const { filters, handleSearch } = useFiltersHandler(initialValues);
 
-  const { data: resData, isLoading, refetch: refetchListNews } = useGetNewsListHooks(filters);
+  const { data: resData, isLoading } = useGetNewsListHooks(filters);
 
   const data = resData?.data?.data?.items || [];
 

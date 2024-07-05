@@ -58,7 +58,6 @@ function AutoCompleteField(props: Props) {
   const value = field?.value || restProps?.value;
   const onBlur = field?.onBlur || restProps?.onBlur;
   //   const { errors, touched } = form || {};
-  console.log('lplp', value);
   //! Function
   React.useEffect(() => {
     let active = true;
@@ -118,7 +117,7 @@ function AutoCompleteField(props: Props) {
       renderInput={(params) => (
         <TextField
           {...params}
-          label={label || 'Asynchronous'}
+          label={label}
           name={name}
           InputProps={{
             ...params.InputProps,

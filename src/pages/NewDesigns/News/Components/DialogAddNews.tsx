@@ -8,14 +8,13 @@ import AutoCompleteField from 'components/CustomFields/AutoCompleteField';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
 import { queryKeys } from 'consts';
-import { AppType, NewsType } from 'consts/enum';
-import { FastField, Form, Formik, FormikValues } from 'formik';
+import { NewsType } from 'consts/enum';
+import { FastField, Form, Formik } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import { useCreateNews, useUpdateNew } from 'hooks/news/useNewsHooks';
 import { DialogI } from 'interfaces/common';
 import { News } from 'interfaces/news';
-import { isEmpty } from 'lodash';
 import { useMemo } from 'react';
 import { RequestCreateNews } from 'services/newsServices';
 import userService from 'services/userService';
@@ -30,9 +29,7 @@ const validateAddNew = Yup.object().shape({
   title: Yup.string().required('Title is required field!'),
   body: Yup.string().required('Body is required field!'),
   thumbUrl: Yup.string().required('ThumbUrl is required field!'),
-  type: Yup.string()
-    .typeError('Category is required field!')
-    .required('Category is required field!'),
+  type: Yup.string().typeError('Type is required field!').required('Type is required field!'),
 });
 
 const DialogAddNews = (props: Props) => {
@@ -173,7 +170,7 @@ const DialogAddNews = (props: Props) => {
                       variant='captionLMedium'
                       sx={{ mb: 1.5, mt: 1 }}
                     >
-                      Category <span style={{ color: 'red' }}>*</span>
+                      Type <span style={{ color: 'red' }}>*</span>
                     </CommonStyles.Typography>
                     <FastField
                       component={SelectField}
@@ -195,12 +192,10 @@ const DialogAddNews = (props: Props) => {
                           component={AutoCompleteField}
                           name='appId'
                           loading={isLoading}
-                          label='Choose App'
                           optionsArg={optionApps || []}
                           fullWidth
                           multiple
-                          sx={{ height: '42px' }}
-                          loadOptions={(text: string, setOptions: any, setLoading: any) => {
+                          loadOptions={(_: string, setOptions: any, setLoading: any) => {
                             setLoading(true);
                             setOptions(optionApps);
                             setLoading(false);
@@ -213,6 +208,7 @@ const DialogAddNews = (props: Props) => {
                       name='directDetail'
                       label='Direct Detail'
                       fullWidth
+                      sxContainer={{ mt: 1 }}
                     />
                   </CommonStyles.Box>
                 </CommonStyles.Box>

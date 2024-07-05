@@ -2,12 +2,13 @@ import React from 'react';
 import CommonStyles from 'components/CommonStyles';
 import { Field, Form, Formik } from 'formik';
 import TextField from 'components/CustomFields/TextField';
-import { Dialog } from '@mui/material';
 import AllApplicationDialog from 'pages/NewDesigns/AllApplication';
+import { Dialog } from '@mui/material';
 
 const CenterSide = () => {
   //! State
   const [open, setOpen] = React.useState(false);
+
   //! Function
 
   //! Render

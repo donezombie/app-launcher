@@ -1,6 +1,7 @@
 import CommonStyles from 'components/CommonStyles';
 import TextField from 'components/CustomFields/TextField';
 import SearchAndFilters from 'components/SearchAndFilters';
+import { UPLOAD_URL } from 'consts/apiUrl';
 import { SortOrder } from 'consts/enum';
 import { FastField } from 'formik';
 import { filterAppType } from 'helpers';
@@ -71,7 +72,9 @@ const AppsManagement = () => {
             id: 'icon',
             Cell: (row) => {
               const { icon } = row;
-              return <CommonStyles.Avatar src={icon} sx={{ width: 56, height: 56 }} />;
+              return (
+                <CommonStyles.Avatar src={`${UPLOAD_URL}/${icon}`} sx={{ width: 56, height: 56 }} />
+              );
             },
           },
           {

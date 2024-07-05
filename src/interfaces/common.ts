@@ -69,6 +69,7 @@ export interface RequestPagingCommon {
   canAccess?: boolean | null;
   categoryType?: string;
   type?: string;
+  textSearch?: string;
 }
 
 export interface ResponsePagingCommon<T> {
