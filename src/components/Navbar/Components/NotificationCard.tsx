@@ -2,12 +2,12 @@ import { Switch, useTheme } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { SIZE_ICON_DEFAULT } from 'consts';
-import React from 'react';
-import ItemNotification from './ItemNotification';
-import { useNavigate } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import NewsTab from './NewsTab';
 import NotiTab from './NotiTab';
+import NotificationTab from './NotificationTab';
 
 interface ITab {
   label: string;
@@ -40,9 +40,12 @@ const NotificationCard = (props: NotificationCardProps) => {
   const tabs = [
     { label: 'Direct', component: NotiTab },
     { label: 'News', component: NewsTab },
+    {
+      label: 'Notification',
+      component: NotificationTab,
+    },
   ];
   //! Function
-
   const onOpenNotiSreen = () => {
     navigate(BaseUrl.Notification.Index);
     onClickNavigateNotiScreen && onClickNavigateNotiScreen();

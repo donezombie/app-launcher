@@ -18,11 +18,11 @@ interface CellActionsProps {
 const CellActions = (props: CellActionsProps) => {
   //! State
   const { item, noStatusIcon } = props;
-  const {
-    open: openDialogEdit,
-    toggle: toggleDialogEdit,
-    shouldRender: shouldRenderDialogEdit,
-  } = useToggleDialog();
+  // const {
+  //   open: openDialogEdit,
+  //   toggle: toggleDialogEdit,
+  //   shouldRender: shouldRenderDialogEdit,
+  // } = useToggleDialog();
   const {
     open: openDialogDelete,
     toggle: toggleDialogDelete,

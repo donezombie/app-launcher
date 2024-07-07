@@ -36,3 +36,22 @@ export const useGetUserReceiveNotification = (filters: RequestPagingCommon) => {
     queryFn: () => notificationService.getUserReceiveNotification(filters),
   });
 };
+
+export const useGetListNoti = () => {
+  return useQuery({
+    queryKey: [queryKeys.getListNotification],
+    queryFn: () => notificationService.getListNoti({}),
+  });
+};
+
+export const useReadAllNoti = () => {
+  return useMutation({
+    mutationFn: () => notificationService.postReadAllNoti({}),
+  });
+};
+
+export const useReadEachNoti = () => {
+  return useMutation({
+    mutationFn: ({ id }: { id: string }) => notificationService.postNotificationRead(id, {}),
+  });
+};

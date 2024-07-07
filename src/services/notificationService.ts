@@ -10,6 +10,8 @@ import { Notification } from 'interfaces/notification';
 import {
   LIST_NOTIFICATION,
   LIST_NOTIFICATION_CREATE_NEW,
+  LIST_NOTIFICATION_MANAGER,
+  LIST_NOTIFICATION_READ_ALL,
   LIST_USER_RECEIVE_NOTIFICATION,
 } from 'consts/apiUrl';
 
@@ -39,7 +41,7 @@ export interface RequestUserReceiveNotification {
 
 class NotificationServices {
   getListNotification(filter: RequestPagingCommon): PromiseResponseBase<ResponseListNotification> {
-    return httpService.get(`${LIST_NOTIFICATION}?${queryString.stringify(filter)}`);
+    return httpService.get(`${LIST_NOTIFICATION_MANAGER}?${queryString.stringify(filter)}`);
   }
 
   postCreateNotification(body: RequestCreateNotification) {
@@ -56,6 +58,18 @@ class NotificationServices {
     filter: RequestPagingCommon
   ): PromiseResponseBase<ResponseGenerator<RequestUserReceiveNotification[]>> {
     return httpService.get(`${LIST_USER_RECEIVE_NOTIFICATION}?${queryString.stringify(filter)}`);
+  }
+  getListNoti(filter: RequestPagingCommon): PromiseResponseBase<ResponseListNotification> {
+    return httpService.get(`${LIST_NOTIFICATION}?${queryString.stringify(filter)}`);
+  }
+  getNotificationDetail(id: string): PromiseResponseBase<Notification> {
+    return httpService.get(`${LIST_NOTIFICATION}/${id}`);
+  }
+  postNotificationRead(id: string, body: RequestCreateNotification) {
+    return httpService.patch(`${LIST_NOTIFICATION}/${id}/readed`, body);
+  }
+  postReadAllNoti(body: RequestCreateNotification) {
+    return httpService.patch(`${LIST_NOTIFICATION_READ_ALL}`, body);
   }
 }
 
