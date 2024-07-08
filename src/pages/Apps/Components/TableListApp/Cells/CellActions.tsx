@@ -4,7 +4,7 @@ import CommonStyles from 'components/CommonStyles';
 import useToggleDialog from 'hooks/useToggleDialog';
 import DialogAddOrEditApp from '../../../Dialogs/DialogAddOrEditApp';
 import { App, NewApp } from 'interfaces/apps';
-import { useUpdateAppIntegration } from 'hooks/app/useAppHooks';
+import { useUninstallApp, useUpdateAppIntegration } from 'hooks/app/useAppHooks';
 import { showError, showSuccess } from 'helpers/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from 'consts/index';
@@ -15,6 +15,7 @@ import BaseUrl from 'consts/baseUrl';
 import { Badge } from '@mui/material';
 import DialogListRequesting from 'pages/Apps/Dialogs/DialogListRequesting';
 import { AccessAppType } from 'consts/enum';
+import CellDelete from './CellDelete';
 
 interface CellActionsProps {
   item: NewApp;
@@ -38,6 +39,12 @@ const CellActions = ({ item }: CellActionsProps) => {
     open: openRequesting,
     toggle: toggleRequesting,
     shouldRender: shoulRenderRequesting,
+  } = useToggleDialog();
+
+  const {
+    open: openDelete,
+    toggle: toggleDelete,
+    shouldRender: shouldRenderDelete,
   } = useToggleDialog();
 
   const { mutateAsync: updateApp } = useUpdateAppIntegration();
@@ -83,6 +90,8 @@ const CellActions = ({ item }: CellActionsProps) => {
         <DialogListRequesting isOpen={openRequesting} toggle={toggleRequesting} appId={item.id} />
       )}
 
+      {shouldRenderDelete && <CellDelete item={item} isOpen={openDelete} toggle={toggleDelete} />}
+
       <CommonStyles.Tooltip title='Edit'>
         <Link to={BaseUrl.MyApps.DetailWithID(item.id)}>
           <CommonStyles.Button isIconButton>
@@ -102,6 +111,12 @@ const CellActions = ({ item }: CellActionsProps) => {
           <Badge badgeContent={requestingList?.length || 0} color='error'>
             <CommonIcons.AssignmentChecked />
           </Badge>
+        </CommonStyles.Button>
+      </CommonStyles.Tooltip>
+
+      <CommonStyles.Tooltip title='Delete App'>
+        <CommonStyles.Button isIconButton onClick={toggleDelete}>
+          <CommonIcons.RiDeleteBin7Line />
         </CommonStyles.Button>
       </CommonStyles.Tooltip>
     </Fragment>

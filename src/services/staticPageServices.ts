@@ -16,7 +16,6 @@ export interface CreateStaticPage {
   thumbUrl: string;
   url?: string;
   description?: string;
-  topic: string;
   category?: string;
 }
 

@@ -122,3 +122,9 @@ export const useApprovalAll = () => {
     mutationFn: (body: { id: number; isAccess: boolean }) => appManagementService.approvalAll(body),
   });
 };
+
+export const useDeleteAppIntegration = () => {
+  return useMutation({
+    mutationFn: ({ id }: { id: string }) => appManagementService.deleteAppIntegration(id),
+  });
+};

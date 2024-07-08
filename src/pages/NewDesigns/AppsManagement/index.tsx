@@ -40,6 +40,7 @@ const AppsManagement = () => {
     useMemo(() => {
       return resListApp?.data?.data?.items;
     }, [resListApp]) || [];
+  const dataStatus = data?.map((item) => item?.status) || [];
   const totalCount = resListApp?.data?.data?.totalItems || 0;
 
   //! Render
@@ -94,6 +95,13 @@ const AppsManagement = () => {
                   {row?.summary || ''}
                 </CommonStyles.Typography>
               );
+            },
+          },
+          {
+            label: 'Status',
+            id: 'status',
+            Cell: (row) => {
+              return <CommonStyles.Typography>{row?.status || ''}</CommonStyles.Typography>;
             },
           },
           {

@@ -1,7 +1,10 @@
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import { CategoryType } from 'consts/enum';
-import { useGetNotificationListHooks } from 'hooks/notification/useNotificationHook';
+import {
+  useGetNotificationListHooks,
+  useGetUserReceiveNotification,
+} from 'hooks/notification/useNotificationHook';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import useToggleDialog from 'hooks/useToggleDialog';
 import { Order } from 'interfaces/common';
@@ -13,13 +16,6 @@ import SearchAndFilters from 'components/SearchAndFilters';
 import TextField from 'components/CustomFields/TextField';
 import { FastField, Field } from 'formik';
 import { cloneDeep } from 'lodash';
-
-const tabs = [
-  {
-    label: 'Notification',
-    value: 'Notification',
-  },
-];
 
 const initialValues = {
   extSearch: '',
@@ -90,9 +86,16 @@ const NotificationManagement = () => {
       disableSort: true,
     },
     {
-      label: 'Updated At',
-      id: 'updatedAt',
+      label: 'User Receive',
+      id: 'userId',
       disableSort: true,
+      Cell: (row: Notification) => {
+        return (
+          <CommonStyles.Box>
+            {row.NotificationLogsWith.map((el) => el.User.username).join(', ')}
+          </CommonStyles.Box>
+        );
+      },
     },
     {
       label: 'Action',
@@ -114,7 +117,7 @@ const NotificationManagement = () => {
         // }}
         placeholder='Search Notification Management...'
       />
-      <CommonStyles.Button sx={{ mb: 2 }} onClick={toggleDialog}>
+      <CommonStyles.Button sx={{ mb: 2, mt: 1 }} onClick={toggleDialog}>
         Add New Notification
       </CommonStyles.Button>
       <CommonStyles.Box

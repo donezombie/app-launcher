@@ -27,6 +27,7 @@ export const queryKeys = {
   detailHelp: 'detailHelp',
   getListNotification: 'getListNotification',
   getUserReceiveNotification: 'getUserReceiveNotification',
+  getReadNotification: 'getReadNotification',
 };
 
 export const LANG_ENUM = {
