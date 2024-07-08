@@ -117,7 +117,7 @@ const NotificationManagement = () => {
         // }}
         placeholder='Search Notification Management...'
       />
-      <CommonStyles.Button sx={{ mb: 2 }} onClick={toggleDialog}>
+      <CommonStyles.Button sx={{ mb: 2, mt: 1 }} onClick={toggleDialog}>
         Add New Notification
       </CommonStyles.Button>
       <CommonStyles.Box

@@ -4,6 +4,7 @@ import CommonStyles from 'components/CommonStyles';
 import UploadField from 'components/CommonStyles/UploadField';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
+import { StaticPageType } from 'consts/enum';
 import { FastField, Form, Formik } from 'formik';
 import { handleUpload } from 'helpers';
 import { showError, showSuccess } from 'helpers/toast';
@@ -20,7 +21,6 @@ const validateCreateApp = Yup.object().shape({
   // thumbUrl: Yup.string().required('Thumb Url Header is required field!'),
   // url: Yup.string().required('Url Header is required field!'),
   // description: Yup.string().required('Description Header is required field!'),
-  topic: Yup.string().required('Topic Header is required field!'),
   category: Yup.string().required('Category Header is required field!'),
 });
 
@@ -44,7 +44,6 @@ const AddEditHelp = () => {
     thumbUrl: helpDetail?.thumbUrl ? helpDetail?.thumbUrl : '',
     url: helpDetail?.url ? helpDetail?.url : '',
     description: helpDetail?.description ? helpDetail?.description : '',
-    topic: helpDetail?.topic ? helpDetail?.topic : '',
     category: helpDetail?.category ? helpDetail?.category : '',
   };
 
@@ -68,9 +67,13 @@ const AddEditHelp = () => {
         onSubmit={(values, { setSubmitting }) => {
           (async () => {
             try {
+              const body = {
+                ...values,
+                type: StaticPageType.HELP,
+              };
               const res = isEdit
                 ? await updateHelp({ id: String(id), body: values })
-                : await createHelp(values);
+                : await createHelp(body);
               refetch();
               navigate(-1);
 
@@ -102,18 +105,14 @@ const AddEditHelp = () => {
                   <FastField component={TextField} name='thumbUrl' label='Thumb Url' fullWidth />
                   <FastField component={TextField} name='url' label='Url' fullWidth />
                 </CommonStyles.Box>
-                <CommonStyles.Box
-                  sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, mt: 1, mb: 1 }}
-                >
-                  <FastField component={TextField} name='topic' label='Topic' fullWidth required />
-                  <FastField
-                    component={TextField}
-                    name='category'
-                    label='Category'
-                    fullWidth
-                    required
-                  />
-                </CommonStyles.Box>
+
+                <FastField
+                  component={TextField}
+                  name='category'
+                  label='Category'
+                  fullWidth
+                  required
+                />
                 <CommonStyles.Box
                   sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, mt: 1, mb: 1 }}
                 >

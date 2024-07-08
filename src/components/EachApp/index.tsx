@@ -197,6 +197,16 @@ const EachApp = ({
         <CommonStyles.Button loading={loading} onClick={onClickRequestAccess}>
           Request Access
         </CommonStyles.Button>
+
+        <Link
+          to={
+            isReport
+              ? BaseUrl.ReportApp.InfoWithID(item.id || '')
+              : BaseUrl.Marketplace.InfoWithID(item.id || '')
+          }
+        >
+          <CommonStyles.Button variant='outlined'>More Infomation</CommonStyles.Button>
+        </Link>
       </CommonStyles.Box>
     );
   };

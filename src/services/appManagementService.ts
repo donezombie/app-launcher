@@ -175,6 +175,9 @@ class AppManagementService {
       isAccess: body.isAccess,
     });
   }
+  deleteAppIntegration(id?: string) {
+    return httpService.delete(`${APP_INTEGRATION_URL}/${id}`);
+  }
 }
 
 export default new AppManagementService();
