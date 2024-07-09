@@ -61,9 +61,7 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
 
   //! Render
   return (
-    <CommonStyles.Box
-      sx={{ display: 'flex', alignItems: 'center', my: 2, px: '12px', cursor: 'pointer' }}
-    >
+    <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', my: 2, px: '12px' }}>
       {!item.isRead ? (
         <StyledBadge
           overlap='circular'
@@ -73,7 +71,7 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
         >
           <CommonStyles.Avatar
             src={item?.imageUrl}
-            sx={{ width: sizeAva, height: sizeAva }}
+            sx={{ width: sizeAva, height: sizeAva, cursor: 'pointer' }}
             onClick={() => handleReadNotification(item.id)}
           />
         </StyledBadge>

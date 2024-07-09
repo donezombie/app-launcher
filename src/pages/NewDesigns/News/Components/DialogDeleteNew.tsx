@@ -4,12 +4,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useQueryClient } from '@tanstack/react-query';
 import CommonStyles from 'components/CommonStyles';
 import { queryKeys } from 'consts';
-import { Form, Formik } from 'formik';
 import { showError, showSuccess } from 'helpers/toast';
 import { useDeleteNews } from 'hooks/news/useNewsHooks';
 import { DialogI } from 'interfaces/common';
 import { News } from 'interfaces/news';
-import { RequestCreateApp } from 'services/appManagementService';
 import { RequestCreateNews } from 'services/newsServices';
 
 interface Props extends DialogI<RequestCreateNews> {
@@ -17,7 +15,7 @@ interface Props extends DialogI<RequestCreateNews> {
 }
 
 const DialogDeleteNew = (props: Props) => {
-  const { isOpen, toggle, onSubmit, item } = props;
+  const { isOpen, toggle, item } = props;
   const { mutateAsync: deleteNews } = useDeleteNews();
   const queryClient = useQueryClient();
 
