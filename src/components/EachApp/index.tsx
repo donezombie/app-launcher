@@ -1,3 +1,4 @@
+import { Image } from '@mui/icons-material';
 import { useTheme } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { IconApplication1, IconApplication2 } from 'components/CommonIcons';
@@ -71,7 +72,9 @@ const EachApp = ({
 
   const onClickLaunch = () => {
     const url = encodeURIComponent(item.launchUri);
-    navigate(BaseUrl.Launcher.AppWithdDetail(url, item.id));
+    isReport
+      ? navigate(BaseUrl.Launcher.AppWithdDetail(url))
+      : navigate(BaseUrl.Launcher.AppWithdDetail(item.launchUri, item.id));
     addNewTab({
       label: item.name,
       value: item.id,
@@ -102,10 +105,6 @@ const EachApp = ({
   //! Render
   const checkIcon = ind % 2 === 0 ? IconApplication1 : IconApplication2;
   const renderActions = () => {
-    // if (item.isYourApp) {
-    //   return <CommonStyles.Button sx={{ width: 'fit-content' }}>Manage</CommonStyles.Button>;
-    // }
-
     if (isYourApp) {
       const {
         open: openRequesting,
@@ -228,11 +227,6 @@ const EachApp = ({
         showSuccess(`InActive [${item.name}] successfully!`);
       }
       await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
-
-      // if (isAdmin) {
-      //   await queryClient.refetchQueries({ queryKey: [queryKeys.getAppInstalledList] });
-      // }
-
       setSubmitting(false);
     } catch (error) {
       setSubmitting(false);
@@ -261,35 +255,58 @@ const EachApp = ({
               alignItems: 'center',
             }}
           >
-            <CommonStyles.Box className='each-app__left'>
-              <CommonStyles.Box
-                className='each-application__logo'
-                sx={{
-                  width: 100,
-                  height: 100,
-                  backgroundColor: theme.palette.primary.main,
-                  borderRadius: 2,
-                  boxShadow: 3,
-                  position: 'relative',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {checkIcon}
+            {!item.icon ? (
+              <>
+                <CommonStyles.Box className='each-app__left'>
+                  <CommonStyles.Box
+                    className='each-application__logo'
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      backgroundColor: theme.palette.primary.main,
+                      borderRadius: 2,
+                      boxShadow: 3,
+                      position: 'relative',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {checkIcon}
+                    <CommonStyles.Box
+                      className='each-application__overlay'
+                      sx={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                        transition: '.3s',
+                      }}
+                    />
+                  </CommonStyles.Box>
+                </CommonStyles.Box>
+              </>
+            ) : (
+              <CommonStyles.Box className='each-app__left'>
                 <CommonStyles.Box
-                  className='each-application__overlay'
+                  className='each-application__logo'
                   sx={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    transition: '.3s',
+                    width: 100,
+                    height: 100,
+                    borderRadius: 2,
+                    boxShadow: 3,
+                    position: 'relative',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
-                />
+                >
+                  <img src={item.icon} alt='image' style={{ width: '100%', height: '100%' }} />
+                </CommonStyles.Box>
               </CommonStyles.Box>
-            </CommonStyles.Box>
+            )}
             <CommonStyles.Box
               className='each-app__right'
               sx={{ display: 'flex', gap: 2, flexDirection: 'column', flexGrow: 1 }}

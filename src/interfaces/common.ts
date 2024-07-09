@@ -70,6 +70,7 @@ export interface RequestPagingCommon {
   categoryType?: string;
   type?: string;
   textSearch?: string;
+  isRead?: boolean;
 }
 
 export interface ResponsePagingCommon<T> {
