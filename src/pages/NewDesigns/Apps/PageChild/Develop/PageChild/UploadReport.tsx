@@ -1,5 +1,6 @@
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
+import UploadField from 'components/CommonStyles/UploadField';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
@@ -7,6 +8,7 @@ import { URL_REGEX } from 'consts';
 import BaseUrl from 'consts/baseUrl';
 import { AppType, CategoryType } from 'consts/enum';
 import { FastField, Form, Formik, FormikProps } from 'formik';
+import { handleUpload } from 'helpers';
 import { showError, showSuccess } from 'helpers/toast';
 import {
   useCreateAppIntegration,
@@ -23,9 +25,7 @@ import * as Yup from 'yup';
 
 const validateCreateApp = Yup.object().shape({
   name: Yup.string().required('Name is required field!'),
-  launchUri: Yup.string()
-    .required('Launch Uri is required field!')
-    .matches(URL_REGEX, 'Invalid Url!'),
+  launchUri: Yup.string().required('Launch Uri is required field!'),
   categoryId: Yup.number()
     .typeError('Category is required field!')
     .required('Category is required field!'),
@@ -108,7 +108,7 @@ const UploadReport = (props: Iprops) => {
           })();
         }}
       >
-        {({ isSubmitting, handleSubmit, values }) => {
+        {({ isSubmitting, handleSubmit, values, setFieldValue }) => {
           return (
             <Form>
               <CommonStyles.Box>
@@ -158,6 +158,15 @@ const UploadReport = (props: Iprops) => {
                       sx={{ height: '42px' }}
                     />
                   </CommonStyles.Box>
+                </CommonStyles.Box>
+                <CommonStyles.Box sx={{ mt: 1 }}>
+                  <UploadField
+                    name='icon'
+                    placeholder='Upload Icon'
+                    label='Icon'
+                    onChange={(e: any) => handleUpload('icon', e, setFieldValue)}
+                    fullWidth
+                  />
                 </CommonStyles.Box>
               </CommonStyles.Box>
               <CommonStyles.Box

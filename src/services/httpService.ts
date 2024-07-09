@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LOGOUT_REDIRECT_URI } from 'consts/configAWS';
 import { IUser } from 'providers/AuthenticationProvider';
 import AuthService from './authService';
+import { BASE_URL } from 'consts/apiUrl';
 // import AuthService from './authService';
 
 export const TOKEN_KEY = 'token';
@@ -32,6 +33,8 @@ class Services {
       async (error) => {
         if (error.response.data?.statusCode === 401) {
           this.clearAuthStorage();
+          window.location.href = `${BASE_URL}/login`;
+          window.sessionStorage.clear();
         }
         return Promise.reject(error);
       }

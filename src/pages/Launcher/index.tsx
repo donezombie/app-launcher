@@ -22,6 +22,9 @@ const Launcher = ({ idApp, launchUri }: LauncherProps) => {
     });
   }, []);
 
+  const iframeUri = !idApp
+    ? `${decodeURIComponent(launchUri || '')}`
+    : `${launchUri}?embedded=true&token=${auth.accessToken}&id=${idApp}` || '';
   //! Function
 
   //! Render
@@ -36,7 +39,7 @@ const Launcher = ({ idApp, launchUri }: LauncherProps) => {
       }}
     >
       <iframe
-        src={`${launchUri}?embedded=true&token=${auth.accessToken}&id=${idApp}` || ''}
+        src={iframeUri || ''}
         // src={`http://localhost:3001?token=${auth.accessToken}&id=${idApp}` || ''}
         frameBorder={0}
         sandbox='allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts allow-downloads allow-pointer-lock'

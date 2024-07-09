@@ -3,9 +3,12 @@ import { showSuccess } from 'helpers/toast';
 import { useReadEachNoti } from 'hooks/notification/useNotificationHook';
 import { styled, useTheme } from '@mui/material/styles';
 import { Badge } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from 'consts';
+import { Notification } from 'interfaces/notification';
 
 interface ItemNotificationsProps {
-  item: any;
+  item: Notification;
 }
 const sizeAva = 36;
 
@@ -43,12 +46,14 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
   const { item } = props;
   const theme = useTheme();
   const { mutateAsync: updateNotification } = useReadEachNoti();
+  const queryClient = useQueryClient();
 
   //! Function
   const handleReadNotification = async (id: string) => {
     try {
       await updateNotification({ id });
       showSuccess('Read notification success');
+      queryClient.refetchQueries([queryKeys.getListNotification]);
     } catch (error) {
       console.log('error', error);
     }
@@ -58,7 +63,6 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
   return (
     <CommonStyles.Box
       sx={{ display: 'flex', alignItems: 'center', my: 2, px: '12px', cursor: 'pointer' }}
-      onClick={() => handleReadNotification(item.id)}
     >
       {!item.isRead ? (
         <StyledBadge
@@ -67,10 +71,14 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
           variant='dot'
           color='success'
         >
-          <CommonStyles.Avatar src={item?.thumbUrl} sx={{ width: sizeAva, height: sizeAva }} />
+          <CommonStyles.Avatar
+            src={item?.imageUrl}
+            sx={{ width: sizeAva, height: sizeAva }}
+            onClick={() => handleReadNotification(item.id)}
+          />
         </StyledBadge>
       ) : (
-        <CommonStyles.Avatar src={item?.thumbUrl} sx={{ width: sizeAva, height: sizeAva }} />
+        <CommonStyles.Avatar src={item?.imageUrl} sx={{ width: sizeAva, height: sizeAva }} />
       )}
 
       <CommonStyles.Box

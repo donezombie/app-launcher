@@ -12,6 +12,9 @@ const Launcher = () => {
   const uri = searchParams.get('uri');
   const id = searchParams.get('id');
 
+  const iframeUri = !id
+    ? `${decodeURIComponent(uri || '')}`
+    : `${uri}?embedded=true&token=${auth.accessToken}&id=${id}` || '';
   //! Function
 
   //! Render
@@ -33,8 +36,7 @@ const Launcher = () => {
       }}
     >
       <iframe
-        src={`${decodeURIComponent(uri)}?embedded=true&token=${auth.accessToken}&id=${id}` || ''}
-        // src={`http://localhost:3001?token=${auth.accessToken}&id=${idApp}` || ''}
+        src={iframeUri || ''}
         frameBorder={0}
         sandbox='allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts allow-downloads allow-pointer-lock'
         allow='accelerometer; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; clipboard-write;'

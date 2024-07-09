@@ -74,8 +74,11 @@ const BaseUrl = {
   },
   Launcher: {
     App: '/apps/launcher',
-    AppWithdDetail: (launchUri?: string | number, idApp?: string | number) =>
-      `/apps/launcher?uri=${launchUri}&id=${idApp}`,
+    AppWithdDetail: (launchUri?: string | number, idApp?: string | number) => {
+      return idApp
+        ? `/apps/launcher?uri=${launchUri}&id=${idApp}`
+        : `/apps/launcher?uri=${launchUri}`;
+    },
   },
   News: {
     Index: '/apps/news',

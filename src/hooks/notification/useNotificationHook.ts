@@ -37,10 +37,10 @@ export const useGetUserReceiveNotification = (filters: RequestPagingCommon) => {
   });
 };
 
-export const useGetListNoti = () => {
+export const useGetListNoti = (filters: RequestPagingCommon) => {
   return useQuery({
     queryKey: [queryKeys.getListNotification],
-    queryFn: () => notificationService.getListNoti({}),
+    queryFn: () => notificationService.getListNoti(filters),
   });
 };
 

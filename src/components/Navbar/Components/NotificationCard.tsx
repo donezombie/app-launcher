@@ -3,7 +3,7 @@ import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { SIZE_ICON_DEFAULT } from 'consts';
 import BaseUrl from 'consts/baseUrl';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NewsTab from './NewsTab';
 import NotiTab from './NotiTab';
@@ -33,6 +33,8 @@ interface NotificationCardProps {
 
 const NotificationCard = (props: NotificationCardProps) => {
   const { onClickNavigateNotiScreen } = props;
+  const [isReaded, setIsReaded] = useState(false);
+
   //! State
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const theme = useTheme();
@@ -42,9 +44,10 @@ const NotificationCard = (props: NotificationCardProps) => {
     { label: 'News', component: NewsTab },
     {
       label: 'Notification',
-      component: NotificationTab,
+      component: () => <NotificationTab isReaded={isReaded} />,
     },
   ];
+
   //! Function
   const onOpenNotiSreen = () => {
     navigate(BaseUrl.Notification.Index);
@@ -69,9 +72,9 @@ const NotificationCard = (props: NotificationCardProps) => {
         </CommonStyles.Typography>
 
         <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', alignContent: 'center' }}>
-          <Switch {...label} defaultChecked size='small' />
+          <Switch {...label} size='small' onChange={(e) => setIsReaded(e.target.checked)} />
           <CommonStyles.Typography fontWeight={500} fontSize='14px' mr='32px' ml='16px'>
-            Only show unread
+            Only show readed
           </CommonStyles.Typography>
           <CommonIcons.MdOutlineLaunch
             size={SIZE_ICON_DEFAULT + 2}

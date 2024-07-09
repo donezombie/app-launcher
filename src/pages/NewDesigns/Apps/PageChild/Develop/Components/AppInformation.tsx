@@ -1,15 +1,19 @@
 import { useTheme } from '@mui/material';
 import CommonStyles from 'components/CommonStyles';
+import UploadField from 'components/CommonStyles/UploadField';
 import SelectField from 'components/CustomFields/SelectField';
 import SwitchField from 'components/CustomFields/SwitchField';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
 import { AppType, CategoryType } from 'consts/enum';
-import { FastField, Field } from 'formik';
+import { FastField, Field, useFormikContext } from 'formik';
+import { handleUpload } from 'helpers';
+import { showError, showSuccess } from 'helpers/toast';
 import { useGetCategoryList } from 'hooks/category/useGetListCategory';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { Category } from 'interfaces/category';
 import { useCallback } from 'react';
+import userService from 'services/userService';
 
 const initialValues = {
   categoryType: CategoryType.DEFAULT,
@@ -20,6 +24,7 @@ const AppInformation = () => {
   const theme = useTheme();
   const { filters, handleSearch } = useFiltersHandler(initialValues);
   const { data: category } = useGetCategoryList(filters);
+  const { setFieldValue } = useFormikContext();
 
   //! Function
   const categoryOptions = useCallback(() => {
@@ -85,7 +90,13 @@ const AppInformation = () => {
           />
         </CommonStyles.Box>
         <CommonStyles.Box sx={{ mt: 1 }}>
-          <FastField component={TextField} name='icon' label='Icon link' fullWidth />
+          <UploadField
+            name='icon'
+            placeholder='Upload Icon'
+            label='Icon'
+            onChange={(e: any) => handleUpload('icon', e, setFieldValue)}
+            fullWidth
+          />
         </CommonStyles.Box>
         <CommonStyles.Box sx={{ mt: 1 }}>
           <CommonStyles.Typography component='p' variant='captionLMedium' sx={{ mb: 1.5 }}>
