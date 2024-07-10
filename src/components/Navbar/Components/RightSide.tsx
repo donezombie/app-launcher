@@ -13,8 +13,8 @@ import HelpDrawer from './HelpDrawer';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
-    backgroundColor: '#44b700',
-    color: '#44b700',
+    backgroundColor: theme.colors?.lawnGreen,
+    color: theme.colors?.lawnGreen,
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
     '&::after': {
       position: 'absolute',
