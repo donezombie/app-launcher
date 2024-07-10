@@ -1,4 +1,4 @@
-import { DialogActions, DialogContent } from '@mui/material';
+import { DialogActions, DialogContent, Switch } from '@mui/material';
 import DialogMui from '@mui/material/Dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import CommonStyles from 'components/CommonStyles';
@@ -51,7 +51,6 @@ const DialogAddNotification = (props: Props) => {
   //! State
   const { isOpen, toggle, item } = props;
   const { mutateAsync: createNotification } = useCreateNotification();
-  const { mutateAsync: updateNotification } = useUpdateNotification();
   const queryClient = useQueryClient();
   const { data: resListApp, isLoading } = useGetListApp({});
   const data = useMemo(() => resListApp?.data?.data?.items, [resListApp]) || [];
@@ -62,7 +61,6 @@ const DialogAddNotification = (props: Props) => {
   }));
 
   const { data: resListUser, isLoading: isLoadingUser } = useGetUserReceiveNotification({});
-
   const optionUsers = resListUser?.data?.data?.map((el) => ({
     key: el.id,
     label: el.username,
@@ -171,6 +169,7 @@ const DialogAddNotification = (props: Props) => {
                       required
                       onChange={(e) => handleUpload('imageUrl', e, setFieldValue)}
                     />
+
                     <FastField
                       component={RadioField}
                       name='select'

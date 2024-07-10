@@ -69,6 +69,7 @@ type Colors = {
   text1?: string;
   text2?: string;
   text3?: string;
+  lawnGreen?: string;
 };
 
 type Sizes = {
@@ -104,6 +105,7 @@ const lightTheme = createTheme({
     black: 'rgb(18, 18, 18)',
     gray: '#fafafb',
     grayLight: '#F2F2F2',
+    lawnGreen: '#44b700',
   },
 });
 

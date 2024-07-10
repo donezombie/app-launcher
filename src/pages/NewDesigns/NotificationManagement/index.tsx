@@ -18,7 +18,7 @@ import { FastField, Field } from 'formik';
 import { cloneDeep } from 'lodash';
 
 const initialValues = {
-  extSearch: '',
+  textSearch: '',
   page: 1,
   perPage: 10,
   sortOrder: Order.asc,
@@ -159,7 +159,7 @@ const NotificationManagement = () => {
                 gap: '4px',
               }}
             >
-              <FastField fullWidth component={TextField} name='extSearch' placeholder={'Search'} />
+              <FastField fullWidth component={TextField} name='textSearch' placeholder={'Search'} />
             </CommonStyles.Box>
           )}
         />

@@ -14,8 +14,8 @@ const sizeAva = 36;
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
-    backgroundColor: '#44b700',
-    color: '#44b700',
+    backgroundColor: theme.colors?.lawnGreen,
+    color: theme.colors?.lawnGreen,
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
     '&::after': {
       position: 'absolute',
@@ -61,9 +61,7 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
 
   //! Render
   return (
-    <CommonStyles.Box
-      sx={{ display: 'flex', alignItems: 'center', my: 2, px: '12px', cursor: 'pointer' }}
-    >
+    <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', my: 2, px: '12px' }}>
       {!item.isRead ? (
         <StyledBadge
           overlap='circular'
@@ -73,7 +71,7 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
         >
           <CommonStyles.Avatar
             src={item?.imageUrl}
-            sx={{ width: sizeAva, height: sizeAva }}
+            sx={{ width: sizeAva, height: sizeAva, cursor: 'pointer' }}
             onClick={() => handleReadNotification(item.id)}
           />
         </StyledBadge>

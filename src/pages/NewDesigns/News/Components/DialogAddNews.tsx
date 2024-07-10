@@ -1,3 +1,4 @@
+import { Switch } from '@mui/material';
 import DialogMui from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,6 +8,7 @@ import UploadField from 'components/CommonStyles/UploadField';
 import AutoCompleteField from 'components/CustomFields/AutoCompleteField';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
+import { log } from 'console';
 import { queryKeys } from 'consts';
 import { NewsType } from 'consts/enum';
 import { FastField, Form, Formik } from 'formik';
@@ -15,7 +17,7 @@ import { useGetListApp } from 'hooks/app/useAppHooks';
 import { useCreateNews, useUpdateNew } from 'hooks/news/useNewsHooks';
 import { DialogI } from 'interfaces/common';
 import { News } from 'interfaces/news';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { RequestCreateNews } from 'services/newsServices';
 import userService from 'services/userService';
 import * as Yup from 'yup';
@@ -38,7 +40,7 @@ const DialogAddNews = (props: Props) => {
   const { mutateAsync: createNew } = useCreateNews();
   const { mutateAsync: updateNew } = useUpdateNew();
   const queryClient = useQueryClient();
-
+  const [isSendNoti, setIsSendNoti] = useState(false);
   const { data: resListApp, isLoading } = useGetListApp({});
   const data =
     useMemo(() => {
@@ -67,10 +69,11 @@ const DialogAddNews = (props: Props) => {
           })
         : item?.appId
       : undefined,
+    isSendNoti: isSendNoti,
   };
 
   const isEdit = !!item?.id;
-
+  //!Function
   const optionTypes = Object.values(NewsType)
     .filter(
       isRecent
@@ -115,6 +118,7 @@ const DialogAddNews = (props: Props) => {
             setSubmitting(true);
             const objBody = {
               ...values,
+              isSendNoti,
               appId: values.appId?.map((el: any) => el.value).join(','),
             };
             if (!isRecent) delete objBody.appId;
@@ -203,6 +207,7 @@ const DialogAddNews = (props: Props) => {
                         />
                       </>
                     )}
+
                     <FastField
                       component={TextField}
                       name='directDetail'
@@ -210,6 +215,16 @@ const DialogAddNews = (props: Props) => {
                       fullWidth
                       sxContainer={{ mt: 1 }}
                     />
+
+                    <CommonStyles.Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+                      <CommonStyles.Typography>Notification:</CommonStyles.Typography>
+                      <Switch
+                        size='medium'
+                        onChange={(e) => {
+                          setIsSendNoti(e.target.checked);
+                        }}
+                      />
+                    </CommonStyles.Box>
                   </CommonStyles.Box>
                 </CommonStyles.Box>
               </Form>
