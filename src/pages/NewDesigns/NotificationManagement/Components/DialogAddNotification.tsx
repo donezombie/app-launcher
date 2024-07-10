@@ -5,6 +5,7 @@ import CommonStyles from 'components/CommonStyles';
 import UploadField from 'components/CommonStyles/UploadField';
 import AutoCompleteField from 'components/CustomFields/AutoCompleteField';
 import RadioField from 'components/CustomFields/RadioField';
+import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
 import { queryKeys } from 'consts';
 import { CategoryType, NotiDataType } from 'consts/enum';
@@ -20,6 +21,7 @@ import {
 import { DialogI } from 'interfaces/common';
 import { Notification } from 'interfaces/notification';
 import { isArray } from 'lodash';
+import { useAuth } from 'providers/AuthenticationProvider';
 import { useMemo } from 'react';
 import { RequestCreateNotification } from 'services/notificationService';
 import * as Yup from 'yup';
@@ -39,6 +41,7 @@ interface NotificationCreate {
   userId?: string | undefined;
   subTitle: string;
   data?: string;
+  token?: string;
 }
 
 const validateAddNotification = Yup.object().shape({
@@ -54,6 +57,7 @@ const DialogAddNotification = (props: Props) => {
   const queryClient = useQueryClient();
   const { data: resListApp, isLoading } = useGetListApp({});
   const data = useMemo(() => resListApp?.data?.data?.items, [resListApp]) || [];
+  const auth = useAuth();
   const optionApps = data.map((el: { id: string; name: string }) => ({
     key: el.id,
     label: el.name,
@@ -109,11 +113,16 @@ const DialogAddNotification = (props: Props) => {
               subTitle: values.subTitle,
               type: CategoryType.DEFAULT,
               data: JSON.stringify(dataObject),
+              token: auth.accessToken || 'Bearer ' + localStorage.getItem('accessToken'),
             };
-            if (isArray(values.appId) && values.select === 'topic') {
-              objBody.topicId = values.appId?.map((el: any) => el.value).join(',');
-            } else if (isArray(values.userId) && values.select === 'user') {
-              objBody.userId = values.userId?.map((el: any) => el.value).join(',');
+            // if (isArray(values.appId) && values.select === 'topic') {
+            if (values.select === 'topic') {
+              // objBody.topicId = values.appId?.map((el: any) => el.value).join(',');
+              objBody.appId = values.appId;
+              // } else if (isArray(values.userId) && values.select === 'user') {
+            } else if (values.select === 'user') {
+              // objBody.userId = values.userId?.map((el: any) => el.value).join(',');
+              objBody.userId = values.userId?.toString();
             }
             await createNotification(objBody);
             toggle();
@@ -184,9 +193,9 @@ const DialogAddNotification = (props: Props) => {
                           variant='captionLMedium'
                           sx={{ mb: 1.5, mt: 1 }}
                         >
-                          App
+                          Choose App
                         </CommonStyles.Typography>
-                        <FastField
+                        {/* <FastField
                           component={AutoCompleteField}
                           name='appId'
                           loading={isLoading}
@@ -200,6 +209,14 @@ const DialogAddNotification = (props: Props) => {
                             setOptions(optionApps);
                             setLoading(false);
                           }}
+                        /> */}
+                        <FastField
+                          component={SelectField}
+                          loading={isLoading}
+                          name='appId'
+                          options={optionApps || []}
+                          fullWidth
+                          sx={{ height: '42px' }}
                         />
                       </>
                     )}
@@ -211,9 +228,9 @@ const DialogAddNotification = (props: Props) => {
                           variant='captionLMedium'
                           sx={{ mb: 1.5, mt: 1 }}
                         >
-                          User
+                          Choose User
                         </CommonStyles.Typography>
-                        <FastField
+                        {/* <FastField
                           component={AutoCompleteField}
                           name='userId'
                           loading={isLoadingUser}
@@ -227,6 +244,14 @@ const DialogAddNotification = (props: Props) => {
                             setOptions(optionUsers);
                             setLoading(false);
                           }}
+                        /> */}
+                        <FastField
+                          loading={isLoadingUser}
+                          component={SelectField}
+                          name='userId'
+                          options={optionUsers || []}
+                          fullWidth
+                          sx={{ height: '42px' }}
                         />
                       </>
                     )}
