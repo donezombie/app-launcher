@@ -82,7 +82,7 @@ const DialogAddNotification = (props: Props) => {
     body: item ? item?.body : '',
     imageUrl: item ? item?.imageUrl : '',
     type: item ? item.type : '',
-    select: 'topic',
+    select: optionRadioSelect[0].value,
     appId: item ? parseData?.appId : '',
     userId: item ? parseData?.userId : '',
     subTitle: item ? item?.subTitle : '',
@@ -118,7 +118,7 @@ const DialogAddNotification = (props: Props) => {
             // if (isArray(values.appId) && values.select === 'topic') {
             if (values.select === 'topic') {
               // objBody.topicId = values.appId?.map((el: any) => el.value).join(',');
-              objBody.appId = values.appId;
+              objBody.topicId = values.appId?.toString();
               // } else if (isArray(values.userId) && values.select === 'user') {
             } else if (values.select === 'user') {
               // objBody.userId = values.userId?.map((el: any) => el.value).join(',');
