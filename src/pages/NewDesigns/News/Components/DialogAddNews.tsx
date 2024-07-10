@@ -8,7 +8,6 @@ import UploadField from 'components/CommonStyles/UploadField';
 import AutoCompleteField from 'components/CustomFields/AutoCompleteField';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
-import { log } from 'console';
 import { queryKeys } from 'consts';
 import { NewsType } from 'consts/enum';
 import { FastField, Form, Formik } from 'formik';

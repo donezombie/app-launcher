@@ -1,9 +1,8 @@
-import { DialogActions, DialogContent, Switch } from '@mui/material';
+import { DialogActions, DialogContent } from '@mui/material';
 import DialogMui from '@mui/material/Dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import CommonStyles from 'components/CommonStyles';
 import UploadField from 'components/CommonStyles/UploadField';
-import AutoCompleteField from 'components/CustomFields/AutoCompleteField';
 import RadioField from 'components/CustomFields/RadioField';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
@@ -16,11 +15,9 @@ import { useGetListApp } from 'hooks/app/useAppHooks';
 import {
   useCreateNotification,
   useGetUserReceiveNotification,
-  useUpdateNotification,
 } from 'hooks/notification/useNotificationHook';
 import { DialogI } from 'interfaces/common';
 import { Notification } from 'interfaces/notification';
-import { isArray } from 'lodash';
 import { useAuth } from 'providers/AuthenticationProvider';
 import { useMemo } from 'react';
 import { RequestCreateNotification } from 'services/notificationService';
