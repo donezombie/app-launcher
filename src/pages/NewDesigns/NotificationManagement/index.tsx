@@ -1,10 +1,7 @@
 import CommonStyles from 'components/CommonStyles';
 import HeadWithSearching from 'components/HeadWithSearching';
 import { CategoryType } from 'consts/enum';
-import {
-  useGetNotificationListHooks,
-  useGetUserReceiveNotification,
-} from 'hooks/notification/useNotificationHook';
+import { useGetNotificationListHooks } from 'hooks/notification/useNotificationHook';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import useToggleDialog from 'hooks/useToggleDialog';
 import { Order } from 'interfaces/common';
@@ -14,7 +11,7 @@ import DialogAddNotification from './Components/DialogAddNotification';
 import { useTheme } from '@mui/material';
 import SearchAndFilters from 'components/SearchAndFilters';
 import TextField from 'components/CustomFields/TextField';
-import { FastField, Field } from 'formik';
+import { FastField } from 'formik';
 import { cloneDeep } from 'lodash';
 
 const initialValues = {
@@ -44,7 +41,6 @@ const NotificationManagement = () => {
     handleRequestSort,
     handleSelectAllClick,
     handleResetToInitial,
-    handleCheckBox,
   } = useFiltersHandler(initialValues);
 
   const { data: resData, isLoading } = useGetNotificationListHooks(filters);

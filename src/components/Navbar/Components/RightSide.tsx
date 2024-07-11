@@ -1,15 +1,14 @@
-import { Badge, Drawer, Popover, Switch } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
+import { Badge, Drawer, Popover } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import Avatar from 'components/CommonStyles/Avatar';
 import { SIZE_ICON_DEFAULT } from 'consts';
 import { useAuth } from 'providers/AuthenticationProvider';
 import React, { useId } from 'react';
-import ItemNotification from './ItemNotification';
+import HelpDrawer from './HelpDrawer';
 import NotificationCard from './NotificationCard';
 import SettingCard from './SettingCard';
-import HelpDrawer from './HelpDrawer';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
