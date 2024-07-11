@@ -12,6 +12,7 @@ import { log } from 'console';
 import { queryKeys } from 'consts';
 import { NewsType } from 'consts/enum';
 import { FastField, Form, Formik } from 'formik';
+import { handleUpload } from 'helpers';
 import { showError, showSuccess } from 'helpers/toast';
 import { useGetListApp } from 'hooks/app/useAppHooks';
 import { useCreateNews, useUpdateNew } from 'hooks/news/useNewsHooks';
@@ -19,7 +20,6 @@ import { DialogI } from 'interfaces/common';
 import { News } from 'interfaces/news';
 import { useMemo, useState } from 'react';
 import { RequestCreateNews } from 'services/newsServices';
-import userService from 'services/userService';
 import * as Yup from 'yup';
 
 interface Props extends DialogI<RequestCreateNews> {
@@ -92,19 +92,6 @@ const DialogAddNews = (props: Props) => {
     value: el.id,
   }));
 
-  const handleUpload = async (
-    event: any,
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
-  ) => {
-    try {
-      const resUpload = await userService.upload({ file: event.target.files?.[0] });
-      setFieldValue('thumbUrl', resUpload.data.data.uri);
-      showSuccess('Upload success!');
-    } catch (error) {
-      showError(error);
-    }
-  };
-
   //! Render
   return (
     <Formik
@@ -134,7 +121,7 @@ const DialogAddNews = (props: Props) => {
         })();
       }}
     >
-      {({ handleSubmit, isSubmitting, setFieldValue }) => {
+      {({ handleSubmit, isSubmitting, setFieldValue, values }) => {
         return (
           <DialogMui scroll='paper' open={isOpen} onClose={toggle} fullWidth maxWidth='sm'>
             <DialogContent>
@@ -167,7 +154,7 @@ const DialogAddNews = (props: Props) => {
                       helperText='Helper text'
                       fullWidth
                       required
-                      onChange={(e) => handleUpload(e, setFieldValue)}
+                      onChange={(e) => handleUpload('thumbUrl', e, setFieldValue)}
                     />
                     <CommonStyles.Typography
                       component='p'
@@ -215,16 +202,17 @@ const DialogAddNews = (props: Props) => {
                       fullWidth
                       sxContainer={{ mt: 1 }}
                     />
-
-                    <CommonStyles.Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-                      <CommonStyles.Typography>Notification:</CommonStyles.Typography>
-                      <Switch
-                        size='medium'
-                        onChange={(e) => {
-                          setIsSendNoti(e.target.checked);
-                        }}
-                      />
-                    </CommonStyles.Box>
+                    {values.type === NewsType.DIRECT && !isEdit && (
+                      <CommonStyles.Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+                        <CommonStyles.Typography>Notification:</CommonStyles.Typography>
+                        <Switch
+                          size='medium'
+                          onChange={(e) => {
+                            setIsSendNoti(e.target.checked);
+                          }}
+                        />
+                      </CommonStyles.Box>
+                    )}
                   </CommonStyles.Box>
                 </CommonStyles.Box>
               </Form>

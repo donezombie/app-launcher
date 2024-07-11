@@ -9,6 +9,7 @@ import { Order } from 'interfaces/common';
 import { cloneDeep } from 'lodash';
 import CellActions from 'pages/Apps/Components/TableListApp/Cells/CellActions';
 import CellActive from 'pages/Apps/Components/TableListApp/Cells/CellActive';
+import CellApproval from 'pages/Apps/Components/TableListApp/Cells/CellApproval';
 import { useMemo } from 'react';
 
 const initialValues = {
@@ -79,19 +80,12 @@ const ReportsManagement = () => {
             id: 'name',
           },
           {
-            label: 'Developer name',
-            id: 'developerName',
+            label: 'Description',
+            id: 'description',
           },
           {
-            label: 'Summary',
-            id: 'summary',
-            Cell: (row) => {
-              return (
-                <CommonStyles.Typography sx={{ maxWidth: 400 }}>
-                  {row?.summary || ''}
-                </CommonStyles.Typography>
-              );
-            },
+            label: 'Status',
+            id: 'status',
           },
           {
             label: 'Live',
@@ -100,19 +94,19 @@ const ReportsManagement = () => {
               return <CellActive item={row} />;
             },
           },
-          // {
-          //   label: 'Approved',
-          //   id: 'isApproved',
-          //   Cell: (row) => {
-          //     return <CellApproval item={row} />;
-          //   },
-          // },
+          {
+            label: 'Approved',
+            id: 'isApproved',
+            Cell: (row) => {
+              return <CellApproval item={row} />;
+            },
+          },
           {
             label: '',
             id: 'actions',
             disableSort: true,
             Cell: (row) => {
-              return <CellActions item={row} />;
+              return <CellActions item={row} isReport />;
             },
           },
         ]}

@@ -119,7 +119,7 @@ export const useCreateApproval = () => {
 
 export const useApprovalAll = () => {
   return useMutation({
-    mutationFn: (body: { id: number; isAccess: boolean }) => appManagementService.approvalAll(body),
+    mutationFn: (body: { id: string; isAccess: boolean }) => appManagementService.approvalAll(body),
   });
 };
 

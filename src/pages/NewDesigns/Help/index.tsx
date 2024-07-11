@@ -88,8 +88,8 @@ const HelpManagement = () => {
             id: 'description',
           },
           {
-            label: 'Topic',
-            id: 'topic',
+            label: 'Category',
+            id: 'category',
           },
           {
             label: '',

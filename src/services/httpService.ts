@@ -1,9 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import BaseUrl from 'consts/baseUrl';
 import { LOGOUT_REDIRECT_URI } from 'consts/configAWS';
+import { deleteToken } from 'firebase/messaging';
 import { IUser } from 'providers/AuthenticationProvider';
+import { messaging } from '../firebase';
 import AuthService from './authService';
-import { BASE_URL } from 'consts/apiUrl';
-// import AuthService from './authService';
 
 export const TOKEN_KEY = 'token';
 export const USER_KEY = 'user';
@@ -14,7 +15,6 @@ class Services {
   constructor() {
     this.axios = axios;
     this.axios.defaults.withCredentials = false;
-
     //! Interceptor request
     this.axios.interceptors.request.use(
       function (config) {
@@ -32,8 +32,11 @@ class Services {
       },
       async (error) => {
         if (error.response.data?.statusCode === 401) {
+          await deleteToken(messaging);
+          window.location.href = `${BaseUrl.Login}`;
+
           this.clearAuthStorage();
-          window.location.href = `${BASE_URL}/login`;
+          window.location.href = `${BaseUrl.Login}`;
           window.sessionStorage.clear();
         }
         return Promise.reject(error);

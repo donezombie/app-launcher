@@ -72,6 +72,7 @@ export enum AppStatus {
   PENDING = 'PENDING',
   REJECT = 'REJECT',
   APPROVED = 'APPROVED',
+  DELETED = 'DELETED',
   // BANNED = 'BANNED',
   // EXPRIED = 'EXPRIED',
 }

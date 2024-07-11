@@ -1,19 +1,17 @@
-import React, { useMemo } from 'react';
+import Logo from 'assets/logo.svg';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { SIZE_ICON_DEFAULT } from 'consts';
-import { Link } from 'react-router-dom';
 import BaseUrl from 'consts/baseUrl';
-import Logo from 'assets/logo.svg';
-import { useGetCompanyDetail } from 'hooks/company/useCompanyHooks';
 import { useAuth } from 'providers/AuthenticationProvider';
-import { BASE_URL, UPLOAD_URL } from 'consts/apiUrl';
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 const LeftSide = () => {
   //! State
   const { user } = useAuth();
   const userLogo = useMemo(() => {
-    return user?.Company?.logo ? `${UPLOAD_URL}/${user?.Company?.logo}` : Logo;
+    return user?.Company?.logo ? `${user?.Company?.logo}` : Logo;
   }, [user?.Company?.logo]);
   //! Function
 

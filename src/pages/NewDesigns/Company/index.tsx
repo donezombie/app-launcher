@@ -1,18 +1,17 @@
 import CommonStyles from 'components/CommonStyles';
 import TextField from 'components/CustomFields/TextField';
 import SearchAndFilters from 'components/SearchAndFilters';
-import { UPLOAD_URL } from 'consts/apiUrl';
 import BaseUrl from 'consts/baseUrl';
 import { SortOrder } from 'consts/enum';
 import { FastField } from 'formik';
 import { useGetCompanyList } from 'hooks/company/useCompanyHooks';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { Order } from 'interfaces/common';
+import { ICompany } from 'interfaces/company';
 import { cloneDeep } from 'lodash';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CellActions from './Components/CellActions';
-import { ICompany } from 'interfaces/company';
 
 const initialValues = {
   page: 1,
@@ -87,7 +86,7 @@ const Company = () => {
               const { logo } = row;
               return (
                 <img
-                  src={`${UPLOAD_URL}/${logo}`}
+                  src={`${logo}`}
                   style={{ width: 56, height: 56, borderRadius: 999 }}
                   alt='companyLogo'
                 />

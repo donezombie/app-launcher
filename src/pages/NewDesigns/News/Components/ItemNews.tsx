@@ -3,11 +3,10 @@ import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
 import { SIZE_ICON_DEFAULT } from 'consts';
 import useToggleDialog from 'hooks/useToggleDialog';
+import { News } from 'interfaces/news';
 import React from 'react';
 import DialogAddNews from './DialogAddNews';
 import DialogDeleteNew from './DialogDeleteNew';
-import { News } from 'interfaces/news';
-import { UPLOAD_URL } from 'consts/apiUrl';
 
 interface ItemNewsProps {
   item: News;
@@ -36,10 +35,7 @@ const ItemNews = (props: ItemNewsProps) => {
   //! Render
   return (
     <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', my: 2, px: '12px' }}>
-      <CommonStyles.Avatar
-        src={`${UPLOAD_URL}/${item?.thumbUrl}`}
-        sx={{ width: sizeAva, height: sizeAva }}
-      />
+      <CommonStyles.Avatar src={`${item?.thumbUrl}`} sx={{ width: sizeAva, height: sizeAva }} />
       <CommonStyles.Box
         sx={{
           display: 'flex',

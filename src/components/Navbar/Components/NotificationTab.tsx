@@ -10,7 +10,7 @@ interface Props {
 }
 
 const initialValues = {
-  sortOrder: SortOrder.ASC,
+  sortOrder: SortOrder.DESC,
   sortField: 'createdAt',
 };
 
@@ -31,7 +31,7 @@ const NotificationTab = (props: Props) => {
       {isLoading ? (
         <CommonStyles.Loading />
       ) : (
-        data.map((item: Notification, ind: number) => {
+        data?.map((item: Notification, ind: number) => {
           return <ItemNotifications key={ind} item={item} />;
         })
       )}

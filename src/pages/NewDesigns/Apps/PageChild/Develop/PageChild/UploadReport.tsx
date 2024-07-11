@@ -4,7 +4,6 @@ import UploadField from 'components/CommonStyles/UploadField';
 import SelectField from 'components/CustomFields/SelectField';
 import TextField from 'components/CustomFields/TextField';
 import HeadWithSearching from 'components/HeadWithSearching';
-import { URL_REGEX } from 'consts';
 import BaseUrl from 'consts/baseUrl';
 import { AppType, CategoryType } from 'consts/enum';
 import { FastField, Form, Formik, FormikProps } from 'formik';
@@ -63,6 +62,7 @@ const UploadReport = (props: Iprops) => {
     launchUri: appDetail ? appDetail.launchUri : '',
     description: appDetail ? appDetail.description : '',
     categoryId: appDetail ? appDetail.categoryId : null,
+    icon: appDetail ? appDetail?.icon : '',
   };
 
   //! Render

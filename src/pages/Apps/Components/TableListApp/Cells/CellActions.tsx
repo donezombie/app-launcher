@@ -4,7 +4,7 @@ import CommonStyles from 'components/CommonStyles';
 import useToggleDialog from 'hooks/useToggleDialog';
 import DialogAddOrEditApp from '../../../Dialogs/DialogAddOrEditApp';
 import { App, NewApp } from 'interfaces/apps';
-import { useUninstallApp, useUpdateAppIntegration } from 'hooks/app/useAppHooks';
+import { useApprovalAll, useUninstallApp, useUpdateAppIntegration } from 'hooks/app/useAppHooks';
 import { showError, showSuccess } from 'helpers/toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from 'consts/index';
@@ -16,12 +16,14 @@ import { Badge } from '@mui/material';
 import DialogListRequesting from 'pages/Apps/Dialogs/DialogListRequesting';
 import { AccessAppType } from 'consts/enum';
 import CellDelete from './CellDelete';
+import { isEmpty } from 'lodash';
 
 interface CellActionsProps {
   item: NewApp;
+  isReport?: boolean;
 }
 
-const CellActions = ({ item }: CellActionsProps) => {
+const CellActions = ({ item, isReport }: CellActionsProps) => {
   //! State
   const {
     open: openEditApp,
@@ -48,6 +50,7 @@ const CellActions = ({ item }: CellActionsProps) => {
   } = useToggleDialog();
 
   const { mutateAsync: updateApp } = useUpdateAppIntegration();
+  const { mutateAsync: approveAll, isLoading: loadingAproveAll } = useApprovalAll();
   const queryClient = useQueryClient();
   cachedService.setValue('app', item);
 
@@ -55,6 +58,16 @@ const CellActions = ({ item }: CellActionsProps) => {
   const requestingList = item?.accessApp.filter(
     (item) => item.accessType === AccessAppType.REQUEST
   );
+
+  const onClickApproval = async () => {
+    try {
+      await approveAll({ id: item?.id, isAccess: true });
+      await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
+      showSuccess('Successfully');
+    } catch (error) {
+      showError(error);
+    }
+  };
   //! Render
   return (
     <Fragment>
@@ -93,18 +106,29 @@ const CellActions = ({ item }: CellActionsProps) => {
       {shouldRenderDelete && <CellDelete item={item} isOpen={openDelete} toggle={toggleDelete} />}
 
       <CommonStyles.Tooltip title='Edit'>
-        <Link to={BaseUrl.MyApps.DetailWithID(item.id)}>
+        <Link
+          to={
+            isReport
+              ? BaseUrl.MyReport.DetailWithID(item.id || '')
+              : BaseUrl.MyApps.DetailWithID(item.id)
+          }
+        >
           <CommonStyles.Button isIconButton>
             <CommonIcons.EditIcon />
           </CommonStyles.Button>
         </Link>
       </CommonStyles.Tooltip>
 
-      {/* <CommonStyles.Tooltip title='Assign'>
-        <CommonStyles.Button isIconButton onClick={toggleAssign}>
-          <CommonIcons.AssignIcon />
+      <CommonStyles.Tooltip title='Aprrove all'>
+        <CommonStyles.Button
+          disabled={isEmpty(requestingList?.length)}
+          loading={loadingAproveAll}
+          isIconButton
+          onClick={onClickApproval}
+        >
+          <CommonIcons.CheckedAndAdd />
         </CommonStyles.Button>
-      </CommonStyles.Tooltip> */}
+      </CommonStyles.Tooltip>
 
       <CommonStyles.Tooltip title='Requesting App'>
         <CommonStyles.Button isIconButton onClick={toggleRequesting}>

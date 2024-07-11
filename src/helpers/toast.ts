@@ -12,8 +12,8 @@ export const showSuccess = (msg: any, options?: ToastOptions) => {
 
 export const showError = (error: any, options?: ToastOptions) => {
   if (error?.response) {
-    if (error?.response?.data?.message) {
-      toast.error(JSON.stringify(error?.response?.data?.message));
+    if (error?.response?.data?.messages) {
+      toast.error(error?.response?.data?.messages[0]);
       return;
     }
     if (error?.response?.data?.errors) {

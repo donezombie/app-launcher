@@ -1,10 +1,10 @@
+import { Badge } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { useQueryClient } from '@tanstack/react-query';
 import CommonStyles from 'components/CommonStyles';
+import { queryKeys } from 'consts';
 import { showSuccess } from 'helpers/toast';
 import { useReadEachNoti } from 'hooks/notification/useNotificationHook';
-import { styled, useTheme } from '@mui/material/styles';
-import { Badge } from '@mui/material';
-import { useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from 'consts';
 import { Notification } from 'interfaces/notification';
 
 interface ItemNotificationsProps {
@@ -61,7 +61,10 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
 
   //! Render
   return (
-    <CommonStyles.Box sx={{ display: 'flex', alignItems: 'center', my: 2, px: '12px' }}>
+    <CommonStyles.Box
+      sx={{ display: 'flex', alignItems: 'center', my: 2, px: '12px', cursor: 'pointer' }}
+      onClick={() => !item.isRead && handleReadNotification(item.id)}
+    >
       {!item.isRead ? (
         <StyledBadge
           overlap='circular'
@@ -69,11 +72,7 @@ const ItemNotifications = (props: ItemNotificationsProps) => {
           variant='dot'
           color='success'
         >
-          <CommonStyles.Avatar
-            src={item?.imageUrl}
-            sx={{ width: sizeAva, height: sizeAva, cursor: 'pointer' }}
-            onClick={() => handleReadNotification(item.id)}
-          />
+          <CommonStyles.Avatar src={item?.imageUrl} sx={{ width: sizeAva, height: sizeAva }} />
         </StyledBadge>
       ) : (
         <CommonStyles.Avatar src={item?.imageUrl} sx={{ width: sizeAva, height: sizeAva }} />

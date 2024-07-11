@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTheme } from '@mui/material';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
@@ -9,9 +8,9 @@ import { Form, Formik } from 'formik';
 import { useGetListHelp } from 'hooks/staticPage/useStaticPageHook';
 import useFiltersHandler from 'hooks/useFiltersHandler';
 import { IStaticPage } from 'interfaces/staticPage';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { isEmpty } from 'lodash';
+import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface HelpDrawerProps {
   handleClose: (value: React.SetStateAction<boolean>) => void;
@@ -34,11 +33,16 @@ const HelpDrawer: React.FC<HelpDrawerProps> = ({ handleClose }) => {
   const navigate = useNavigate();
 
   const topics = useMemo(() => {
-    return data.reduce<{ [key: string]: IStaticPage[] }>((acc, item) => {
-      if (!acc[item.topic]) acc[item.topic] = [];
-      acc[item.topic].push(item);
-      return acc;
-    }, {});
+    const categoryMap: { [key: string]: IStaticPage[] } = {};
+
+    data.forEach((item) => {
+      if (!categoryMap[item.category]) {
+        categoryMap[item.category] = [];
+      }
+      categoryMap[item.category].push(item);
+    });
+
+    return Object.values(categoryMap);
   }, [data]);
 
   const handleClick = (item: IStaticPage) => {
@@ -95,7 +99,7 @@ const HelpDrawer: React.FC<HelpDrawerProps> = ({ handleClose }) => {
           </Form>
         </Formik>
       </CommonStyles.Box>
-      {!isEmpty(topics[Object.keys(topics)[0]]) && (
+      {!isEmpty(topics[0]) && (
         <CommonStyles.Box mt={2}>
           <CommonStyles.Typography fontWeight={'bold'} sx={{ marginLeft: '1.5rem' }}>
             Discover more
@@ -111,7 +115,7 @@ const HelpDrawer: React.FC<HelpDrawerProps> = ({ handleClose }) => {
               '&::-webkit-scrollbar': { display: 'none' },
             }}
           >
-            {topics[Object.keys(topics)[0]]?.map((el) => (
+            {topics[0]?.map((el) => (
               <CommonStyles.Box
                 key={el.id}
                 sx={{
@@ -131,34 +135,39 @@ const HelpDrawer: React.FC<HelpDrawerProps> = ({ handleClose }) => {
         </CommonStyles.Box>
       )}
       <CommonStyles.Box sx={{ marginLeft: '1.5rem' }}>
-        {!isEmpty(topics[Object.keys(topics)[1]]) && (
+        {!isEmpty(topics[1]) && (
           <>
             <CommonStyles.Typography fontWeight={'bold'}>
               Explore help topics
             </CommonStyles.Typography>
             <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
-              {topics[Object.keys(topics)[1]]?.map(renderHelp)}
+              {topics[1]?.map(renderHelp)}
             </CommonStyles.Box>
           </>
         )}
-        {!isEmpty(topics[Object.keys(topics)[2]]) && (
+        {!isEmpty(topics[2]) && (
           <CommonStyles.Box>
             <CommonStyles.Typography fontWeight={'bold'}>Help categories</CommonStyles.Typography>
             <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
-              {topics[Object.keys(topics)[2]]?.map(renderHelp)}
+              {topics[2]?.map(renderHelp)}
             </CommonStyles.Box>
           </CommonStyles.Box>
         )}
         {Object.keys(topics)
           .slice(3)
-          ?.map((topicKey) => (
-            <CommonStyles.Box key={topicKey}>
-              <CommonStyles.Typography fontWeight={'bold'}>{topicKey}</CommonStyles.Typography>
-              <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
-                {topics[topicKey]?.map(renderHelp)}
+          ?.map((topicKey) => {
+            const newTopic = topics[topicKey as keyof typeof topics] as IStaticPage[];
+            return (
+              <CommonStyles.Box key={topicKey}>
+                <CommonStyles.Typography fontWeight={'bold'}>
+                  {newTopic[0]?.category}
+                </CommonStyles.Typography>
+                <CommonStyles.Box sx={{ display: 'grid', gap: 0.5, p: 1 }}>
+                  {newTopic?.map(renderHelp)}
+                </CommonStyles.Box>
               </CommonStyles.Box>
-            </CommonStyles.Box>
-          ))}
+            );
+          })}
       </CommonStyles.Box>
       <CommonStyles.Box
         sx={{

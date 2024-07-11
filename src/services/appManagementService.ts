@@ -170,7 +170,7 @@ class AppManagementService {
   getDetailCategory(id: string): PromiseResponseBase<ResponseCategoryDetail> {
     return httpService.get(`${BASE_URL}/category/${id}`);
   }
-  approvalAll(body: { id: number; isAccess: boolean }) {
+  approvalAll(body: { id: string; isAccess: boolean }) {
     return httpService.post(`${APP_MANAGER}/approved-access-all/${body.id}`, {
       isAccess: body.isAccess,
     });

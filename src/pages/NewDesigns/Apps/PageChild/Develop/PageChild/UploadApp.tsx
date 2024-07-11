@@ -27,9 +27,8 @@ const validateCreateApp = Yup.object().shape({
   // summary: Yup.string().required('Summary is required field!'),
   // description: Yup.string().required('Description is required field!'),
   // icon: Yup.string().required('Icon is required field!'),
-  launchUri: Yup.string()
-    .required('Launch uri is required field!')
-    .matches(URL_REGEX, 'Invalid Url!'),
+  launchUri: Yup.string().required('Launch uri is required field!'),
+  // .matches(URL_REGEX, 'Invalid Url!'),
   appType: Yup.string()
     .required('App type is required field!')
     .test('appType', 'Invalid App type', function (value) {
@@ -40,7 +39,7 @@ const validateCreateApp = Yup.object().shape({
   categoryId: Yup.number()
     .typeError('Category is required field!')
     .required('Category is required field!'),
-  apiDoc: Yup.string().matches(URL_REGEX, 'Invalid Url!'),
+  // apiDoc: Yup.string().matches(URL_REGEX, 'Invalid Url!'),
 });
 interface Iprops {
   isEdit: boolean;

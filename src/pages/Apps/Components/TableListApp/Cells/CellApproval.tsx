@@ -1,18 +1,15 @@
-import React from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import CommonIcons from 'components/CommonIcons';
 import CommonStyles from 'components/CommonStyles';
-import { App, NewApp } from 'interfaces/apps';
-import { Field, Form, Formik } from 'formik';
 import SwitchField from 'components/CustomFields/SwitchField';
-import { showError, showSuccess } from 'helpers/toast';
-import { useApprovalAll, useApproveApp, useSetLiveApp } from 'hooks/app/useAppHooks';
-import { useQueryClient } from '@tanstack/react-query';
-import { PERMISSION_ENUM, queryKeys } from 'consts';
-import { useAuth } from 'providers/AuthenticationProvider';
+import { queryKeys } from 'consts';
 import { AppStatus } from 'consts/enum';
-import SelectField from 'components/CustomFields/SelectField';
-import { SelectChangeEvent } from '@mui/material';
-import httpService from 'services/httpService';
+import { Field, Form, Formik } from 'formik';
+import { showError, showSuccess } from 'helpers/toast';
+import { useApproveApp } from 'hooks/app/useAppHooks';
+import { NewApp } from 'interfaces/apps';
+import { useAuth } from 'providers/AuthenticationProvider';
+import React from 'react';
 
 interface CellApprovalProps {
   item: NewApp;
@@ -21,7 +18,9 @@ interface CellApprovalProps {
 const CellApproval = (props: CellApprovalProps) => {
   //! State
   const { item } = props;
+
   const isApproved = item?.status === AppStatus.APPROVED;
+  console.log(isApproved, 'item');
 
   const queryClient = useQueryClient();
   const { isAdmin } = useAuth();
@@ -44,6 +43,7 @@ const CellApproval = (props: CellApprovalProps) => {
       initialValues={{
         isApproved: isApproved,
       }}
+      enableReinitialize
       onSubmit={(values, { setSubmitting, resetForm }) => {
         (async () => {
           try {
@@ -52,7 +52,6 @@ const CellApproval = (props: CellApprovalProps) => {
               appId: item?.id || '',
               isApprove: values.isApproved,
             });
-            // await approveAll({id:item?.id,isAccess: values.isApproved});
 
             await queryClient.refetchQueries({ queryKey: [queryKeys.getAppList] });
 
@@ -78,7 +77,7 @@ const CellApproval = (props: CellApprovalProps) => {
               <Field
                 component={SwitchField}
                 name='isApproved'
-                disabled={isApproved}
+                disabled={item?.status === AppStatus.DELETED || isApproved}
                 afterOnChange={() => {
                   handleSubmit();
                 }}
